@@ -1,0 +1,7 @@
+{
+  "name": "fukey",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
