@@ -1,13 +1,67 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>intro</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">intro</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="logo">
+    <img src="assets/logo.png" alt="" srcset="">
+  </div>
+
+    <swiper-container
+     #swiperEx
+     (slideChange)="swiperSlideChanged()" 
+     [allowSlidePrev]="false" 
+     [pagination]="{clickable:true}"
+    >
+      <swiper-slide>
+        <img src="assets/first-illustration.png" alt="" srcset="">
+        <h3 class="subtitle">Welcome to</h3>
+        <h1 class="title">Fukey Education</h1>
+        <p class="desc">
+          Hello, thank you for downloading our App!
+          Follow our guide for helping you to using this
+          application.
+        </p>
+        <p class="desc">
+          If this is not first time, you can skip this guide.
+          But if you wanna following our guide again,
+          then its no problem.
+        </p>
+      </swiper-slide>
+      <swiper-slide>
+        <img src="assets/second-illustration.png" alt="" srcset="">
+        <h3 class="subtitle">Our Provides</h3>
+        <h1 class="title">Features</h1>
+        <p class="desc">
+          Hello, thank you for downloading our App!
+          Follow our guide for helping you to using this
+          application.
+        </p>
+        <p class="desc">
+          Video Call Classroom Group
+          Get Knowledge and Certificates
+        </p>
+      </swiper-slide>
+      <swiper-slide>
+        <img src="assets/third-illustration.png" alt="" srcset="">
+        <h3 class="subtitle">Thank You</h3>
+        <h1 class="title">Come Join us</h1>
+        <p class="desc">
+          Hello, thank you for downloading our App!
+          Follow our guide for helping you to using this
+          application.
+        </p>
+        <p class="desc">
+          If this is not first time, you can skip this guide.
+          But if you wanna following our guide again,
+          then its no problem.
+        </p>
+      </swiper-slide>
+
+    </swiper-container>
+
+    <div *ngIf="start != 2; else elseBlock">
+      <ion-button (click)="goNext()" expand="block" class="next-button">Next</ion-button>
+      <ion-button (click)="skip()"expand="block" fill="clear" class="skip-button">Skip This Guide</ion-button>
+    </div>
+    <ng-template #elseBlock>
+      <!-- Get Started Button -->
+      <ion-button expand="block" class="get-started" (click)="navigateToTargetPage()">Get Started</ion-button>
+    </ng-template>
 </ion-content>

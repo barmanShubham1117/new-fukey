@@ -1,0 +1,114 @@
+.course-thumbnail > img {
+    border-radius: 10px;
+}
+
+.course-title {
+    color: #000;
+    font-weight: 900;
+}
+
+.course-short-description {
+    color: #000;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+}
+
+.content-tabs {
+    display: flex;
+    margin-bottom: 10px;
+}
+.content-tab {
+    color: #fff;
+    font-size: 1rem;
+    background-color: #002CBD;
+    border-radius: 50px;
+    padding: 0.3rem 0.8rem;
+    margin-right: 0.5rem;
+}
+
+.course-description {
+    margin-bottom: 10px;
+}
+.course-description > h3 {
+    margin-top: 0;
+    color: #000;
+}
+.description {
+    font-size: 0.8rem;
+    text-align: justify;
+    color: #000;
+}
+
+.section {
+    background-color: #E7E8FF;
+    border-radius: 2rem;
+    margin-bottom: 1rem;
+}
+.section-header {
+    width: 100%;
+    display: flex;
+    color: #fff;
+    background: linear-gradient(180deg, rgba(0,38,162,1) 0%, rgba(27,150,235,1) 100%);
+    padding: 0.5rem;
+    border-radius: 2rem;
+
+    .section-icon {
+        flex-wrap: wrap;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        font-size: 1.5rem;
+    }
+    .section-title {
+        flex: 10;
+        flex-wrap: wrap;
+        padding: 0 1rem;
+        display: flex;
+        align-content: center;
+        padding: 0 1rem;
+
+        h5 {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+    .dropdown-icon { 
+        flex-wrap: wrap;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        font-size: 1.5rem;
+    }
+}
+.section-bodies {
+    padding: 1rem;
+    display: none;
+}
+.section-body {
+    display: flex;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+
+    .lesson-icon {
+        flex-wrap: wrap;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        font-size: 1rem;
+        color: #000;
+    }
+    .lesson-title {
+        flex: 10;
+        font-size: 1rem;
+        padding: 0 1rem;
+        color: #000;
+    }
+    .lesson-duration {
+        flex-wrap: wrap;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        font-size: 1rem;
+        color: #000;
+    }
+}

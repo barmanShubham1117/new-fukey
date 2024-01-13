@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpService } from '../services/http.service';
+import { AppService } from '../services/app.service';
 
 @Component({
   selector: 'app-tabs',
@@ -7,9 +10,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TabsPage implements OnInit {
 
-  constructor() { }
+  private MOBILE: any;
+  public name: string = "";
+  public std: string = "";
 
-  ngOnInit() {
+  constructor(
+    private router: Router,
+    private httpService: HttpService
+  ) {
+    this.MOBILE = localStorage.getItem('MOBILE');
+    httpService.getUserViaMobile(this.MOBILE).subscribe((response: any) => {
+      this.name = response.first_name;
+      this.std = response.class;
+    })
+   }
+
+  ngOnInit() {}
+
+  navigateToOfflineDownloads() {
+    this.router.navigate(['/tabs/offline-downloads']);
+  }
+
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/login'], { replaceUrl: true});
   }
 
 }

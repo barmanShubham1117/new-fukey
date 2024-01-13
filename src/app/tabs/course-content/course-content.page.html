@@ -1,13 +1,73 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>course-content</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding" id="mainContent">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">course-content</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div *ngIf="isCourseDataAvailable && isContentDataAvailable">
+    <div class="course-thumbnail">
+      <img src="{{ COURSE_DATA.thumbnail }}" alt="Loading.." srcset="">
+    </div>
+
+    <div>
+      <h1 class="course-title">{{ COURSE_DATA.title }}</h1>
+    </div>
+
+    <div class="course-short-description">{{ COURSE_DATA.short_description }}</div>
+
+    <div class="content-tabs">
+      <div class="content-tab">CLASS {{ COURSE_DATA.title.substring(6, 7) | uppercase }}</div>
+      <div class="content-tab">{{ COURSE_DATA.language | uppercase }}</div>
+      <div class="content-tab">{{ COURSE_DATA.level | uppercase }}</div>
+    </div>
+
+
+    <div class="course-description">
+      <h3>Course Overview</h3>
+      <div class="description" [innerHTML]="COURSE_DATA.description"></div>
+    </div>
+
+    <div class="course-description">
+      <h3>Curriculum for this course</h3>
+    </div>
+
+    <div class="sections">
+      <div class="section" *ngFor="let content of CONTENT_DATA;let i = index" (click)="openDropdown(i)">
+        <div class="section-header">
+          <div class="section-icon">
+            <ion-icon name="document-outline"></ion-icon>
+          </div>
+
+          <div class="section-title">
+            <div class="lesson-number">
+              <h5>{{ content.title }}</h5>
+            </div>
+          </div>
+
+          <div class="dropdown-icon" id="dropdown-btn">
+            <ion-icon name="chevron-down-outline" id="expand{{ i }}"></ion-icon>
+            <ion-icon name="chevron-up-outline" id="collapse{{ i }}" style="display: none;"></ion-icon>
+          </div>
+        </div>
+
+        <div class="section-bodies" id="section-bodies-{{ i }}">
+
+          <div class="section-body" *ngFor="let lesson of content.lessons; let j = index;"
+            (click)="openStudyMaterial(CONTENT_DATA, i, j, COURSE_DATA.id, lesson.id)">
+            <div class="lesson-icon" *ngIf="lesson.lesson_type == 'video';">
+              <ion-icon name="play-circle-outline"></ion-icon>
+            </div>
+            <div class="lesson-icon" *ngIf="lesson.lesson_type == 'text';">
+              <ion-icon name="text-outline"></ion-icon>
+            </div>
+            <div class="lesson-icon" *ngIf="lesson.lesson_type == 'other';">
+              <ion-icon name="document-text-outline"></ion-icon>
+            </div>
+            <div class="lesson-icon" *ngIf="lesson.lesson_type == 'quiz';">
+              <ion-icon name="stats-chart-outline"></ion-icon>
+            </div>
+            <div class="lesson-title">{{ lesson.title }}</div>
+            <div class="lesson-duration">{{ lesson.duration }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </ion-content>

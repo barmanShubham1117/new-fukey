@@ -1,13 +1,68 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
+  <div class="main-container">
+    <div class="main">
+      <div class="logo">
+        <img src="assets/main.png" alt="" srcset="">
+      </div>
+
+      <div class="container">
+        <div class="register">Create a Free Account</div>
+        <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm.value)" class="row g-3 needs-validation">
+
+          <!-- <div id="sign-in-button"></div> -->
+
+          <div>
+            <input type="text" placeholder="Full Name" class="form-control user-input" name="fullName" ngModel required>
+          </div>
+
+          <div>
+            <input type="tel" placeholder="Mobile No." class="form-control user-input" name="mobile" ngModel required>
+          </div>
+          
+          <div>
+            <input type="email" placeholder="Email Id" class="form-control user-input" name="email" ngModel required>
+          </div>
+
+          <div *ngIf="!isClassListAvailable">
+            <input type="text" placeholder="Class" class="form-control user-input" name="class" ngModel required>
+          </div>
+          <div *ngIf="isClassListAvailable">
+            <select class="form-control user-input" name="class" ngModel required>
+              <option value="">Select your class</option>
+              <option *ngFor="let val of classList" [value]="val.name">{{ val.name }}</option>
+            </select>
+          </div>
+
+          <div>
+            <input type="text" placeholder="School" class="form-control user-input" name="school" ngModel required>
+          </div>
+
+          <div>
+            <input type="text" placeholder="City" class="form-control user-input" name="city" ngModel required>
+          </div>
+
+          <div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="tnc" name="tnc" ngModel required>
+              <label class="form-check-label">
+                I agree to terms and conditions<span>*</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="sign-in-button"></div>
+
+          <div class="register-btn-container">
+            <ion-button shape="round" class="register-button" type="submit">PROCEED</ion-button>
+          </div>
+        </form>
+
+        <div class="bottom">
+          <div class="bottom-message" (click)="navigateToLoginPage()">Already an user? <b>Log In</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </ion-content>

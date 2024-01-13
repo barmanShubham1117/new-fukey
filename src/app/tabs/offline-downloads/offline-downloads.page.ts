@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-offline-downloads',
@@ -7,9 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OfflineDownloadsPage implements OnInit {
 
-  constructor() { }
+  activeTab = 'documents';
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit() {
+  }
+  
+  changeActiveTab(event: any) {
+    console.log(event.detail.value);
+    this.activeTab = event.detail.value;
+  }
+
+  openDownloadsPage(type: string) {
+    const navigationExtras: NavigationExtras = {
+      state: {
+        type: type
+      },
+      replaceUrl: false
+    }
+    this.router.navigate(['/tabs/offline-downloads/downloads'], navigationExtras);
   }
 
 }

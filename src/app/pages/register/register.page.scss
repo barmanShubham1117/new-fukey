@@ -1,0 +1,88 @@
+ion-content {
+    --background: url('/assets/auth_background.png') no-repeat center center / cover;
+}
+
+.main-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main {
+    width: 80%;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+.logo > img {
+    height: 10rem;
+}
+
+.register{
+    font-weight: 800;
+    font-size: 1rem;
+    color: #002CBD;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+}
+.user-input {
+    width: 100%;
+    font-size: 1rem;
+    background-color: #D6D6D6;
+    border-radius: 100px;
+    border: none;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    margin-bottom: 1rem;
+    color: #000 !important;
+}
+
+input {
+    color: #000;
+}
+
+.form-check-label {
+    color: #000;
+    font-size: 1rem;
+}
+
+.form-check-label > span {
+    color: #D12929;
+}
+
+.form-check {
+    margin-bottom: 1rem;
+}
+.register-btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.register-button {
+    text-decoration: none;
+    color: white;
+    --background: linear-gradient(90deg, rgba(13,6,152,1) 0%, rgba(58,118,245,1) 50%, rgba(33,181,248,1) 100%);
+    text-transform: none;
+    font-size: 1rem;
+    width: 10rem;
+    height: 3rem;
+    --box-shadow: 0 5px 8px 0 rgb(0, 0, 0, 0.5);
+}
+
+.bottom {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+.bottom-message {
+    color: #000;
+    font-size: 0.8em;
+}
+
+.bottom-message > b{   
+    color: #002CBD;
+}

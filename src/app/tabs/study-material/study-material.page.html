@@ -1,13 +1,46 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>study-material</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding">
+  <div *ngIf="currentLesson.lesson_type != 'quiz'">
+    <h2 class="title">{{ currentLesson.title }}</h2>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">study-material</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <div *ngIf="currentLesson.lesson_type == 'video'">
+      <div *ngIf="currentLesson.attachment_type == 'url'">
+        <iframe [src]="playVideo(convertToEmbedUrl(currentLesson.video_url_web))"
+          allowfullscreen="allowfullscreen"></iframe>
+
+        <div class="summary" [innerHTML]="currentLesson.summary"></div>
+      </div>
+      <div *ngIf="currentLesson.attachment_type == 'file'">
+        <video controls width="100%" height="auto">
+          <source [src]="currentLesson.video_url" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+
+        <div class="summary" [innerHTML]="currentLesson.summary"></div>
+
+        <button class="downloadBtn" (click)="downloadVideo()">Download</button>
+      </div>
+    </div>
+
+    <div *ngIf="currentLesson.lesson_type == 'other'">
+      <pdf-viewer [src]="currentLesson.attachment_url" [render-text]="true" [original-size]="false" [fit-to-page]="true"
+        style="width: 100%; height: 30rem"></pdf-viewer>
+
+      <button class="downloadBtn" (click)="download()">Download</button>
+    </div>
+
+    <div *ngIf="currentLesson.lesson_type == 'text'">
+      <div class="summary" [innerHTML]="currentLesson.attachment"></div>
+    </div>
+
+    <div class="nav-buttons" *ngIf="currentLesson.lesson_type != 'quiz'">
+      <button [disabled]="isPreviousBtnDisabled" id="previous-btn" (click)="onPreviousBtnPressed()">PREVIOUS</button>
+      <button [disabled]="isNextBtnDisabled" id="next-btn" (click)="onNextBtnPressed()">NEXT</button>
+    </div>
+  </div>
+
+  <div *ngIf="currentLesson.lesson_type == 'quiz'">
+    <!-- <div class="summary" [innerHTML]="currentLesson.summary"></div> -->
+    <iframe [src]="quizUrl | safe: 'resourceUrl'" style="width: 100%; min-height: 100vh; overflow-x: hidden;"></iframe>
+  </div>
+
 </ion-content>

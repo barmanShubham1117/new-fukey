@@ -1,0 +1,88 @@
+.main-container {
+    padding: 0.5rem;
+    padding-top: 1rem;
+}
+ion-searchbar {
+    --background: #fff;
+    color: #000;
+}
+.top-bar {
+    display: flex;
+}
+.search-bar {
+    height: 2rem;
+    width: 85%;
+}
+.searchbar-input.sc-ion-searchbar-md {
+    font-size: 0.8rem;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.searchbar-search-icon.sc-ion-searchbar-md, .searchbar-cancel-button.sc-ion-searchbar-md {
+    color: #002CBD;
+}
+.filter-btn {
+    height: 2rem;
+    margin: 0;
+    width: 15%;
+}
+.top-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+}
+ion-button {
+    font-size: 0.7rem;
+}
+#select-class-btn {
+    width: 40%;
+}
+.inactive-btn {
+    --background: #F2F2F2;
+    color: #000;
+    width: 20%;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+.grid-item {
+    // padding: ;
+    // background-color: #f0f0f0;
+    // border: 1px solid #999;
+
+    img {
+        border-radius: 10px;
+        height: 7rem;
+        width: 100%;
+    }
+    .info {
+        width: 90%;
+    }
+    .grid-info {
+        display: flex;
+    }
+    .subject {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 0.4rem;
+    }
+    .content {
+        font-size: 0.6rem;
+        color: #000;
+
+        ion-icon {
+            color: #002CBD;
+        }
+    }
+    .leave {
+        width: 10%;
+        display: flex;
+        align-items: center;
+        color: #002CBD;
+        font-size: 1.5rem
+    }
+}

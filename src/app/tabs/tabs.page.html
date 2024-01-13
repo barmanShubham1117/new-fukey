@@ -1,13 +1,95 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>tabs</ion-title>
-  </ion-toolbar>
-</ion-header>
+<!-- <ion-app> -->
+  <ion-menu contentId="main-content">
+    <ion-content class="ion-padding">
+      <div class="intro">
+        <div class="image"></div>
+        <div class="details">
+          <div class="name" *ngIf="name != ''">{{ name }}</div>
+          <div class="class" *ngIf="std != ''">{{ std }}</div>
+        </div>
+      </div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">tabs</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+      <div class="grid-container">
+        <div class="grid-item">
+          <ion-icon name="person-circle-outline"></ion-icon>
+          <div class="tag">Edit<br>Profile</div>
+        </div>
+        <div class="grid-item">
+          <ion-icon name="folder-open-outline"></ion-icon>
+          <div class="tag">Study<br>Material</div>
+        </div>
+        <!-- <div class="grid-item">
+          <ion-icon name="folder-outline"></ion-icon>
+          <div class="tag">Free<br>Tests</div>
+        </div> -->
+        <!-- <div class="grid-item">
+          <ion-icon name="chatbubbles-outline"></ion-icon>
+          <div class="tag">Student<br>Testimonials</div>
+        </div> -->
+        <div class="grid-item" (click)="navigateToOfflineDownloads()">
+          <ion-icon name="cloud-download-outline"></ion-icon>
+          <div class="tag">Offline<br>Downloads</div>
+        </div>
+        <!-- <div class="grid-item">
+          <ion-icon name="settings-outline"></ion-icon>
+          <div class="tag">Settings</div>
+        </div> -->
+        <!-- <div class="grid-item">
+          <ion-icon name="help-circle-outline"></ion-icon>
+          <div class="tag">How to<br>Use App</div>
+        </div> -->
+        <div class="grid-item">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          <div class="tag">Privacy<br>Policy</div>
+        </div>
+        <div class="grid-item" (click)="logout()">
+          <ion-icon name="settings-outline"></ion-icon>
+          <div class="tag">Logout</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="share-title">Share this app:</div>
+        <div class="share-icons">
+          <img src="assets/logo/facebook.png" alt="" srcset="">
+          <img src="assets/logo/instagram.png" alt="" srcset="">
+          <img src="assets/logo/linkedin.png" alt="" srcset="">
+          <img src="assets/logo/whatsapp.png" alt="" srcset="">
+          <img src="assets/logo/telegram.png" alt="" srcset="">
+        </div>
+      </div>
+
+    </ion-content>
+  </ion-menu>
+
+  <div class="ion-page" id="main-content">
+    <app-header></app-header>
+
+    <ion-content>
+      <ion-tabs>
+        <ion-tab-bar slot="bottom">
+          <ion-tab-button tab="home">
+            <ion-icon class="icon" name="home"></ion-icon>
+            Home
+          </ion-tab-button>
+          <ion-tab-button tab="batches">
+            <ion-icon class="icon" name="people"></ion-icon>
+            Batches
+          </ion-tab-button>
+          <ion-tab-button tab="store" class="store-btn">
+            <ion-icon class="icon store-icon" name="library"></ion-icon>
+            Store
+          </ion-tab-button>
+          <ion-tab-button tab="chat">
+            <ion-icon class="icon" name="chatbox"></ion-icon>
+            Chats
+          </ion-tab-button>
+          <ion-tab-button tab="profile">
+            <ion-icon class="icon" name="person"></ion-icon>
+            Profile
+          </ion-tab-button>
+        </ion-tab-bar>
+      </ion-tabs>
+    </ion-content>
+  </div>
+<!-- </ion-app> -->

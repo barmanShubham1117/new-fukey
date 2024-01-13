@@ -1,0 +1,89 @@
+ion-content {
+    --background: #fff;
+}
+.intro {
+    display: flex;
+    margin-top: 2rem;
+
+    .image {
+        background: url(/assets/new/img2.jpg);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 4rem;
+        width: 4rem;
+        border-radius: 50%;
+    }
+    .details {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-left: 1rem;
+        color: #000;
+
+        .name {
+            font-weight: 600;
+            color: #000;
+        }
+        .class {
+            font-size: 0.8rem;
+            color: #8A8A8A;
+        }
+    }
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-top: 3rem;
+}
+.grid-item {
+    background-color: #C6CEDF;
+    padding: 0.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    display: flex;
+    border-radius: 10px;
+    color: #000;
+
+    ion-icon {
+        font-size: 2rem;
+        color: #000;
+    }
+    .tag {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding-left: 0.5rem;
+        color: #000;
+    }
+}
+
+.footer {
+    margin-top: 3rem;
+}
+.share-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #000 !important;
+}
+.share-icons {
+    display: flex;
+
+    img {
+        height: 2rem;
+        width: 2rem;
+        margin-right: 0.5rem;
+    }
+}
+
+ion-tab-button {
+    background: white;
+}
+
+.icon {
+    color: #595959;
+}
+.active>ion-icon {
+    color: rgb(62, 164, 253);
+}

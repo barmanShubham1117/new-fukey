@@ -1,0 +1,39 @@
+.page-title {
+    font-size: medium;
+    font-weight: 900;
+    color: #000;
+    margin-bottom: 1.5rem;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+}
+.grid-item {
+    display: flex;
+    align-items: center;
+    padding: 1.3rem 0;
+    border-top: 1px solid #545454;
+
+    .chat-details {
+        margin-left: 0.5rem;
+    }
+    .chat-image {
+        background-image: url('/assets/new/img1.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 4rem;
+        width: 4rem;
+        border-radius: 50%;
+    }
+    .chat-title {
+        font-size: 1rem;
+        color: #000;
+        margin-bottom: 0.8rem;
+    }
+    .last-message {
+        color: #A6A6A6;
+        font-size: 1rem;
+    }
+}

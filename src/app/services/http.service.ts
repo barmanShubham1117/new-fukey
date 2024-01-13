@@ -1,9 +1,186 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, map } from 'rxjs';
+import { saveAs } from 'file-saver';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
 
-  constructor() { }
+  public USER_ID: any = localStorage.getItem("USER_ID");
+  public MOBILE: any = localStorage.getItem("MOBILE");
+  public TOKEN: any = localStorage.getItem("TOKEN");
+
+  constructor(
+    private http: HttpClient
+  ) { }
+
+  public setUserID(id: any) {
+    this.USER_ID = id;
+  }
+  public setMobile(mobile: any) {
+    this.MOBILE = mobile;
+  }
+  public setToken(token: any) {
+    this.TOKEN = token;
+  }
+  public getUserID() {
+    return this.USER_ID;
+  }
+  public getMobile() {
+    return this.MOBILE;
+  }
+  public getToken() {
+    return this.TOKEN;
+  }
+
+  public clearData() {
+    localStorage.clear();
+    this.USER_ID = undefined;
+    this.MOBILE = undefined;
+    this.TOKEN = undefined;
+  }
+
+  public register(formData:any) {
+
+    let body = `first_name=${formData.fullName}&last_name=%20&email=${formData.email}&password=%20&city=${formData.city}&mobile=%2B91${formData.mobile}&class=${formData.class}&school=${formData.school}&city=${formData.city}`;
+
+    const httpOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    };
+    
+    return this.http.post(environment.BASE_API_URL + 'signup', body, httpOptions);
+  }
+  
+  public checkUser(mobile: any) {
+
+    let body = `mobile=%2B91${mobile}`;
+
+    const httpOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    };
+    
+    return this.http.post(environment.BASE_API_URL + 'check_user', body, httpOptions);
+  }
+  
+  public updateStatus(userId: any) {
+
+    let body = `user_id=${userId}`;
+
+    const httpOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    };
+    
+    return this.http.post(environment.BASE_API_URL + 'update_status', body, httpOptions);
+  }
+
+  public getUserViaMobile(mobile: string) {
+    let body = `mobile=%2B91${mobile}`;
+
+    const httpOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    };
+    
+    return this.http.post(environment.BASE_API_URL + 'get_user', body, httpOptions);
+  }
+  
+  public getAccessToken(mobile: string, userId: any) {
+    let body = `mobile=%2B91${mobile}&userId=${userId}`;
+
+    const httpOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    };
+    
+    return this.http.post(environment.BASE_API_URL + 'get_access_token', body, httpOptions);
+  }
+
+  public updateProfilePicture(file: File, userId: any) {
+    const formData: FormData = new FormData();
+    formData.append('image', file, file.name);
+    formData.append('user_id', userId.toString());
+
+    return this.http.post(environment.BASE_API_URL + 'upload_profile_photo', formData);
+  }
+  
+  public getSearchedCourses(val: string) {
+    return this.http.get(environment.BASE_API_URL + 'courses_by_search_string?search_string=' + val);
+  }
+
+  public getClassList() {
+    return this.http.get(environment.BASE_API_URL + 'class_list/10');
+  }
+
+  public getEnrolledCourses(token: string) {
+    return this.http.get(environment.BASE_API_URL + 'my_courses?auth_token=' + token);
+  }
+
+  public getAllCourses() {
+    return this.http.get(environment.BASE_API_URL + 'all_courses');
+  }
+
+  public getFreeCourses() {
+    return this.http.get(environment.BASE_API_URL + 'free_courses');
+  }
+
+  public getPopularCourses() {
+    return this.http.get(environment.BASE_API_URL + 'popular_courses');
+  }
+  
+  public getTests() {
+    return this.http.get(environment.BASE_API_URL + 'tests');
+  }
+  
+  public getCoursesByClass(userId: string) {
+    return this.http.get(environment.BASE_API_URL + 'class_wise_course?user_id=' + userId);
+  }
+
+  public getCourseInfoUsingCourseID(courseId: string) {
+    return this.http.get(environment.BASE_API_URL + 'course_object_by_id?course_id=' + courseId);
+  }
+  
+  public getSectionsAndLessonsUsingCourseID(token: string, courseId: string) {
+    return this.http.get(environment.BASE_API_URL + 'sections?auth_token=' + token + '&course_id=' + courseId);
+  }
+
+  public updateUserInfo(formData: any) {
+    let body = `first_name=${formData.fullName}&mobile=%2B91${formData.mobile}&class=${formData.class}&school=${formData.school}&city=${formData.city}`;
+
+    const httpOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    };
+    
+    return this.http.post(environment.BASE_API_URL + 'update_user_data', body, httpOptions);
+  }
+
+  public downloadPdf(url: string): Observable<Blob> {
+    return this.http.get(url, { responseType: 'blob' });
+  }
+
+  public savePdf(blob: Blob, fileName: string): void {
+    saveAs(blob, fileName);
+  }
+
+  public downloadVideo(url: string, fileName: string) {
+    this.http.get(url, { responseType: 'blob' }).subscribe(
+      (blob: any) => {
+        // const blob = new Blob([data], { type: 'video/mp4' });
+        saveAs(blob, fileName);
+      }
+    );
+  }
+
+  public saveVideo(blob: Blob, fileName: string) {
+    saveAs(blob, fileName);
+  }
+
+  public updateUserCurrentProgress(user_id: any, course_id: any, lesson_id: any) {
+    let body = `user_id=${user_id}&course_id=${course_id}&lesson_id=${lesson_id}`;
+
+    const httpOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    };
+    return this.http.post(environment.BASE_URL + 'home/update_watch_history_manually', body, httpOptions);
+  }
 }

@@ -7,14 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { StudyMaterialPageRoutingModule } from './study-material-routing.module';
 
 import { StudyMaterialPage } from './study-material.page';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { SafePipe } from 'src/app/safe.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    StudyMaterialPageRoutingModule
+    StudyMaterialPageRoutingModule,
+    PdfViewerModule,
   ],
-  declarations: [StudyMaterialPage]
+  declarations: [StudyMaterialPage,SafePipe],
 })
 export class StudyMaterialPageModule {}

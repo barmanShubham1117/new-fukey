@@ -1,13 +1,101 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>home</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content>
+  <div class="main-layout">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">home</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <div class="welcome">
+      <div class="profile-pic"></div>
+      <div class="welcome-note">
+        <div class="welcome-title"><b>Welcome, {{ username }}!</b></div>
+        <div class="welcome-subtitle">You have {{ noOfEnrolledCourse }} enrolled courses</div>
+      </div>
+    </div>
+
+    <div class="ad"></div>
+
+    <div class="enrolled-batches">
+      <div class="enrolled-batches-header">
+        <span id="enrolled-batches-title"><b>Enrolled Batches</b></span>
+        <span id="enrolled-batches-all" (click)="goToBatchesTab()"><a>View All<b>></b></a></span>
+      </div>
+
+      <div id="hideEnrollCourse" class="enrolled-batches-content">
+
+        <div class="swiper" *ngIf="enrolledCourses.length == 0">
+          <div class="swiper-wrapper">            
+            <div class="swiper-slide">
+              <div class="course-container">
+                <div class="text-center">No enrolled course found.</div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+      </div>
+
+      <div id="showEnrollCourse" class="enrolled-batches-content" style="display: none;">
+
+        <div class="swiper">
+          <div class="swiper-wrapper">            
+            <div class="swiper-slide" *ngFor="let enroll of enrolledCourses;">
+              <div class="course-container" (click)="navigateToCourseContentPage(enroll.id)">
+                <div class="course-image" style="background: url('{{enroll.thumbnail}}');background-position: center; background-repeat: no-repeat; background-size: cover;"></div>
+                <div class="course-details">
+                  <div class="course-name">{{ enroll.title }}</div>
+                  <div class="course-timing">Timing: 7:45 PM</div>
+                  <div class="course-leave">
+                    <ion-icon name="enter"></ion-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="for-you">
+      <div class="for-you-header">
+        <span id="for-you-title"><b>For You</b></span>
+        <span id="for-you-all" (click)="goToStoreTab()"><a>View All<b>></b></a></span>
+      </div>
+      <div class="for-you-content">
+        <div class="swiper">
+
+          <div class="swiper-wrapper">
+
+            <div class="swiper-slide for-you-slide" *ngFor="let all of newAllCourses;">
+              
+              <div class="for-you-course-container" *ngFor="let course of all;" (click)="navigateToCourseContentPage(course.id)">
+                <div class="for-you-course-image" style="background: url('{{course.thumbnail}}');background-position: center; background-repeat: no-repeat; background-size: cover;"></div>
+                <div class="for-you-course-details">
+                  <div class="for-you-course-name">{{ course.title }}</div>
+                  <div class="course-key-points">
+                    <div>
+                      <ion-icon class="library" name="library"></ion-icon> {{ course.level }}
+                    </div>
+                    <div>
+                      <ion-icon class="star" name="star"></ion-icon> {{ course.number_of_ratings }}/5.0 Rating
+                    </div>
+                    <div>
+                      <ion-icon class="people" name="people"></ion-icon> {{ course.total_enrollment }}
+                    </div>
+                  </div>
+                  <div class="view-details">
+                    <a>View Details<b>></b></a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          
+          </div>
+
+          <div class="swiper-pagination"></div>
+
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>

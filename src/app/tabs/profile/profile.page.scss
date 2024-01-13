@@ -1,0 +1,86 @@
+.intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+    
+    .profile-image {
+        background-image: url('/assets/new/img1.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 7rem;
+        width: 7rem;
+        border-radius: 50%;
+        border: 2px solid #0026A2;
+        margin-bottom: 1rem;
+    }
+    .username {
+        font-weight: 600;
+        color: #000;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+    .email {
+        font-weight: 600;
+        color: #000;
+        font-size: 1rem;
+    }
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+
+    .option-icon {
+        height: 2.5rem;
+        width: 2.5rem;
+        border-radius: 50%;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5rem;
+    }
+    .option-detail {
+        width: 80%;
+        display: flex;
+        margin-left: 1rem;
+        justify-content: space-between;
+    }
+    .option-title {
+        font-weight: bold;
+        font-size: 1rem;
+        color: #000;
+    }
+    .more-btn {
+        font-weight: bolder;
+        color: #888888;
+    }
+    .edit-profile {
+        background-color: #06CB5B;
+    }
+    .about {
+        background-color: #8C52FF;
+    }
+    .terms-and-conditions {
+        background-color: #005CD6;
+    }
+    .privacy-policy {
+        background-color: #FF1616;
+    }
+    .rate-this-app {
+        background-color: #8C52FF;
+    }
+    .share-this-app {
+        background-color: #FF66C4;
+    }
+}
+
+.general-settings {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #000;
+    margin: 1rem 0;
+}

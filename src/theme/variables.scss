@@ -76,6 +76,12 @@
   --ion-color-light-tint: #f5f6f9;
 }
 
+:root[mode=ios] .montserrat,
+:root[mode=md] .montserrat{
+  --ion-font-family:  'Montserrat'!important;
+  font-family:  'Montserrat' !important;
+}
+
 @media (prefers-color-scheme: dark) {
   /*
    * Dark Colors
@@ -241,4 +247,14 @@ html {
    * https://ionicframework.com/docs/layout/dynamic-font-scaling
    */
   --ion-dynamic-font: var(--ion-default-dynamic-font);
+}
+
+@font-face {
+  font-family: Montserrat;
+  src: 'https://fonts.googleapis.com/css?family=Montserrat';
+}
+
+@font-face {
+  font-family: MontserratBold;
+  src: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap';
 }

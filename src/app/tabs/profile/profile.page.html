@@ -1,13 +1,81 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>profile</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding">
+  <div class="intro">
+    <div class="profile-image" style="overflow: hidden;">
+      <img *ngIf="user.image != null" [src]="user.image" alt="" srcset="" style="height: 100%; width: 100%;">
+    </div>
+    <div class="username">{{ USERNAME }}</div>
+    <div class="email">{{ MOBILE }}</div>
+  </div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="option-container">
+    <div class="option" routerLink="/tabs/edit-profile">
+      <div class="option-icon edit-profile">
+        <ion-icon name="pencil-outline"></ion-icon>
+      </div>
+      <div class="option-detail">
+        <div class="option-title">Edit Profile</div>
+        <div class="more-btn">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </div>
+    </div>
+
+    <div class="general-settings">General Settings</div>
+
+    <div class="option">
+      <div class="option-icon about">
+        <ion-icon name="pencil-outline"></ion-icon>
+      </div>
+      <div class="option-detail">
+        <div class="option-title">About</div>
+        <div class="more-btn">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </div>
+    </div>
+    <div class="option">
+      <div class="option-icon terms-and-conditions">
+        <ion-icon name="alert-outline"></ion-icon>
+      </div>
+      <div class="option-detail">
+        <div class="option-title">Terms & Conditions</div>
+        <div class="more-btn">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </div>
+    </div>
+    <div class="option">
+      <div class="option-icon privacy-policy">
+        <ion-icon name="lock-closed-outline"></ion-icon>
+      </div>
+      <div class="option-detail">
+        <div class="option-title">Privacy Policy</div>
+        <div class="more-btn">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </div>
+    </div>
+    <div class="option">
+      <div class="option-icon rate-this-app">
+        <ion-icon name="star-outline"></ion-icon>
+      </div>
+      <div class="option-detail">
+        <div class="option-title">Rate This App</div>
+        <div class="more-btn">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </div>
+    </div>
+    <div class="option">
+      <div class="option-icon share-this-app">
+        <ion-icon name="share-social-outline"></ion-icon>
+      </div>
+      <div class="option-detail">
+        <div class="option-title">Share This App</div>
+        <div class="more-btn">
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>

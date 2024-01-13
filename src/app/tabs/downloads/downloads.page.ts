@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-downloads',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DownloadsPage implements OnInit {
 
-  constructor() { }
+  type: string = "";
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    this.type = this.router.getCurrentNavigation()?.extras.state?.['type'];
   }
 
 }

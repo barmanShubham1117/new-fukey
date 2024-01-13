@@ -24,3 +24,57 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+* {
+    font-family: 'Montserrat' !important;
+}
+
+/* For responsiveness across screens */
+html {
+    font-size: 100%;
+    @media (max-width: 289px) {
+      font-size: 72.25%;
+    }
+    @media (min-width: 290px) {
+      font-size: 72.5%;
+    }
+    @media (min-width: 300px) {
+      font-size: 75%;
+    }
+    @media (min-width: 320px) {
+      font-size: 80%;
+    }
+    @media (min-width: 325px) {
+      font-size: 81.25%;
+    }
+    @media (min-width: 326px) {
+      font-size: 81.5%;
+    }
+    @media (min-width: 330px) {
+      font-size: 82.5%;
+    }
+    @media (min-width: 360px) {
+      font-size: 90%;
+    }
+    @media (min-width: 411px) {
+      font-size: 102.75%;
+    }
+    @media (min-width: 500px) {
+      font-size: 125%;
+    }
+    @media (min-width: 720px) {
+      font-size: 180%;
+    }
+    @media (min-width: 1000px) {
+      font-size: 250%;
+    }
+}
+html.ios {
+    @media (max-width: 359px) and (min-width: 320px) {
+      font-size: 82.5%;
+    }
+}
+
+ion-content {
+  --background: #fff;
+}

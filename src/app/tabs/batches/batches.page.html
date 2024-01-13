@@ -1,13 +1,23 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>batches</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content>
+  <div class="page-header">Enrolled Batches</div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">batches</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="batch-list" *ngIf="isEnrolledCourseAvailable">
+
+    <div *ngFor="let course of enrolledCourses;" class="course-container" (click)="navigateToCourseContentPage(course.id)">
+      <div class="course-image" style="background: url('{{course.thumbnail}}');background-position: center; background-repeat: no-repeat; background-size: cover;"></div>
+      <div class="course-details">
+        <div class="course-name">{{course.title}}</div>
+        <div class="details">Current Progress: <b>{{ course.completion }}%</b></div>
+        <div class="details">Timing: 7:45 PM</div>
+        <div class="continue">
+          <span class="continue-text">Continue</span><ion-icon name="enter"></ion-icon>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+  <div class="text-center"  *ngIf="!isEnrolledCourseAvailable">
+    You have no enrolled course.
+  </div>
 </ion-content>

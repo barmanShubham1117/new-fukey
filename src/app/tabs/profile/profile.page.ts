@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpService } from 'src/app/services/http.service';
 
 @Component({
   selector: 'app-profile',
@@ -7,9 +8,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfilePage implements OnInit {
 
-  constructor() { }
+  public USERNAME: any;
+  public USER_ID: any;
+  public MOBILE: any;
+
+  public user = {
+    name: '',
+    class: '',
+    city: '',
+    mobile: '',
+    school: '',
+    image: '',
+  };
+
+  constructor(
+    private httpService: HttpService
+  ) { }
 
   ngOnInit() {
+    this.MOBILE = localStorage.getItem('MOBILE');
+    this.httpService.getUserViaMobile(this.MOBILE).subscribe((response: any) => {
+      console.log(response);
+      this.USERNAME = response.first_name;
+
+      this.user.image = response.image;
+    })
   }
 
 }

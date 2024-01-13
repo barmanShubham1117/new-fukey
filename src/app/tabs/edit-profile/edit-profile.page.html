@@ -1,13 +1,41 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>edit-profile</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding">
+  
+  <div class="page-header">Edit Profile</div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">edit-profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="container">
+
+    <div class="profile-image" (click)="fileInput.click()" style="overflow: hidden;">
+      <input #fileInput type="file" (change)="onFileSelected($event)" style="display:none">
+      <img *ngIf="user.image != null" [src]="user.image" alt="" srcset="" style="height: 100%; width: 100%;">
+    </div>
+
+    <form class="needs-validation">
+
+      <!-- <div id="sign-in-button"></div> -->
+  
+      <div>
+        <input type="text" placeholder="Full Name" class="form-control user-input" value="{{ user.name }}" name="fullName" id="fullName" required>
+      </div>
+  
+      <div>
+        <input type="tel" placeholder="Mobile No." class="form-control user-input" value="{{ user.mobile }}" name="mobile" readonly id="mobile" required>
+      </div>
+  
+      <div>
+        <input type="text" placeholder="Class" class="form-control user-input" value="{{ user.class }}" name="class" id="class" required>
+      </div>
+  
+      <div>
+        <input type="text" placeholder="School" class="form-control user-input" value="{{ user.school }}" name="school" id="school" required>
+      </div>
+  
+      <div>
+        <input type="text" placeholder="City" class="form-control user-input" value="{{ user.city }}" name="city" id="city" required>
+      </div>
+    
+      <div class="update-btn-container">
+        <ion-button shape="round" class="update-button" (click)="onSubmit()">UPDATE</ion-button>
+      </div>
+    </form>
+  </div>
 </ion-content>

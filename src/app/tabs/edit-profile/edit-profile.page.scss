@@ -1,0 +1,71 @@
+ion-content {
+    --background: url('/assets/auth_background.png') no-repeat center center / cover;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80%;
+}
+.page-header {
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: #002CBD;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-image {
+    background-image: url('/assets/new/img1.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 7rem;
+    width: 7rem;
+    border-radius: 50%;
+    border: 2px solid #0026A2;
+    margin-bottom: 2rem;
+}
+
+form {
+    width: 70%;
+}
+.user-input {
+    width: 100%;
+    font-size: 1rem;
+    background-color: #D6D6D6;
+    border-radius: 100px;
+    border: none;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    margin-bottom: 1rem;
+    color: #000;
+}
+
+.form-check-label {
+    font-size: 1rem;
+}
+
+.form-check-label > span {
+    color: #D12929;
+}
+
+.form-check {
+    margin-bottom: 1rem;
+}
+.update-btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.update-button {
+    text-decoration: none;
+    color: white;
+    --background: linear-gradient(90deg, rgba(13,6,152,1) 0%, rgba(58,118,245,1) 50%, rgba(33,181,248,1) 100%);
+    text-transform: none;
+    font-size: 1rem;
+    width: 10rem;
+    height: 3rem;
+    --box-shadow: 0 5px 8px 0 rgb(0, 0, 0, 0.5);
+}

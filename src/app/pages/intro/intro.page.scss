@@ -1,0 +1,81 @@
+ion-content {
+    --background: white;
+}
+.logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 15%;
+
+    img {
+        height: 100px;
+        width: 100px;
+        background-size: contain;
+    }
+}
+
+swiper-container {
+    width: 100%;
+    height: 65%;
+}
+
+swiper-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+swiper-slide {
+    img {
+        width: 70%;
+        margin-top: -2em;
+        background-size: contain;
+    }
+}
+
+.title {
+    margin-top: 0px;
+    font-weight: bolder;
+    font-size: xx-large;
+    color: black;
+}
+
+.subtitle {
+    margin-top: -1em;
+    color: black;
+}
+
+.desc {
+    text-align: center;
+    font-size: smaller;
+    color: black;
+}
+
+.next-button {
+    height: 60px;
+    --background: rgb(245,169,72);
+    --background: linear-gradient(90deg, rgba(245,169,72,1) 0%, rgba(245,115,58,1) 50%, rgba(220,76,142,1) 100%);
+    padding: 0 8%;
+    text-transform: none;
+    font-size: 20px;
+}
+.skip-button {
+    height: 60px;
+    padding: 0 10%;
+    text-transform: none;
+    font-size: 15px;
+    color: rgb(101, 173, 245);
+}
+.get-started {
+    text-decoration: none;
+    color: white;
+    height: 60px;
+    --background: rgb(13,6,152);
+    --background: linear-gradient(90deg, rgba(13,6,152,1) 0%, rgba(58,118,245,1) 50%, rgba(33,181,248,1) 100%);
+    padding: 0 8%;
+    text-transform: none;
+    font-size: 20px;
+    margin-top: 5%;
+}
