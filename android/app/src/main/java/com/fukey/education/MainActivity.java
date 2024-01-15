@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.fukey.education;
 
 import com.getcapacitor.BridgeActivity;
 

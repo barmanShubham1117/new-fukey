@@ -7,13 +7,13 @@ export const environment = {
   BASE_URL: 'https://learn.fukeyeducation.com/',
   BASE_API_URL: 'https://learn.fukeyeducation.com/api/',
   firebaseConfig: {
-    apiKey: "AIzaSyDLkvpuD0zPJXw4ZlN8ZgNekMM4Lph67mM",
-    authDomain: "education-lms-1701250931421.firebaseapp.com",
-    projectId: "education-lms-1701250931421",
-    storageBucket: "education-lms-1701250931421.appspot.com",
-    messagingSenderId: "792748978749",
-    appId: "1:792748978749:web:7511b6daa467d98ba83054",
-    measurementId: "G-PVM4BH9ERJ"
+    apiKey: "AIzaSyDpe8lvcG2YXYhM_tD1SqWA1Cs4yxGJVpI",
+    authDomain: "fukey-education.firebaseapp.com",
+    projectId: "fukey-education",
+    storageBucket: "fukey-education.appspot.com",
+    messagingSenderId: "591743951341",
+    appId: "1:591743951341:web:62673fa29506db8d0487e4",
+    measurementId: "G-VEG6DM6YVQ"
   },
   countryJson: [
 		{ name: 'India', dial_code: '+91', code: 'IN' },
