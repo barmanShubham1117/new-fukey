@@ -69,6 +69,10 @@ const routes: Routes = [
         loadChildren: () => import('./downloads/downloads.module').then( m => m.DownloadsPageModule)
       },
       {
+        path: 'offline-downloads/offline-material',
+        loadChildren: () => import('./offline-material/offline-material.module').then( m => m.OfflineMaterialPageModule)
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: '/tabs/home',

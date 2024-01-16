@@ -6,6 +6,8 @@ import { HttpService } from 'src/app/services/http.service';
 
 import { AppService } from 'src/app/services/app.service';
 import { SafePipe } from 'src/app/safe.pipe';
+import { FileActionService } from 'src/app/services/fileaction.service';
+import { DbService } from 'src/app/services/db.service';
 
 @Component({
   selector: 'app-study-material',
@@ -19,7 +21,7 @@ export class StudyMaterialPage implements OnInit {
   public chapterIndex: any;
   public lessonIndex: any;
   public currentLesson: any;
-
+  public fileDownloaded:boolean = false;
   public isPreviousBtnDisabled: any;
   public isNextBtnDisabled: any;
   public pdfUrl: any;
@@ -35,10 +37,11 @@ export class StudyMaterialPage implements OnInit {
     private loader: LoadingController,
     private httpService: HttpService,
     private appService: AppService,
+    private dbService:DbService
   ) { 
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     // this.appService.showLoadingScreen("Loading..")
     this.USER_ID = localStorage.getItem('USER_ID');
     this.MOBILE = localStorage.getItem('MOBILE');
@@ -48,32 +51,66 @@ export class StudyMaterialPage implements OnInit {
     this.data = this.router.getCurrentNavigation()?.extras.state?.['data'];
     this.chapterIndex = this.router.getCurrentNavigation()?.extras.state?.['chapterIndex'];
     this.lessonIndex = this.router.getCurrentNavigation()?.extras.state?.['lessonIndex'];
-    console.log(this.data);
-    console.log(this.chapterIndex);
-    console.log(this.lessonIndex);
-
-    console.log(this.data[this.chapterIndex].lessons[this.lessonIndex]);
     this.currentLesson = this.data[this.chapterIndex].lessons[this.lessonIndex];
-
-    console.log(this.currentLesson);
-
+    this.currentLesson.instructor_name  = this.courseData.instructor_name;
+    this.currentLesson.course_name  = this.courseData.title;
+    await this.isFileDownloaded();
     if (this.currentLesson.lesson_type == 'quiz') {
       this.quizUrl = "https://learn.rahulshrivastava.in/home/start_quiz/" + this.currentLesson.id + "/" + this.USER_ID;
     }
   }
 
   async download() {
-    this.httpService.downloadPdf(this.currentLesson.attachment_url).subscribe(
-      (blob: Blob) => {
-        this.httpService.savePdf(blob, this.currentLesson.title);
-      }
-    );
+    console.log("course name",this.currentLesson.course_name);
+    console.log("instructor name",this.currentLesson.instructor_name);
+    this.appService.showLoadingScreen('Downloading offline media..');
+    this.dbService.downloadAndSavePDF(this.currentLesson.attachment_url,this.currentLesson.title,this.currentLesson.summary,this.currentLesson.course_name,this.currentLesson.instructor_name,"pdf").subscribe((status:string) => {
+      this.appService.dismissLoading().then(() => {
+        if(status == "done"){
+          this.appService.presentToast('File saved successfully.','bottom');
+          this.fileDownloaded = true;
+        }else{
+          this.appService.presentToast('Error to download pdf.','bottom');
+          this.fileDownloaded = false;
+        }    
+      });
+      
+    });
   }
-
   async downloadVideo() {
-    this.httpService.downloadVideo(this.currentLesson.video_url, this.currentLesson.title);
+    this.appService.showLoadingScreen('Downloading offline media..');
+    var status = this.dbService.downloadAndSavePDF(this.currentLesson.video_url_web,this.currentLesson.title,this.currentLesson.summary,this.currentLesson.course_name,this.currentLesson.instructor_name,"video").subscribe((status:string) => {
+      this.appService.dismissLoading().then(() => {
+        if(status == "done"){
+          this.appService.presentToast('Video saved successfully.','bottom');
+          this.fileDownloaded = true;
+        }else{
+          this.appService.presentToast('Error to download video.','bottom');
+          this.fileDownloaded = false;
+        }    
+      });
+      
+    });
   }
-
+  async isFileDownloaded(){
+    this.dbService.dbState().subscribe(async (res) => {
+      if(res){
+        this.dbService.getDownloadAsset(this.currentLesson.title,this.currentLesson.lesson_type == 'video'? 'video':'pdf').then((data:any)=>{
+          console.log("checked file is there:"+data.status);
+          if(data.status != "Error"){
+            this.fileDownloaded = true;
+          }else{
+            this.fileDownloaded = false;
+          }
+           
+        })
+        .catch((error) =>{
+          console.log("checked file is there:" + error);
+          this.fileDownloaded = false;
+        }); 
+      }
+    });
+  }
   convertToEmbedUrl(youtubeUrl: string) {
     const videoIdMatch = youtubeUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
   
@@ -90,7 +127,7 @@ export class StudyMaterialPage implements OnInit {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
-  onPreviousBtnPressed() {
+  async onPreviousBtnPressed() {
     console.log('BEFORE: ', this.chapterIndex);
     console.log('BEFORE: ', this.lessonIndex);
 
@@ -109,14 +146,15 @@ export class StudyMaterialPage implements OnInit {
         this.lessonIndex--;
       }
     }
-
+    this.fileDownloaded = false;
     this.currentLesson = this.data[this.chapterIndex].lessons[this.lessonIndex];
-
-    console.log('AFTER: ', this.chapterIndex);
-    console.log('AFTER: ', this.lessonIndex);
+    this.currentLesson.instructor_name  = this.courseData.instructor_name;
+    this.currentLesson.course_name  = this.courseData.title;
+    console.log("Current Course Name",this.currentLesson.course_name);
+    await this.isFileDownloaded();
   }
   
-  onNextBtnPressed() {
+  async onNextBtnPressed() {
     console.log('BEFORE: ', this.chapterIndex);
     console.log('BEFORE: ', this.lessonIndex);
 
@@ -135,17 +173,12 @@ export class StudyMaterialPage implements OnInit {
         this.lessonIndex++;
       }
     }
-
+    this.fileDownloaded = false;
     this.currentLesson = this.data[this.chapterIndex].lessons[this.lessonIndex];
-
-    console.log('Current Lesson: ', this.currentLesson);
-    console.log('AFTER: ', this.chapterIndex);
-    console.log('AFTER: ', this.lessonIndex);
-
-    console.log('data: ', this.data);
-    console.log('course_id: ', this.courseData.id);
-    console.log('lesson_id: ', this.data[this.chapterIndex].lessons[this.lessonIndex].id);
-
+    this.currentLesson.instructor_name  = this.courseData.instructor_name;
+    this.currentLesson.course_name  = this.courseData.title;
+    console.log("Current Course Name",this.currentLesson.course_name);
+    await this.isFileDownloaded();
   }
 
 }

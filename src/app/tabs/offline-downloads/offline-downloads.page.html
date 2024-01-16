@@ -12,91 +12,43 @@
 
     <div *ngIf="activeTab == 'videos'" class="tab-contents">
       <div class="top-bar">
-        <ion-searchbar class="search-bar" show-clear-button="focus" placeholder="Search"></ion-searchbar>
+        <ion-searchbar class="search-bar" show-clear-button="focus" placeholder="Search" [(ngModel)]="videoBatch"></ion-searchbar>
       </div>
 
       <div class="secondary-container">
-        <span>TOTAL (5)</span>
+        <span>TOTAL ({{ this.videos.length }})</span>
 
         <div class="sort-area">
           <ion-icon name="funnel"></ion-icon>
           <span>SORT</span>
         </div>
       </div>
-
-      <ion-card (click)="openDownloadsPage('video')">
+      <div *ngIf="videos.length > 0">
+      <ion-card (click)="openDownloadsPage(item.batchName,'video')" *ngFor="let item of videos | filterpipe: videoBatch : searchableList">
         <ion-card-header>
           <div class="card-image">
             ▶️
           </div>
           <div class="card-content">
-            <ion-card-title>Class 12th English Medium</ion-card-title>
-            <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-            <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
+            <ion-card-title>{{ item.batchName }}</ion-card-title>
+            <ion-card-subtitle><ion-icon name="person"></ion-icon>{{ item.instructor_name }}</ion-card-subtitle>
+            <!-- <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle> -->
           </div>
         </ion-card-header>
       </ion-card>
-      
-      <ion-card (click)="openDownloadsPage('video')">
-        <ion-card-header>
-          <div class="card-image">
-            ▶️
-          </div>
-          <div class="card-content">
-            <ion-card-title>Class 12th English Medium</ion-card-title>
-            <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-            <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-          </div>
-        </ion-card-header>
-      </ion-card>
-      
-      <ion-card (click)="openDownloadsPage('video')">
-        <ion-card-header>
-          <div class="card-image">
-            ▶️
-          </div>
-          <div class="card-content">
-            <ion-card-title>Class 12th English Medium</ion-card-title>
-            <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-            <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-          </div>
-        </ion-card-header>
-      </ion-card>
-      
-      <ion-card (click)="openDownloadsPage('video')">
-        <ion-card-header>
-          <div class="card-image">
-            ▶️
-          </div>
-          <div class="card-content">
-            <ion-card-title>Class 12th English Medium</ion-card-title>
-            <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-            <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-          </div>
-        </ion-card-header>
-      </ion-card>
-      
-      <ion-card (click)="openDownloadsPage('video')">
-        <ion-card-header>
-          <div class="card-image">
-            ▶️
-          </div>
-          <div class="card-content">
-            <ion-card-title>Class 12th English Medium</ion-card-title>
-            <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-            <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-          </div>
-        </ion-card-header>
-      </ion-card>
+      </div>
+      <div *ngIf="videos.length == 0">
+          <p>No video found.</p>
+      </div>
     </div>
     
     <div *ngIf="activeTab == 'documents'" class="tab-contents">
       <div class="top-bar">
-        <ion-searchbar class="search-bar" show-clear-button="focus" placeholder="Search"></ion-searchbar>
+        <ion-searchbar class="search-bar" show-clear-button="focus" placeholder="Search" [(ngModel)]="documentBatch"></ion-searchbar>
       </div>
 
       <div class="secondary-container">
-        <span>TOTAL (5)</span>
+        <span>TOTAL ({{ this.pdfs.length }})</span>
 
         <div class="sort-area">
           <ion-icon name="funnel"></ion-icon>
@@ -104,7 +56,7 @@
         </div>
       </div>
 
-      <ion-card (click)="openDownloadsPage('file')">
+      <!-- <ion-card (click)="openDownloadsPage('file')">
         <ion-card-header>
           <div class="card-image">
             📁
@@ -115,59 +67,24 @@
             <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
           </div>
         </ion-card-header>
-      </ion-card>
-      
-      <ion-card (click)="openDownloadsPage('file')">
-        <ion-card-header>
-          <div class="card-image">
-            📁
-          </div>
-          <div class="card-content">
-            <ion-card-title>Class 12th English Medium</ion-card-title>
-            <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-            <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-          </div>
-        </ion-card-header>
-      </ion-card>
-      
-      <ion-card (click)="openDownloadsPage('file')">
-        <ion-card-header>
-          <div class="card-image">
-            📁
-          </div>
-          <div class="card-content">
-            <ion-card-title>Class 12th English Medium</ion-card-title>
-            <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-            <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-          </div>
-        </ion-card-header>
-      </ion-card>
-      
-      <ion-card (click)="openDownloadsPage('file')">
-        <ion-card-header>
-          <div class="card-image">
-            📁
-          </div>
-          <div class="card-content">
-            <ion-card-title>Class 12th English Medium</ion-card-title>
-            <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-            <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-          </div>
-        </ion-card-header>
-      </ion-card>
-      
-      <ion-card (click)="openDownloadsPage('file')">
-        <ion-card-header>
-          <div class="card-image">
-            📁
-          </div>
-          <div class="card-content">
-            <ion-card-title>Class 12th English Medium</ion-card-title>
-            <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-            <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-          </div>
-        </ion-card-header>
-      </ion-card>
+      </ion-card> -->
+      <div *ngIf="pdfs.length > 0">
+        <ion-card (click)="openDownloadsPage(item.batchName,'pdf')" *ngFor="let item of pdfs | filterpipe: documentBatch : searchableList">
+          <ion-card-header>
+            <div class="card-image">
+              📁
+            </div>
+            <div class="card-content">
+              <ion-card-title>{{ item.batchName }}</ion-card-title>
+              <ion-card-subtitle><ion-icon name="person"></ion-icon>{{ item.instructor_name }}</ion-card-subtitle>
+              <!-- <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle> -->
+            </div>
+          </ion-card-header>
+        </ion-card>
+        </div>
+        <div *ngIf="pdfs.length == 0">
+          <p>No document found.</p>
+      </div>
     </div>
 
   </div>

@@ -1,11 +1,11 @@
 <ion-content class="ion-padding">
   <div *ngIf="type == 'video'" class="tab-contents">
     <div class="top-bar">
-      <ion-searchbar class="search-bar" show-clear-button="focus" placeholder="Search"></ion-searchbar>
+      <ion-searchbar class="search-bar" show-clear-button="focus" placeholder="Search" [(ngModel)]="videoTitle"></ion-searchbar>
     </div>
 
     <div class="secondary-container">
-      <span>TOTAL (5)</span>
+      <span>TOTAL ({{ assets.length }})</span>
 
       <div class="sort-area">
         <ion-icon name="funnel"></ion-icon>
@@ -13,147 +13,42 @@
       </div>
     </div>
 
-    <ion-card>
+    <ion-card *ngFor="let item of assets | filterpipe: videoTitle : searchableList" (click)="openOfflineMaterial(item.title,'video')">
       <ion-card-header>
         <div class="card-image">
           ▶️
         </div>
         <div class="card-content">
-          <ion-card-title>Class 12th English Medium</ion-card-title>
-          <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-        </div>
-      </ion-card-header>
-    </ion-card>
-    
-    <ion-card>
-      <ion-card-header>
-        <div class="card-image">
-          ▶️
-        </div>
-        <div class="card-content">
-          <ion-card-title>Class 12th English Medium</ion-card-title>
-          <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-        </div>
-      </ion-card-header>
-    </ion-card>
-    
-    <ion-card>
-      <ion-card-header>
-        <div class="card-image">
-          ▶️
-        </div>
-        <div class="card-content">
-          <ion-card-title>Class 12th English Medium</ion-card-title>
-          <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-        </div>
-      </ion-card-header>
-    </ion-card>
-    
-    <ion-card>
-      <ion-card-header>
-        <div class="card-image">
-          ▶️
-        </div>
-        <div class="card-content">
-          <ion-card-title>Class 12th English Medium</ion-card-title>
-          <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-        </div>
-      </ion-card-header>
-    </ion-card>
-    
-    <ion-card>
-      <ion-card-header>
-        <div class="card-image">
-          ▶️
-        </div>
-        <div class="card-content">
-          <ion-card-title>Class 12th English Medium</ion-card-title>
-          <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
+          <ion-card-title>{{ item.title }}</ion-card-title>
+          <ion-card-subtitle><ion-icon name="person"></ion-icon>by {{ item.instructor_name }}</ion-card-subtitle>
+          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>{{ item.batchName }}</ion-card-subtitle>
         </div>
       </ion-card-header>
     </ion-card>
   </div>
 
-  <div *ngIf="type == 'documents'" class="tab-contents">
+  <div *ngIf="type == 'pdf'" class="tab-contents">
     <div class="top-bar">
-      <ion-searchbar class="search-bar" show-clear-button="focus" placeholder="Search"></ion-searchbar>
+      <ion-searchbar class="search-bar" show-clear-button="focus" placeholder="Search" [(ngModel)]="pdfTitle"></ion-searchbar>
     </div>
 
     <div class="secondary-container">
-      <span>TOTAL (5)</span>
+      <span>TOTAL ({{ assets.length }})</span>
 
       <div class="sort-area">
         <ion-icon name="funnel"></ion-icon>
         <span>SORT</span>
       </div>
     </div>
-
-    <ion-card>
+    <ion-card *ngFor="let item of assets | filterpipe: pdfTitle : searchableList" (click)="openOfflineMaterial(item.title,'pdf')">
       <ion-card-header>
         <div class="card-image">
           📁
         </div>
         <div class="card-content">
-          <ion-card-title>Class 12th English Medium</ion-card-title>
-          <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-        </div>
-      </ion-card-header>
-    </ion-card>
-    
-    <ion-card>
-      <ion-card-header>
-        <div class="card-image">
-          📁
-        </div>
-        <div class="card-content">
-          <ion-card-title>Class 12th English Medium</ion-card-title>
-          <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-        </div>
-      </ion-card-header>
-    </ion-card>
-    
-    <ion-card>
-      <ion-card-header>
-        <div class="card-image">
-          📁
-        </div>
-        <div class="card-content">
-          <ion-card-title>Class 12th English Medium</ion-card-title>
-          <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-        </div>
-      </ion-card-header>
-    </ion-card>
-    
-    <ion-card>
-      <ion-card-header>
-        <div class="card-image">
-          📁
-        </div>
-        <div class="card-content">
-          <ion-card-title>Class 12th English Medium</ion-card-title>
-          <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
-        </div>
-      </ion-card-header>
-    </ion-card>
-    
-    <ion-card>
-      <ion-card-header>
-        <div class="card-image">
-          📁
-        </div>
-        <div class="card-content">
-          <ion-card-title>Class 12th English Medium</ion-card-title>
-          <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
-          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
+          <ion-card-title>{{ item.title }}</ion-card-title>
+          <ion-card-subtitle><ion-icon name="person"></ion-icon>by {{ item.instructor_name }}</ion-card-subtitle>
+          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>{{ item.batchName }}</ion-card-subtitle>
         </div>
       </ion-card-header>
     </ion-card>
