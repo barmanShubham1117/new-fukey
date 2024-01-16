@@ -1,9 +1,15 @@
 import { Token } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
-import { PushNotifications } from '@capacitor/push-notifications';
+import { PushNotificationSchema, PushNotifications } from '@capacitor/push-notifications';
 import { BehaviorSubject } from 'rxjs';
 import { StorageService } from './storage.service';
+
+import * as firebase from 'firebase/app';
+import 'firebase/messaging';
+import { environment } from 'src/environments/environment';
+
+
 
 export const FCM_TOKEN = 'push_notification_token';
 
@@ -23,9 +29,9 @@ export class FcmService {
   ) { }
 
   async initPush() {
-    if (Capacitor.getPlatform() !== 'web') {
+    // if (Capacitor.getPlatform() !== 'web') {
       this.registerPush();
-    }
+    // }
   }
 
   private async registerPush() {
@@ -42,7 +48,16 @@ export class FcmService {
       }
 
       if (permissionStatus.receive === 'granted') {
-        await PushNotifications.register();
+        console.log("Registering Push Notification");
+        console.log("FCM_TOKEN: ", this.storageService.getStorage("FCM_TOKEN"));
+        
+        
+        PushNotifications.register();
+
+         // Listen for incoming push notifications
+        PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
+          console.log('Push notification received', notification);
+        });
       }
 
     } catch(e) {
@@ -57,6 +72,9 @@ export class FcmService {
   }
 
   addListeners() {
+    firebase.initializeApp(environment.firebaseConfig);
+    const messaging = firebase;
+
     PushNotifications.addListener(
       'registration',
       async (token: any) => {
@@ -81,6 +99,8 @@ export class FcmService {
           };
 
           this.storageService.setStorage(FCM_TOKEN, fcmToken);
+
+          messaging
         }
       }
     );
