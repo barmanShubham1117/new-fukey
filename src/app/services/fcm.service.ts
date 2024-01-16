@@ -22,7 +22,7 @@ export class FcmService {
     private storageService: StorageService
   ) { }
 
-  initPush() {
+  async initPush() {
     if (Capacitor.getPlatform() !== 'web') {
       this.registerPush();
     }
@@ -37,11 +37,14 @@ export class FcmService {
         permissionStatus = await PushNotifications.requestPermissions();
       }
 
-      if (permissionStatus.receive === 'granted') {
-        throw new Error('Userr denied permissions...!!')
+      if (permissionStatus.receive !== 'granted') {
+        permissionStatus = await PushNotifications.requestPermissions();
       }
 
-      await PushNotifications.register();
+      if (permissionStatus.receive === 'granted') {
+        await PushNotifications.register();
+      }
+
     } catch(e) {
       console.error(e);
       
@@ -58,7 +61,7 @@ export class FcmService {
       'registration',
       async (token: any) => {
         console.log("MY FCM TOKEN: ", token);
-        const fcmToken = (token?.strValue);
+        const fcmToken = (token?.value);
         let go = 1;
         const savedToken = JSON.parse((await this.storageService.getStorage(FCM_TOKEN)).value);
         if (savedToken) {

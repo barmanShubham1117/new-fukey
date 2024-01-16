@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { StorageService } from 'src/app/services/storage.service';
 
 import Swiper from 'swiper';
 import { register } from 'swiper/element/bundle';
@@ -24,6 +25,7 @@ export class IntroPage implements AfterViewInit {
 
   constructor(
     public router: Router,
+    private storageService: StorageService
   ) {
     this.start = 0;
   }
@@ -38,9 +40,14 @@ export class IntroPage implements AfterViewInit {
   }
 
   goNext() {
-    this.swiperEx?.nativeElement.swiper.slideNext(1000);
-    // console.log('changed: ', this.swiperEx?.nativeElement.swiper.activeIndex);
-    this.start = this.swiperEx?.nativeElement.swiper.activeIndex;
+    // this.swiperEx?.nativeElement.swiper.slideNext(1000);
+    // // console.log('changed: ', this.swiperEx?.nativeElement.swiper.activeIndex);
+    // this.start = this.swiperEx?.nativeElement.swiper.activeIndex;
+    console.log("Button pressed");
+    this.storageService.getStorage('push_notification_token').then((data: any) => {
+      console.log("TOKEN: ", data);
+    });
+    
   }
 
   skip() {

@@ -15,8 +15,9 @@ export class AppComponent {
     private fcmService: FcmService
   ) {
     this.platform.ready().then(() => {
-      this.fcmService.initPush();
-      this.router.navigateByUrl('/splash', { replaceUrl: true });
+      this.fcmService.initPush().then(() => { 
+        this.router.navigateByUrl('/splash', { replaceUrl: true });
+      });
     })
     .catch((error: any) => {
       console.error(error);
