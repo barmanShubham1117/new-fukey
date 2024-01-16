@@ -41,6 +41,7 @@
     "@zoomus/websdk": "^2.18.2",
     "cordova-sqlite-storage": "^6.1.0",
     "file-saver": "^2.0.5",
+    "firebase-admin": "^12.0.0",
     "ionicons": "^7.0.0",
     "localforage-cordovasqlitedriver": "^1.8.0",
     "ng2-pdf-viewer": "^10.0.0",
