@@ -61,36 +61,62 @@ export class StudyMaterialPage implements OnInit {
   }
 
   async download() {
-    console.log("course name",this.currentLesson.course_name);
-    console.log("instructor name",this.currentLesson.instructor_name);
     this.appService.showLoadingScreen('Downloading offline media..');
-    this.dbService.downloadAndSavePDF(this.currentLesson.attachment_url,this.currentLesson.title,this.currentLesson.summary,this.currentLesson.course_name,this.currentLesson.instructor_name,"pdf").subscribe((status:string) => {
-      this.appService.dismissLoading().then(() => {
-        if(status == "done"){
-          this.appService.presentToast('File saved successfully.','bottom');
-          this.fileDownloaded = true;
-        }else{
-          this.appService.presentToast('Error to download pdf.','bottom');
-          this.fileDownloaded = false;
-        }    
+      await (await this.dbService.downloadFile(this.currentLesson.attachment_url, this.currentLesson.title, this.currentLesson.summary, this.currentLesson.course_name, this.currentLesson.instructor_name, "pdf")).subscribe((result)=>{
+        this.appService.dismissLoading().then(() => {
+          if(result){
+            this.fileDownloaded = true;
+            this.appService.presentToast('File saved successfully.','bottom');
+          }else{
+            this.fileDownloaded = false;
+            this.appService.presentToast('Error to download pdf.','bottom');
+          }
+        });
       });
       
-    });
+      
+    // console.log("course name",this.currentLesson.course_name);
+    // console.log("instructor name",this.currentLesson.instructor_name);
+    // this.appService.showLoadingScreen('Downloading offline media..');
+    // (await this.dbService.downloadAndSavePDF(this.currentLesson.attachment_url, this.currentLesson.title, this.currentLesson.summary, this.currentLesson.course_name, this.currentLesson.instructor_name, "pdf")).subscribe((status:string) => {
+    //   this.appService.dismissLoading().then(() => {
+    //     if(status == "done"){
+    //       this.appService.presentToast('File saved successfully.','bottom');
+    //       this.fileDownloaded = true;
+    //     }else{
+    //       this.appService.presentToast('Error to download pdf.','bottom');
+    //       
+    //     }    
+    //   });
+      
+    // });
   }
   async downloadVideo() {
     this.appService.showLoadingScreen('Downloading offline media..');
-    var status = this.dbService.downloadAndSavePDF(this.currentLesson.video_url_web,this.currentLesson.title,this.currentLesson.summary,this.currentLesson.course_name,this.currentLesson.instructor_name,"video").subscribe((status:string) => {
-      this.appService.dismissLoading().then(() => {
-        if(status == "done"){
-          this.appService.presentToast('Video saved successfully.','bottom');
-          this.fileDownloaded = true;
-        }else{
-          this.appService.presentToast('Error to download video.','bottom');
-          this.fileDownloaded = false;
-        }    
+      await (await this.dbService.downloadFile(this.currentLesson.video_url_web, this.currentLesson.title, this.currentLesson.summary, this.currentLesson.course_name, this.currentLesson.instructor_name, "video")).subscribe((result)=>{
+        this.appService.dismissLoading().then(() => {
+          if(result){
+            this.fileDownloaded = true;
+            this.appService.presentToast('File saved successfully.','bottom');
+          }else{
+            this.fileDownloaded = false;
+            this.appService.presentToast('Error to download pdf.','bottom');
+          }
+        });
       });
+    // this.appService.showLoadingScreen('Downloading offline media..');
+    // var status = (await this.dbService.downloadAndSavePDF(this.currentLesson.video_url_web, this.currentLesson.title, this.currentLesson.summary, this.currentLesson.course_name, this.currentLesson.instructor_name, "video")).subscribe((status:string) => {
+    //   this.appService.dismissLoading().then(() => {
+    //     if(status == "done"){
+    //       this.appService.presentToast('Video saved successfully.','bottom');
+    //       this.fileDownloaded = true;
+    //     }else{
+    //       this.appService.presentToast('Error to download video.','bottom');
+    //       this.fileDownloaded = false;
+    //     }    
+    //   });
       
-    });
+    // });
   }
   async isFileDownloaded(){
     this.dbService.dbState().subscribe(async (res) => {
