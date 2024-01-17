@@ -8,6 +8,7 @@ ion-item {
     }
     
 }
+
 #quiz {
     color: black;
 
@@ -131,45 +132,55 @@ ion-item {
             font-weight: bold;
             font-size: 1.2rem;
         }
+        span.red {
+            color: red !important;
+        }
     }
 
     .quiz-container {
         line-height: 1.5rem;
         font-size: 1.2rem;
 
-        .choices {
-            margin: .8rem;
+        form {
 
-            label {
-                display: block;
-                font-size: 1.1rem;
-
-                input[type=radio] {
-                    height: 2rem;
-                    width: 1.3rem;
-                    margin-right: 0.5rem;
-                    vertical-align: middle;
-                  }
+            .question {
+                font-size: 1.2rem !important;
             }
-        }
-        .actions {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            font-size: 1rem;
-            text-align: center;
-            gap: 1rem;
-            font-weight: bold;
-            margin-top: 5rem;
 
-            div {
-                div,button {
-                    color: white;
-                    padding: 0.5rem;
-                    border-radius: 0.7rem;
-                    margin-bottom: 1rem;
-                    width: 100%;
+            .choices {
+                margin: .8rem;
+                
+                label {
+                    display: block;
+                    font-size: 1.1rem;
+
+                    input[type=radio] {
+                        height: 2rem;
+                        width: 1.3rem;
+                        margin-right: 0.5rem;
+                        vertical-align: middle;
+                    }
                 }
-
+            }
+            .actions {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                font-size: 1rem;
+                text-align: center;
+                gap: 1rem;
+                font-weight: bold;
+                margin-top: 5rem;
+                
+                div {
+                    div,button {
+                        color: white;
+                        padding: 0.5rem;
+                        border-radius: 0.7rem;
+                        margin-bottom: 1rem;
+                        width: 100%;
+                    }
+                    
+                }
             }
         }
     }
@@ -181,6 +192,9 @@ ion-item {
         }
         .mat-horizontal-content-container {
             padding: 0 !important;
+        }
+        .item-inner {
+            border: none;
         }
     }
 }

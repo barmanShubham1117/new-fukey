@@ -41,7 +41,7 @@
   <div class="question-box">
     <div class="question-info">
       <div>Question No.:<br><span>{{stepper.selectedIndex + 1}}</span></div>
-      <div>Timer:<br><span [innerHTML]="timerCount"></span></div>
+      <div>Timer:<br><span [ngClass]="timeRed ? 'red' : '' " [innerHTML]="timerCount"></span></div>
     </div>
     <div class="quiz-container ion-padding">
       <mat-horizontal-stepper linear id="stepper" #stepper>

@@ -22,6 +22,7 @@ export class QuizComponent  implements OnInit {
   public quizDetails: any;
   public quesItems: any;
   public timerCount: any;
+  public timeRed: any;
   public attempQuiz: any;
 
   public isPreviousBtnDisabled: any;
@@ -102,13 +103,17 @@ export class QuizComponent  implements OnInit {
         
       // Output the result in an element with id="demo"
       if (hours > 0) {
-        this.timerCount = hours + "h " + minutes + "m " + seconds + "s ";
+        this.timerCount = hours + "h " + minutes + "m " + seconds + "s";
       } else {
-        this.timerCount = minutes + "m " + seconds + "s ";
+        this.timerCount = minutes + "m " + seconds + "s";
+        if (distance < 120000) {
+          this.timeRed = true;
+        }
       }
       
       // If the count down is over, write some text 
       if (distance < 0) {
+        this.complete();
         clearInterval(x);
         this.timerCount = "TIME OUT";
       }
@@ -124,9 +129,18 @@ export class QuizComponent  implements OnInit {
     console.log('Cleared: submitForm' + (stepper.selectedIndex + 1))
   }
   next(stepper: MatStepper) {
-    console.log(stepper.selectedIndex);
-    (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#00bf63";
-    (<HTMLFormElement>document.getElementById('submitForm' + (stepper.selectedIndex + 1))).submit();
+    // console.log(stepper.selectedIndex);
+    var inputCheck = false;
+    document.querySelectorAll('#submitForm'+(stepper.selectedIndex+1)+' input').forEach((node, index, nodeList) => {
+      inputCheck = inputCheck || (<HTMLInputElement>node).checked;
+    });
+    // console.log(inputCheck);
+    if (inputCheck) {
+      (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#00bf63";
+    } else {
+      (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#ff1616";
+    }
+    // (<HTMLFormElement>document.getElementById('submitForm' + (stepper.selectedIndex + 1))).submit();
     stepper.next();
   }
   mark(stepper: MatStepper) {
@@ -134,10 +148,18 @@ export class QuizComponent  implements OnInit {
     stepper.next();
   }
   move(stepper: MatStepper, index: number) {
+    // console.log(stepper.selectedIndex);
+    var inputCheck = false;
+    document.querySelectorAll('#submitForm'+(stepper.selectedIndex+1)+' input').forEach((node, index, nodeList) => {
+      inputCheck = inputCheck || (<HTMLInputElement>node).checked;
+    });
+    // console.log(inputCheck);
+    if (inputCheck) {
+      (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#00bf63";
+    } else {
+      (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#ff1616";
+    }
     stepper.selectedIndex = index;
-  }
-  selectChange(e: any) {
-    console.log(e);
   }
 
   onPreviousBtnPressed() {

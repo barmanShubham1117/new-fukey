@@ -1,23 +1,23 @@
 
 .main-layout {
     padding: 0.5rem;
-    display: flex;
+    // display: flex;
     flex-direction: column;
     height: 100%;
 }
 
 .welcome {
-    height: 10%;
+    height: 5rem;
     display: flex;
     align-items: center;
 }
 .profile-pic {
-    height: 50px;
-    width: 50px;
+    height: 4rem;
+    width: 4rem;
     border-radius: 50%;
-    background: url('/assets/new/img2.jpg');
-    background-position: center;
-    background-size: contain;
+    // background: url('/assets/new/img2.jpg');
+    background-position: center !important;
+    background-size: cover !important;
     border: 2px solid rgb(31, 8, 235);
 }
 .welcome-note {
@@ -37,13 +37,15 @@
     background: url('/assets/ad.png');
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
-    height: 25%;
+    background-size: contain;
+    // height: 25%;
+    height: calc(calc(95vw / 380) * 181);
     margin-bottom: 5%;
+    margin-top: -2rem;
 }
 
 .enrolled-batches {
-    height: 25%;
+    height: 16rem;
 }
 .enrolled-batches-header {
     height: 15%;
@@ -82,8 +84,8 @@
     align-items: center;
 }
 .course-image {
-    height: 90%;
-    width: 35%;
+    height: 10rem;
+    width: 10rem;
     background: url('/assets/new/img1.jpg');
     background-position: center;
     background-repeat: no-repeat;
@@ -94,7 +96,7 @@
 .course-details {
     display: flex;
     flex-direction: column;
-    height: 5em;
+    height: 90%;
     width: 65%;
     padding: 0 0.5em;
     letter-spacing: .5px;
@@ -119,7 +121,7 @@
 }
 
 .for-you {
-    height: 45%;
+    height: 24rem;
 }
 .for-you-header {
     height: 10%;
@@ -148,15 +150,15 @@
     border: #5aed4d;
 }
 .for-you-course-image {
-    height: 40%;
-    width: 90%;
+    height: 10rem;
+    width: 100%;
     // background: url(/assets/new/img1.jpg);
     // background-position: center;
     // background-repeat: no-repeat;
     // background-size: cover;
-    margin-top: 5%;
-    border-radius: 15%;
-    margin-left: 5%;
+    // margin-top: 5%;
+    border-radius: 1rem;
+    // margin-left: 5%;
 }
 .for-you-course-details {
     display: flex;
@@ -183,6 +185,8 @@
 .course-key-points {
     width: 90%;
     font-size: 0.6rem;
+    text-transform: capitalize;
+    
     div {
         color: black;
         .library {

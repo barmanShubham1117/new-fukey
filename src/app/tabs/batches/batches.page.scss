@@ -16,7 +16,7 @@
     color: #000;
 }
 .course-container {
-    height: 6em;
+    height: 9em;
     background-color: rgb(226, 223, 223);
     border-radius: 5px;
     display: flex;
@@ -24,8 +24,8 @@
     margin-bottom: 1em;
 }
 .course-image {
-    height: 85%;
-    width: 40%;
+    height: 8rem;
+    width: 8rem;
     background: url('/assets/new/img1.jpg');
     background-position: center;
     background-repeat: no-repeat;
@@ -36,19 +36,19 @@
 .course-details {
     display: flex;
     flex-direction: column;
-    height: 5em;
-    width: 60%;
+    height: 8em;
+    width: calc(100% - 9rem);
     padding: 0 0.5em;
     letter-spacing: .5px;
 }
 .course-name {
     font-weight: 600;
     color: black;
-    font-size: 0.8rem;
+    font-size: 1.2rem;
 }
 .details {
     font-weight: 300;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     color: black;
 }
 .continue {
@@ -57,8 +57,8 @@
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
-    font-size: 0.7rem;
+    font-size: 1.5rem;
 }
 .continue-text {
-    font-size: 0.6rem;
+    font-size: 1.1rem;
 }

@@ -23,6 +23,7 @@ export class HomePage implements OnInit {
   private MOBILE: any = '';
 
   public username: string = 'user';
+  public userpic: string = '/assets/new/img2.jpg';
   public allCourses: any;
   public enrolledCourses: any[] = [];
   public enrolledCourseArray: any[] = [];
@@ -100,6 +101,7 @@ export class HomePage implements OnInit {
     this.httpService.getUserViaMobile(this.MOBILE).subscribe((response: any) => {
       console.log("HOME PAGE : getUserDetail() : response : ", response);
       this.username = response.first_name;
+      this.userpic = 'https://learn.fukeyeducation.com/uploads/user_image/' + response.image + '.jpg';
 
       this.appService.dismissLoading();
     })

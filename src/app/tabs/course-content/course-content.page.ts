@@ -67,7 +67,7 @@ export class CourseContentPage implements OnInit {
     let section = document.getElementById('section-bodies-'+index);
     let expandBtn = document.getElementById('expand'+index);
     let collapseBtn = document.getElementById('collapse'+index);
-    if (section?.style.display === "none") {
+    if (section?.style.display === "none" || section?.style.display === '') {
       section.style.display = "block";
       collapseBtn!.style.display = "block";
       expandBtn!.style.display = "none";
