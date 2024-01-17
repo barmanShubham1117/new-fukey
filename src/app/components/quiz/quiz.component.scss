@@ -89,25 +89,32 @@ ion-item {
 }
 
 .bg-answered {
-    background: #00bf63;
+    background: #00bf63 !important;
+    background-color: #00bf63 !important;
 }
 .bg-marked {
-    background: #d12929;
+    background: #d12929 !important;
+    background-color: #d12929 !important;
 }
 .bg-not-answered {
-    background: #ff1616;
+    background: #ff1616 !important;
+    background-color: #ff1616 !important;
 }
 .bg-not-visited {
     background: #dfdfdf;
+    background-color: #dfdfdf;
 }
 .bg-save-next {
-    background: #0795ff;
+    background: #0795ff !important;
+    background-color: #0795ff !important;
 }
 .bg-clear-response {
-    background: #888888;
+    background: #888888 !important;
+    background-color: #888888 !important;
 }
 .bg-submit {
-    background: #fccd2f;
+    background: #fccd2f !important;
+    background-color: #fccd2f !important;
     color: black !important;
 }
 .question-box {
@@ -135,6 +142,7 @@ ion-item {
 
             label {
                 display: block;
+                font-size: 1.1rem;
 
                 input[type=radio] {
                     height: 2rem;
@@ -154,11 +162,12 @@ ion-item {
             margin-top: 5rem;
 
             div {
-                div {
+                div,button {
                     color: white;
                     padding: 0.5rem;
                     border-radius: 0.7rem;
                     margin-bottom: 1rem;
+                    width: 100%;
                 }
 
             }

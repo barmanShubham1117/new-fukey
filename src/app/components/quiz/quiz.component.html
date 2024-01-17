@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="questions">
-          <div class="bg-not-visited" *ngFor="let item of quesItems" id="ques{{ item + 1 }}">{{ item + 1 }}</div>
+          <div class="bg-not-visited" *ngFor="let item of quesItems" id="ques{{ item + 1 }}" (click)="move(stepper,item)">{{ item + 1 }}</div>
         </div>
     <div class="intructions" *ngIf="quizDetails?.summary"><b>Instruction:</b><br><p>{{quizDetails?.summary}}</p></div>
       </div>
@@ -40,102 +40,35 @@
   </ion-accordion-group>
   <div class="question-box">
     <div class="question-info">
-      <div>Question No.:<br><span>3</span></div>
+      <div>Question No.:<br><span>{{stepper.selectedIndex + 1}}</span></div>
       <div>Timer:<br><span [innerHTML]="timerCount"></span></div>
     </div>
-    <!-- <div class="quiz-container ion-padding">
-      <div class="question">Which solid structure has a definite and sharp melting point?</div>
-      <div class="choices">
-        <label class="choice">
-          <input type="radio" name="capital" value="paris">All types of solids
-        </label>
-        <label class="choice">
-          <input type="radio" name="capital" value="berlin">No type of solid
-        </label>
-        <label class="choice">
-          <input type="radio" name="capital" value="london">Amorphous solids
-        </label>
-        <label class="choice">
-          <input type="radio" name="capital" value="rome">Crystalline solids
-        </label>
-      </div>
-      <div class="actions">
-        <div>
-          <div class="bg-marked">Mark For Review</div>
-          <div class="bg-save-next">Save & Next</div>
-        </div>
-        <div>
-          <div class="bg-clear-response">Clear Response</div>
-          <div class="bg-submit">Submit Test</div>
-        </div>
-      </div>
-    </div> -->
-    <form [formGroup]="formGroup" class="quiz-container ion-padding">
-      <mat-horizontal-stepper
-        #linearHorizontalStepper="matHorizontalStepper"
-        formArrayName="formArray"
-        [linear]="false"
-      >
-        <mat-step formGroupName="0" [stepControl]="$any(formArray.get([0]))">
-          <!-- <mat-form-field>
-            <mat-label>First name</mat-label>
-            <input matInput formControlName="firstNameFormCtrl" required />
-            <mat-error>This field is required</mat-error>
-          </mat-form-field>
-    
-          <mat-form-field>
-            <mat-label>Last name</mat-label>
-            <input matInput formControlName="lastNameFormCtrl" required />
-            <mat-error>This field is required</mat-error>
-          </mat-form-field> -->
-          <div class="question">Which solid structure has a definite and sharp melting point?</div>
-          <div class="choices">
-            <label class="choice">
-              <input type="radio" name="capital" value="paris">All types of solids
-            </label>
-            <label class="choice">
-              <input type="radio" name="capital" value="berlin">No type of solid
-            </label>
-            <label class="choice">
-              <input type="radio" name="capital" value="london">Amorphous solids
-            </label>
-            <label class="choice">
-              <input type="radio" name="capital" value="rome">Crystalline solids
+    <div class="quiz-container ion-padding">
+      <mat-horizontal-stepper linear id="stepper" #stepper>
+        <mat-step *ngFor="let ques of this.quizDetails.questions; let quei = index" #stepper{{quei}}>
+
+          <form class="ajaxFormSubmission" id="submitForm{{quei+1}}" action="https://learn.fukeyeducation.com/user/submit_quiz_answer/{{quizDetails?.id}}/{{ques.id}}/{{ques.type}}" method="post" enctype="multipart/form-data">
+          
+          <div class="question" [innerHTML]="decodeHtmlCharCodes(ques.title)"></div>
+          <div class="choices" id="choice{{quei}}">
+            <label class="choice" *ngFor="let n of numSequence(ques.options.length); let i = index;">
+              <input type="radio" name="answer[]" value="{{i+1}}">{{ques.options[i]}}
             </label>
           </div>
-          <div>
-            <button mat-button matStepperNext>Next</button>
+          <div class="actions">
+            <div>
+              <button type="button" mat-button mat-raised-button class="bg-marked" (click)="mark(stepper)">Mark For Review</button>
+              <button type="button" mat-button mat-raised-button class="bg-save-next" (click)="next(stepper)">Save & Next</button>
+            </div>
+            <div>
+              <button type="button" mat-button mat-raised-button class="bg-clear-response" (click)="clear(stepper)">Clear Response</button>
+              <button type="button" mat-button mat-raised-button class="bg-submit" (click)="complete()">Submit Test</button>
+            </div>
           </div>
-        </mat-step>
-    
-        <mat-step formGroupName="1" [stepControl]="$any(formArray.get([1]))">
-          <ng-template matStepLabel> </ng-template>
-          <mat-form-field>
-            <mat-label>Email address</mat-label>
-            <input matInput formControlName="emailFormCtrl" />
-            <mat-error>The input is invalid.</mat-error>
-          </mat-form-field>
-          <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext>Next</button>
-          </div>
-        </mat-step>
-    
-        <mat-step>
-          Everything seems correct.
-          <div>
-            <button mat-button>Done</button>
-            <button
-              type="button"
-              mat-button
-              (click)="linearHorizontalStepper.reset()"
-            >
-              Reset
-            </button>
-          </div>
+        </form>
         </mat-step>
       </mat-horizontal-stepper>
-    </form>
+    </div>
     
   </div>
 </div>

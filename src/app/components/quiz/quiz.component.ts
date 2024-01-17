@@ -1,23 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Inject  } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpService } from 'src/app/services/http.service';
 import { AppService } from 'src/app/services/app.service';
 import { NavController } from '@ionic/angular';
 
 import {FormBuilder, Validators, AbstractControl, FormGroup} from '@angular/forms';
-import {MatStepperModule} from '@angular/material/stepper';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
+import {MatStepperModule, MatStepper} from '@angular/material/stepper';
+import { DOCUMENT } from '@angular/common'; 
 @Component({
   selector: 'app-quiz',
   templateUrl: './quiz.component.html',
   styleUrls: ['./quiz.component.scss'],
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { showError: true },
-    },
-  ],
 })
 export class QuizComponent  implements OnInit {
   public data: any;
@@ -39,21 +33,15 @@ export class QuizComponent  implements OnInit {
   private MOBILE: any;
   private TOKEN: any;
 
-  public formGroup: FormGroup = this._formBuilder.group({});
-
-  get formArray(): FormGroup {
-    return this.formGroup.get('formArray') as FormGroup;
-  }
-
   constructor(
     private router: Router,
     private httpService: HttpService,
     private appService: AppService,
     public navCtrl: NavController,
-    private _formBuilder: FormBuilder,
-  ) { }
-
-  ngOnInit() {
+    @Inject(DOCUMENT) document: Document
+    ) { }
+    
+    ngOnInit() {
     this.appService.showLoadingScreen("Setting up your Environment");
     this.USER_ID = localStorage.getItem('USER_ID');
     this.MOBILE = localStorage.getItem('MOBILE');
@@ -80,21 +68,20 @@ export class QuizComponent  implements OnInit {
       // this.startTimer();
     });
   }
+  
+  numSequence(n: number): Array<number> { 
+    return Array(n); 
+  } 
 
+  decodeHtmlCharCodes(str: string) { 
+    var txt = document.createElement("textarea");
+    txt.innerHTML = str;
+    return txt.value;
+  }
+  
   startQuiz(){
     // this.appService.showLoadingScreen("Let's Start!");
     this.attempQuiz = true;
-    this.formGroup = this._formBuilder.group({
-      formArray: this._formBuilder.array([
-        this._formBuilder.group({
-          firstNameFormCtrl: ['', Validators.required],
-          lastNameFormCtrl: ['', Validators.required],
-        }),
-        this._formBuilder.group({
-          emailFormCtrl: ['', Validators.email],
-        }),
-      ]),
-    });
     // this.appService.dismissLoading();
     this.startTimer();
   }
@@ -119,7 +106,7 @@ export class QuizComponent  implements OnInit {
       } else {
         this.timerCount = minutes + "m " + seconds + "s ";
       }
-        
+      
       // If the count down is over, write some text 
       if (distance < 0) {
         clearInterval(x);
@@ -128,6 +115,27 @@ export class QuizComponent  implements OnInit {
     }, 1000);
   }
   
+  complete() {
+    // this.stepper.selected.completed = true;
+    // this.stepper.next();
+  }
+  clear(stepper: MatStepper) {
+    (<HTMLFormElement>document.getElementById('submitForm' + (stepper.selectedIndex + 1))).reset();
+    console.log('Cleared: submitForm' + (stepper.selectedIndex + 1))
+  }
+  next(stepper: MatStepper) {
+    console.log(stepper.selectedIndex);
+    (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#00bf63";
+    (<HTMLFormElement>document.getElementById('submitForm' + (stepper.selectedIndex + 1))).submit();
+    stepper.next();
+  }
+  mark(stepper: MatStepper) {
+    (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#d12929";
+    stepper.next();
+  }
+  move(stepper: MatStepper, index: number) {
+    stepper.selectedIndex = index;
+  }
   selectChange(e: any) {
     console.log(e);
   }
