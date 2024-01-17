@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { StudyMaterialPageRoutingModule } from './study-material-routing.module';
 
 import { StudyMaterialPage } from './study-material.page';
+import { QuizComponent } from 'src/app/components/quiz/quiz.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { SafePipe } from 'src/app/safe.pipe';
 
@@ -18,6 +19,6 @@ import { SafePipe } from 'src/app/safe.pipe';
     StudyMaterialPageRoutingModule,
     PdfViewerModule,
   ],
-  declarations: [StudyMaterialPage,SafePipe],
+  declarations: [StudyMaterialPage,SafePipe,QuizComponent],
 })
 export class StudyMaterialPageModule {}

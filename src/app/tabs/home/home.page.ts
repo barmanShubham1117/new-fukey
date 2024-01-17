@@ -93,6 +93,7 @@ export class HomePage implements OnInit {
 
       this.getEnrolledCourses();
     });
+    this.appService.dismissLoading();
   }
 
   async getUserDetail() {
@@ -137,6 +138,7 @@ export class HomePage implements OnInit {
         hec.style.display = 'block';
       }
       
+      this.appService.dismissLoading();
       this.getUserDetail();
     });
   }

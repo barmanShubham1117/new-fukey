@@ -1,0 +1,82 @@
+<div id="quiz" *ngIf="currentLesson.is_completed === 0 && attempQuiz === false">
+  <ion-item class="header">
+    <ion-label>Practice Test:<br>{{ quizDetails?.title }}</ion-label>
+  </ion-item>
+  <div id="about" class="ion-padding">
+    <div class="intructions" *ngIf="quizDetails?.summary"><b>Instruction: </b><p>{{quizDetails?.summary}}</div>
+    <p class="duration" *ngIf="quizDetails?.duration_sec"><b>Test Duration: </b>{{quizDetails.duration_sec / 60}} Minutes</p>
+    <p class="questions" *ngIf="quizDetails?.items"><b>Total Questions: </b>{{quizDetails?.items}}</p>
+    <p class="total_marks" *ngIf="quizDetails?.total_marks"><b>Maximum Marks: </b>{{quizDetails?.total_marks}}</p>
+    <button id="start-btn" (click)="startQuiz()">START TEST</button>
+    <div class="nav-buttons">
+      <button [disabled]="isPreviousBtnDisabled" id="previous-btn" (click)="onPreviousBtnPressed()">PREVIOUS</button>
+      <button [disabled]="isNextBtnDisabled" id="next-btn" (click)="onNextBtnPressed()">NEXT</button>
+    </div>
+  </div>
+</div>
+<div id="attempQuiz" *ngIf="currentLesson.is_completed === 0 && attempQuiz === true">
+  <ion-accordion-group>
+    <ion-accordion value="first">
+      <ion-item slot="header">
+        <ion-label>Practice Test:<br>{{ quizDetails?.title }}</ion-label>
+      </ion-item>
+      <div slot="content" class="ion-padding quiz-info">
+        <div class="color-label">
+          <div>
+            <div><span class="bg-answered"></span>Answered</div>
+            <div><span class="bg-not-answered"></span>Not Answered</div>
+          </div>
+          <div>
+            <div><span class="bg-marked"></span>Marked</div>
+            <div><span class="bg-not-visited"></span>Not Visited</div>
+          </div>
+        </div>
+        <div class="questions">
+          <div class="bg-not-visited" *ngFor="let item of quesItems" id="ques{{ item + 1 }}">{{ item + 1 }}</div>
+        </div>
+    <div class="intructions" *ngIf="quizDetails?.summary"><b>Instruction:</b><br><p>{{quizDetails?.summary}}</p></div>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+  <div class="question-box">
+    <div class="question-info">
+      <div>Question No.:<br><span>3</span></div>
+      <div>Timer:<br><span [innerHTML]="timerCount"></span></div>
+    </div>
+    <div class="quiz-container ion-padding">
+      <div class="question">Which solid structure has a definite and sharp melting point?</div>
+      <div class="choices">
+        <label class="choice">
+          <input type="radio" name="capital" value="paris">All types of solids
+        </label>
+        <label class="choice">
+          <input type="radio" name="capital" value="berlin">No type of solid
+        </label>
+        <label class="choice">
+          <input type="radio" name="capital" value="london">Amorphous solids
+        </label>
+        <label class="choice">
+          <input type="radio" name="capital" value="rome">Crystalline solids
+        </label>
+      </div>
+      <div class="actions">
+        <div>
+          <div class="bg-marked">Mark For Review</div>
+          <div class="bg-save-next">Save & Next</div>
+        </div>
+        <div>
+          <div class="bg-clear-response">Clear Response</div>
+          <div class="bg-submit">Submit Test</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="quizResult" *ngIf="currentLesson.is_completed === 1">
+<h2>Quiz Attempted</h2>
+<button>View Your Result</button>
+<div class="nav-buttons">
+  <button [disabled]="isPreviousBtnDisabled" id="previous-btn" (click)="onPreviousBtnPressed()">PREVIOUS</button>
+  <button [disabled]="isNextBtnDisabled" id="next-btn" (click)="onNextBtnPressed()">NEXT</button>
+</div>
+</div>
