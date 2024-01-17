@@ -17,15 +17,16 @@
 
         <div class="summary" [innerHTML]="currentLesson.summary"></div>
 
-        <button class="downloadBtn" (click)="downloadVideo()">Download</button>
+        <button class="downloadBtn" *ngIf="this.fileDownloaded">Offline downloaded</button>
+        <button class="downloadBtn" *ngIf="!this.fileDownloaded" (click)="downloadVideo()">Download</button>
       </div>
     </div>
 
     <div *ngIf="currentLesson.lesson_type === 'other'">
       <pdf-viewer [src]="currentLesson.attachment_url" [render-text]="true" [original-size]="false" [fit-to-page]="true"
         style="width: 100%; height: 30rem"></pdf-viewer>
-
-      <button class="downloadBtn" (click)="download()">Download</button>
+        <button class="downloadBtn" *ngIf="this.fileDownloaded">Offline downloaded</button>
+      <button class="downloadBtn" *ngIf="!this.fileDownloaded" (click)="download()">Download</button>
     </div>
 
     <div *ngIf="currentLesson.lesson_type === 'text'">

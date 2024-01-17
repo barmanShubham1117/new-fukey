@@ -1,9 +1,15 @@
 import { Token } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
-import { PushNotifications } from '@capacitor/push-notifications';
+import { PushNotificationSchema, PushNotifications } from '@capacitor/push-notifications';
 import { BehaviorSubject } from 'rxjs';
 import { StorageService } from './storage.service';
+
+import * as firebase from 'firebase/app';
+import 'firebase/messaging';
+import { environment } from 'src/environments/environment';
+
+
 
 export const FCM_TOKEN = 'push_notification_token';
 
@@ -22,10 +28,10 @@ export class FcmService {
     private storageService: StorageService
   ) { }
 
-  initPush() {
-    if (Capacitor.getPlatform() !== 'web') {
+  async initPush() {
+    // if (Capacitor.getPlatform() !== 'web') {
       this.registerPush();
-    }
+    // }
   }
 
   private async registerPush() {
@@ -37,11 +43,23 @@ export class FcmService {
         permissionStatus = await PushNotifications.requestPermissions();
       }
 
-      if (permissionStatus.receive === 'granted') {
-        throw new Error('Userr denied permissions...!!')
+      if (permissionStatus.receive !== 'granted') {
+        permissionStatus = await PushNotifications.requestPermissions();
       }
 
-      await PushNotifications.register();
+      if (permissionStatus.receive === 'granted') {
+        console.log("Registering Push Notification");
+        console.log("FCM_TOKEN: ", this.storageService.getStorage("FCM_TOKEN"));
+        
+        
+        PushNotifications.register();
+
+         // Listen for incoming push notifications
+        PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
+          console.log('Push notification received', notification);
+        });
+      }
+
     } catch(e) {
       console.error(e);
       
@@ -54,11 +72,14 @@ export class FcmService {
   }
 
   addListeners() {
+    firebase.initializeApp(environment.firebaseConfig);
+    const messaging = firebase;
+
     PushNotifications.addListener(
       'registration',
       async (token: any) => {
         console.log("MY FCM TOKEN: ", token);
-        const fcmToken = (token?.strValue);
+        const fcmToken = (token?.value);
         let go = 1;
         const savedToken = JSON.parse((await this.storageService.getStorage(FCM_TOKEN)).value);
         if (savedToken) {
@@ -78,6 +99,8 @@ export class FcmService {
           };
 
           this.storageService.setStorage(FCM_TOKEN, fcmToken);
+
+          messaging
         }
       }
     );
