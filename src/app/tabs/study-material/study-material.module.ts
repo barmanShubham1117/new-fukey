@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -13,6 +12,11 @@ import { SafePipe } from 'src/app/safe.pipe';
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { File } from '@ionic-native/file/ngx';
 
+import {FormBuilder, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatButtonModule} from '@angular/material/button';
 @NgModule({
   imports: [
     CommonModule,
@@ -20,6 +24,12 @@ import { File } from '@ionic-native/file/ngx';
     IonicModule,
     StudyMaterialPageRoutingModule,
     PdfViewerModule,
+    MatButtonModule,
+    MatStepperModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   declarations: [StudyMaterialPage,SafePipe,QuizComponent],
   providers:[SQLite,File]

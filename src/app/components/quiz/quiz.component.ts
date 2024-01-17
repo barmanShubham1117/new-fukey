@@ -4,11 +4,20 @@ import { HttpService } from 'src/app/services/http.service';
 import { AppService } from 'src/app/services/app.service';
 import { NavController } from '@ionic/angular';
 
+import {FormBuilder, Validators, AbstractControl, FormGroup} from '@angular/forms';
+import {MatStepperModule} from '@angular/material/stepper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-quiz',
   templateUrl: './quiz.component.html',
   styleUrls: ['./quiz.component.scss'],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { showError: true },
+    },
+  ],
 })
 export class QuizComponent  implements OnInit {
   public data: any;
@@ -30,11 +39,18 @@ export class QuizComponent  implements OnInit {
   private MOBILE: any;
   private TOKEN: any;
 
+  public formGroup: FormGroup = this._formBuilder.group({});
+
+  get formArray(): FormGroup {
+    return this.formGroup.get('formArray') as FormGroup;
+  }
+
   constructor(
     private router: Router,
     private httpService: HttpService,
     private appService: AppService,
     public navCtrl: NavController,
+    private _formBuilder: FormBuilder,
   ) { }
 
   ngOnInit() {
@@ -64,14 +80,23 @@ export class QuizComponent  implements OnInit {
       // this.startTimer();
     });
   }
-  
+
   startQuiz(){
+    // this.appService.showLoadingScreen("Let's Start!");
     this.attempQuiz = true;
-    this.appService.showLoadingScreen("Let's Start!");
-    setTimeout(() =>{
-      this.appService.dismissLoading();
-      this.startTimer();
-    }, 2000);
+    this.formGroup = this._formBuilder.group({
+      formArray: this._formBuilder.array([
+        this._formBuilder.group({
+          firstNameFormCtrl: ['', Validators.required],
+          lastNameFormCtrl: ['', Validators.required],
+        }),
+        this._formBuilder.group({
+          emailFormCtrl: ['', Validators.email],
+        }),
+      ]),
+    });
+    // this.appService.dismissLoading();
+    this.startTimer();
   }
 
   startTimer() {

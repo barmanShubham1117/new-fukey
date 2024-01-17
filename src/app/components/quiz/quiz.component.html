@@ -43,7 +43,7 @@
       <div>Question No.:<br><span>3</span></div>
       <div>Timer:<br><span [innerHTML]="timerCount"></span></div>
     </div>
-    <div class="quiz-container ion-padding">
+    <!-- <div class="quiz-container ion-padding">
       <div class="question">Which solid structure has a definite and sharp melting point?</div>
       <div class="choices">
         <label class="choice">
@@ -69,7 +69,74 @@
           <div class="bg-submit">Submit Test</div>
         </div>
       </div>
-    </div>
+    </div> -->
+    <form [formGroup]="formGroup" class="quiz-container ion-padding">
+      <mat-horizontal-stepper
+        #linearHorizontalStepper="matHorizontalStepper"
+        formArrayName="formArray"
+        [linear]="false"
+      >
+        <mat-step formGroupName="0" [stepControl]="$any(formArray.get([0]))">
+          <!-- <mat-form-field>
+            <mat-label>First name</mat-label>
+            <input matInput formControlName="firstNameFormCtrl" required />
+            <mat-error>This field is required</mat-error>
+          </mat-form-field>
+    
+          <mat-form-field>
+            <mat-label>Last name</mat-label>
+            <input matInput formControlName="lastNameFormCtrl" required />
+            <mat-error>This field is required</mat-error>
+          </mat-form-field> -->
+          <div class="question">Which solid structure has a definite and sharp melting point?</div>
+          <div class="choices">
+            <label class="choice">
+              <input type="radio" name="capital" value="paris">All types of solids
+            </label>
+            <label class="choice">
+              <input type="radio" name="capital" value="berlin">No type of solid
+            </label>
+            <label class="choice">
+              <input type="radio" name="capital" value="london">Amorphous solids
+            </label>
+            <label class="choice">
+              <input type="radio" name="capital" value="rome">Crystalline solids
+            </label>
+          </div>
+          <div>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+    
+        <mat-step formGroupName="1" [stepControl]="$any(formArray.get([1]))">
+          <ng-template matStepLabel> </ng-template>
+          <mat-form-field>
+            <mat-label>Email address</mat-label>
+            <input matInput formControlName="emailFormCtrl" />
+            <mat-error>The input is invalid.</mat-error>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+    
+        <mat-step>
+          Everything seems correct.
+          <div>
+            <button mat-button>Done</button>
+            <button
+              type="button"
+              mat-button
+              (click)="linearHorizontalStepper.reset()"
+            >
+              Reset
+            </button>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </form>
+    
   </div>
 </div>
 <div id="quizResult" *ngIf="currentLesson.is_completed === 1">
