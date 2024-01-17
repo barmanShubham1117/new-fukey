@@ -183,4 +183,8 @@ export class HttpService {
     };
     return this.http.post(environment.BASE_URL + 'home/update_watch_history_manually', body, httpOptions);
   }
+
+  public getQuiz(lesson_id: any) {
+    return this.http.get(environment.BASE_API_URL + 'quiz_questions_by_id?quiz_id=' + lesson_id);
+  }
 }

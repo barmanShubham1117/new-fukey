@@ -6,6 +6,7 @@ import { HttpService } from 'src/app/services/http.service';
 
 import { AppService } from 'src/app/services/app.service';
 import { SafePipe } from 'src/app/safe.pipe';
+import { QuizComponent } from 'src/app/components/quiz/quiz.component';
 import { FileActionService } from 'src/app/services/fileaction.service';
 import { DbService } from 'src/app/services/db.service';
 
@@ -55,9 +56,9 @@ export class StudyMaterialPage implements OnInit {
     this.currentLesson.instructor_name  = this.courseData.instructor_name;
     this.currentLesson.course_name  = this.courseData.title;
     await this.isFileDownloaded();
-    if (this.currentLesson.lesson_type == 'quiz') {
-      this.quizUrl = "https://learn.rahulshrivastava.in/home/start_quiz/" + this.currentLesson.id + "/" + this.USER_ID;
-    }
+    // if (this.currentLesson.lesson_type == 'quiz') {
+    //   this.quizUrl = "https://learn.rahulshrivastava.in/home/start_quiz/" + this.currentLesson.id + "/" + this.USER_ID;
+    // }
   }
 
   async download() {

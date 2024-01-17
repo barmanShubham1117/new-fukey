@@ -1,15 +1,15 @@
-<ion-content class="ion-padding">
-  <div *ngIf="currentLesson.lesson_type != 'quiz'">
+<ion-content>
+  <div *ngIf="currentLesson.lesson_type !== 'quiz'" class="ion-padding">
     <h2 class="title">{{ currentLesson.title }}</h2>
 
-    <div *ngIf="currentLesson.lesson_type == 'video'">
-      <div *ngIf="currentLesson.attachment_type == 'url'">
+    <div *ngIf="currentLesson.lesson_type === 'video'">
+      <div *ngIf="currentLesson.attachment_type === 'url'">
         <iframe [src]="playVideo(convertToEmbedUrl(currentLesson.video_url_web))"
           allowfullscreen="allowfullscreen"></iframe>
 
         <div class="summary" [innerHTML]="currentLesson.summary"></div>
       </div>
-      <div *ngIf="currentLesson.attachment_type == 'file'">
+      <div *ngIf="currentLesson.attachment_type === 'file'">
         <video controls width="100%" height="auto">
           <source [src]="currentLesson.video_url" type="video/mp4">
           Your browser does not support the video tag.
@@ -22,26 +22,27 @@
       </div>
     </div>
 
-    <div *ngIf="currentLesson.lesson_type == 'other'">
+    <div *ngIf="currentLesson.lesson_type === 'other'">
       <pdf-viewer [src]="currentLesson.attachment_url" [render-text]="true" [original-size]="false" [fit-to-page]="true"
         style="width: 100%; height: 30rem"></pdf-viewer>
         <button class="downloadBtn" *ngIf="this.fileDownloaded">Offline downloaded</button>
       <button class="downloadBtn" *ngIf="!this.fileDownloaded" (click)="download()">Download</button>
     </div>
 
-    <div *ngIf="currentLesson.lesson_type == 'text'">
+    <div *ngIf="currentLesson.lesson_type === 'text'">
       <div class="summary" [innerHTML]="currentLesson.attachment"></div>
     </div>
 
-    <div class="nav-buttons" *ngIf="currentLesson.lesson_type != 'quiz'">
+    <div class="nav-buttons" *ngIf="currentLesson.lesson_type !== 'quiz'">
       <button [disabled]="isPreviousBtnDisabled" id="previous-btn" (click)="onPreviousBtnPressed()">PREVIOUS</button>
       <button [disabled]="isNextBtnDisabled" id="next-btn" (click)="onNextBtnPressed()">NEXT</button>
     </div>
   </div>
 
-  <div *ngIf="currentLesson.lesson_type == 'quiz'">
-    <!-- <div class="summary" [innerHTML]="currentLesson.summary"></div> -->
-    <iframe [src]="quizUrl | safe: 'resourceUrl'" style="width: 100%; min-height: 100vh; overflow-x: hidden;"></iframe>
-  </div>
+  <!-- <div *ngIf="currentLesson.lesson_type == 'quiz'">
+    <iframe [src]="quizUrl | safe: 'resourceUrl'" style="width: 100vw;min-height: calc(100vh - 120px);max-height: calc(100vh - 120px);overflow: hidden;border: none;margin: 0 !important;"></iframe>
+  </div> -->
+  
+  <app-quiz *ngIf="currentLesson.lesson_type === 'quiz'"></app-quiz>
 
 </ion-content>

@@ -13,6 +13,7 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from 'src/environments/environment';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
@@ -26,7 +27,8 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    BrowserAnimationsModule
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, HttpClient,SQLite,File,FileTransfer],
   bootstrap: [AppComponent],

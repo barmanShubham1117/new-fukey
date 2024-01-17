@@ -1,0 +1,186 @@
+ion-item {
+    --background: #f4c01e;
+    font-size: 1.1rem;
+    font-weight: bold;
+
+    ion-label {
+        color: black;
+    }
+    
+}
+#quiz {
+    color: black;
+
+    .item-inner {
+        border: none;
+    }
+    .about {
+        margin-top: 2rem;
+    }
+    button {
+        width: 48%;
+        padding: 1rem;
+        color: #fff;
+        border-radius: 10px;
+    }
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        button {
+            background-color: #1A4789;
+        }
+    }
+    #start-btn {
+        background-color: #007600;
+        margin: 3rem auto;
+        display: block;
+        font-weight: bold;
+    }
+}
+.quiz-info {
+    background: whitesmoke;
+    color: black;
+    font-size: 1rem;
+    font-weight: bold;
+
+    .color-label {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        // gap: 10px;
+
+        div {
+            div {
+                padding: 0 10px 10px 0;
+                display: flex;
+                align-items: center;
+
+                span {
+                    display: inline-block;
+                    height: 2rem;
+                    width: 2rem;
+                    margin-right: 0.5rem;
+                }
+            }
+        }
+    }
+
+    .questions {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        margin-top: 1rem;
+
+        div {
+            height: 2rem;
+            text-align: center;
+            align-self: center;
+            display: inline-block;
+            padding-top: 0.4rem;
+        }
+    }
+
+    .intructions {
+        margin-top: 1rem;
+
+        p {
+            font-weight: 400;
+        }
+    }
+}
+
+.bg-answered {
+    background: #00bf63 !important;
+    background-color: #00bf63 !important;
+}
+.bg-marked {
+    background: #d12929 !important;
+    background-color: #d12929 !important;
+}
+.bg-not-answered {
+    background: #ff1616 !important;
+    background-color: #ff1616 !important;
+}
+.bg-not-visited {
+    background: #dfdfdf;
+    background-color: #dfdfdf;
+}
+.bg-save-next {
+    background: #0795ff !important;
+    background-color: #0795ff !important;
+}
+.bg-clear-response {
+    background: #888888 !important;
+    background-color: #888888 !important;
+}
+.bg-submit {
+    background: #fccd2f !important;
+    background-color: #fccd2f !important;
+    color: black !important;
+}
+.question-box {
+    color: black;
+
+    .question-info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        padding: 1rem;
+        background: #c5deff;
+        font-size: 1rem;
+
+        span {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    }
+
+    .quiz-container {
+        line-height: 1.5rem;
+        font-size: 1.2rem;
+
+        .choices {
+            margin: .8rem;
+
+            label {
+                display: block;
+                font-size: 1.1rem;
+
+                input[type=radio] {
+                    height: 2rem;
+                    width: 1.3rem;
+                    margin-right: 0.5rem;
+                    vertical-align: middle;
+                  }
+            }
+        }
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            font-size: 1rem;
+            text-align: center;
+            gap: 1rem;
+            font-weight: bold;
+            margin-top: 5rem;
+
+            div {
+                div,button {
+                    color: white;
+                    padding: 0.5rem;
+                    border-radius: 0.7rem;
+                    margin-bottom: 1rem;
+                    width: 100%;
+                }
+
+            }
+        }
+    }
+}
+:host {
+    ::ng-deep {
+        .mat-horizontal-stepper-header-container {
+            display: none;
+        }
+        .mat-horizontal-content-container {
+            padding: 0 !important;
+        }
+    }
+}

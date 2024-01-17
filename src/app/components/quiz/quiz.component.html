@@ -1,0 +1,82 @@
+<div id="quiz" *ngIf="currentLesson.is_completed === 0 && attempQuiz === false">
+  <ion-item class="header">
+    <ion-label>Practice Test:<br>{{ quizDetails?.title }}</ion-label>
+  </ion-item>
+  <div id="about" class="ion-padding">
+    <div class="intructions" *ngIf="quizDetails?.summary"><b>Instruction: </b><p>{{quizDetails?.summary}}</div>
+    <p class="duration" *ngIf="quizDetails?.duration_sec"><b>Test Duration: </b>{{quizDetails.duration_sec / 60}} Minutes</p>
+    <p class="questions" *ngIf="quizDetails?.items"><b>Total Questions: </b>{{quizDetails?.items}}</p>
+    <p class="total_marks" *ngIf="quizDetails?.total_marks"><b>Maximum Marks: </b>{{quizDetails?.total_marks}}</p>
+    <button id="start-btn" (click)="startQuiz()">START TEST</button>
+    <div class="nav-buttons">
+      <button [disabled]="isPreviousBtnDisabled" id="previous-btn" (click)="onPreviousBtnPressed()">PREVIOUS</button>
+      <button [disabled]="isNextBtnDisabled" id="next-btn" (click)="onNextBtnPressed()">NEXT</button>
+    </div>
+  </div>
+</div>
+<div id="attempQuiz" *ngIf="currentLesson.is_completed === 0 && attempQuiz === true">
+  <ion-accordion-group>
+    <ion-accordion value="first">
+      <ion-item slot="header">
+        <ion-label>Practice Test:<br>{{ quizDetails?.title }}</ion-label>
+      </ion-item>
+      <div slot="content" class="ion-padding quiz-info">
+        <div class="color-label">
+          <div>
+            <div><span class="bg-answered"></span>Answered</div>
+            <div><span class="bg-not-answered"></span>Not Answered</div>
+          </div>
+          <div>
+            <div><span class="bg-marked"></span>Marked</div>
+            <div><span class="bg-not-visited"></span>Not Visited</div>
+          </div>
+        </div>
+        <div class="questions">
+          <div class="bg-not-visited" *ngFor="let item of quesItems" id="ques{{ item + 1 }}" (click)="move(stepper,item)">{{ item + 1 }}</div>
+        </div>
+    <div class="intructions" *ngIf="quizDetails?.summary"><b>Instruction:</b><br><p>{{quizDetails?.summary}}</p></div>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+  <div class="question-box">
+    <div class="question-info">
+      <div>Question No.:<br><span>{{stepper.selectedIndex + 1}}</span></div>
+      <div>Timer:<br><span [innerHTML]="timerCount"></span></div>
+    </div>
+    <div class="quiz-container ion-padding">
+      <mat-horizontal-stepper linear id="stepper" #stepper>
+        <mat-step *ngFor="let ques of this.quizDetails.questions; let quei = index" #stepper{{quei}}>
+
+          <form class="ajaxFormSubmission" id="submitForm{{quei+1}}" action="https://learn.fukeyeducation.com/user/submit_quiz_answer/{{quizDetails?.id}}/{{ques.id}}/{{ques.type}}" method="post" enctype="multipart/form-data">
+          
+          <div class="question" [innerHTML]="decodeHtmlCharCodes(ques.title)"></div>
+          <div class="choices" id="choice{{quei}}">
+            <label class="choice" *ngFor="let n of numSequence(ques.options.length); let i = index;">
+              <input type="radio" name="answer[]" value="{{i+1}}">{{ques.options[i]}}
+            </label>
+          </div>
+          <div class="actions">
+            <div>
+              <button type="button" mat-button mat-raised-button class="bg-marked" (click)="mark(stepper)">Mark For Review</button>
+              <button type="button" mat-button mat-raised-button class="bg-save-next" (click)="next(stepper)">Save & Next</button>
+            </div>
+            <div>
+              <button type="button" mat-button mat-raised-button class="bg-clear-response" (click)="clear(stepper)">Clear Response</button>
+              <button type="button" mat-button mat-raised-button class="bg-submit" (click)="complete()">Submit Test</button>
+            </div>
+          </div>
+        </form>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </div>
+    
+  </div>
+</div>
+<div id="quizResult" *ngIf="currentLesson.is_completed === 1">
+<h2>Quiz Attempted</h2>
+<button>View Your Result</button>
+<div class="nav-buttons">
+  <button [disabled]="isPreviousBtnDisabled" id="previous-btn" (click)="onPreviousBtnPressed()">PREVIOUS</button>
+  <button [disabled]="isNextBtnDisabled" id="next-btn" (click)="onNextBtnPressed()">NEXT</button>
+</div>
+</div>
