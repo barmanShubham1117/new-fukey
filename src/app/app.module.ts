@@ -13,14 +13,11 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from 'src/environments/environment';
-<<<<<<< HEAD
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-=======
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { SharedModule } from './shared/shared.module'; 
->>>>>>> 711f175b52f476039035b07bc466cabccb9fd1ce
 
 @NgModule({
   declarations: [AppComponent],
