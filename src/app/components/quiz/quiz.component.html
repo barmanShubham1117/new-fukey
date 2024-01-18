@@ -1,4 +1,4 @@
-<div id="quiz" *ngIf="currentLesson.is_completed === 0 && attempQuiz === false">
+<div id="quiz" *ngIf="currentLesson?.is_completed === 0 && attempQuiz === false">
   <ion-item class="header">
     <ion-label>Practice Test:<br>{{ quizDetails?.title }}</ion-label>
   </ion-item>
@@ -14,7 +14,7 @@
     </div>
   </div>
 </div>
-<div id="attempQuiz" *ngIf="currentLesson.is_completed === 0 && attempQuiz === true">
+<div id="attempQuiz" *ngIf="currentLesson?.is_completed === 0 && attempQuiz === true">
   <ion-accordion-group>
     <ion-accordion value="first">
       <ion-item slot="header">
@@ -52,7 +52,7 @@
           <div class="question" [innerHTML]="decodeHtmlCharCodes(ques.title)"></div>
           <div class="choices" id="choice{{quei}}">
             <label class="choice" *ngFor="let n of numSequence(ques.options.length); let i = index;">
-              <input type="radio" name="answer[]" value="{{i+1}}">{{ques.options[i]}}
+              <input type="radio" name="answer[]" value="{{i+1}}" [attr.queid]="ques.id">{{ques.options[i]}}
             </label>
           </div>
           <div class="actions">
@@ -62,7 +62,7 @@
             </div>
             <div>
               <button type="button" mat-button mat-raised-button class="bg-clear-response" (click)="clear(stepper)">Clear Response</button>
-              <button type="button" mat-button mat-raised-button class="bg-submit" (click)="complete()">Submit Test</button>
+              <button type="button" mat-button mat-raised-button class="bg-submit" id="completeQuiz" (click)="complete(stepper)">Submit Test</button>
             </div>
           </div>
         </form>

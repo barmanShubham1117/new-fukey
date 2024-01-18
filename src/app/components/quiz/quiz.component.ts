@@ -16,6 +16,11 @@ import { DOCUMENT } from '@angular/common';
 export class QuizComponent  implements OnInit {
   public data: any;
   public courseData: any;
+  public testData: Record<string, any> = [];
+  public startQuizTime: any;
+  public quesResponses: Record<string, string[]> = {};
+  public quesAns: Record<string, string> = {};
+  public correctAnswers: string[] = [];
   public chapterIndex: any;
   public lessonIndex: any;
   public currentLesson: any;
@@ -63,8 +68,14 @@ export class QuizComponent  implements OnInit {
   async getDetails() {
     this.httpService.getQuiz(this.currentLesson.id).subscribe((response: any) => {
       this.quizDetails = response;
-      console.log(this.quizDetails);
+      console.log("Quiz Details", this.quizDetails);
       this.quesItems = Array(this.quizDetails.items).fill(0).map((x,i)=>i);
+      this.quizDetails.questions.forEach((question: { correct_answers: any; id: string | number; }) => {
+        // this.quesResponses[question.id] = [];
+        // console.log(question.correct_answers[0]);
+        this.quesAns[question.id] = question.correct_answers[0];
+      });
+      console.log(this.quesResponses);
       this.appService.dismissLoading();
       // this.startTimer();
     });
@@ -83,6 +94,11 @@ export class QuizComponent  implements OnInit {
   startQuiz(){
     // this.appService.showLoadingScreen("Let's Start!");
     this.attempQuiz = true;
+    this.startQuizTime = Math.floor(new Date().getTime() / 1000);
+    this.testData['quiz_id']              =  parseInt(this.quizDetails.id);
+    this.testData['user_id']              =  parseInt(this.USER_ID);
+    this.testData['date_added']           =  this.startQuizTime.toString();
+    this.testData['is_submitted']         =  0;
     // this.appService.dismissLoading();
     this.startTimer();
   }
@@ -113,38 +129,111 @@ export class QuizComponent  implements OnInit {
       
       // If the count down is over, write some text 
       if (distance < 0) {
-        this.complete();
+        document.getElementById('completeQuiz')?.click();
         clearInterval(x);
         this.timerCount = "TIME OUT";
       }
     }, 1000);
   }
   
-  complete() {
-    // this.stepper.selected.completed = true;
-    // this.stepper.next();
-  }
   clear(stepper: MatStepper) {
     (<HTMLFormElement>document.getElementById('submitForm' + (stepper.selectedIndex + 1))).reset();
     console.log('Cleared: submitForm' + (stepper.selectedIndex + 1))
   }
+
+  complete(stepper: MatStepper) {
+    this.next(stepper);
+    // this.testData['user_answers']         =  JSON.stringify(this.quesResponses);
+    // this.testData['correct_answers']      =  JSON.stringify(this.correctAnswers);
+    // this.testData['total_obtained_marks'] =  (this.quizDetails.total_marks/this.quizDetails.items) * this.correctAnswers.length;
+    // this.testData['date_updated']         =  Math.floor(new Date().getTime() / 1000).toString();
+    this.testData['is_submitted']         =  1;
+    console.log(this.testData);
+    if (this.testData && this.USER_ID) {
+      this.httpService.submitTest(this.testData, this.USER_ID).subscribe((response: any) => {
+        console.log(response);
+      });
+      this.httpService.updateUserCurrentProgress(this.USER_ID,this.currentLesson.course_id,this.currentLesson.id).subscribe((response: any) => {
+        console.log(response);
+      });
+    }
+  }
   next(stepper: MatStepper) {
     // console.log(stepper.selectedIndex);
     var inputCheck = false;
-    document.querySelectorAll('#submitForm'+(stepper.selectedIndex+1)+' input').forEach((node, index, nodeList) => {
-      inputCheck = inputCheck || (<HTMLInputElement>node).checked;
-    });
+    const formInputs = document.querySelectorAll('#submitForm' + (stepper.selectedIndex + 1) + ' input');
+    for (const node of Array.from(formInputs)) {
+      if ((<HTMLInputElement>node).checked) {
+        inputCheck = true;
+        var quesid = (<HTMLInputElement>node).getAttribute('queid');
+        this.quesResponses[quesid as string] = [(<HTMLInputElement>node).value];
+        if ((<HTMLInputElement>node).value === this.quesAns[quesid as string]) {
+          if (!this.correctAnswers.includes(quesid as string)) {
+            // Add the string to the list
+            this.correctAnswers.push(quesid as string);
+          }
+          console.log("correct ans");
+        } else {
+          const ansIndex = this.correctAnswers.indexOf(quesid as string);
+          if (ansIndex !== -1) {
+            // Remove the value if it exists
+            this.correctAnswers.splice(ansIndex, 1);
+          }
+          console.log("wrong ans");
+        }
+        // console.log(this.quizDetails.questions[quesid as string].correct_answers);
+        break;
+      }
+    }
     // console.log(inputCheck);
     if (inputCheck) {
       (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#00bf63";
     } else {
       (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#ff1616";
     }
-    // (<HTMLFormElement>document.getElementById('submitForm' + (stepper.selectedIndex + 1))).submit();
+
+    this.testData['user_answers']         =  JSON.stringify(this.quesResponses);
+    this.testData['correct_answers']      =  JSON.stringify(this.correctAnswers);
+    this.testData['total_obtained_marks'] =  (this.quizDetails.total_marks/this.quizDetails.items) * this.correctAnswers.length;
+    this.testData['date_updated']         =  Math.floor(new Date().getTime() / 1000).toString();
+    this.testData['is_submitted']         =  0;
+    localStorage.setItem("QUIZDATA"+this.quizDetails.id,JSON.stringify(this.testData));
+
     stepper.next();
   }
   mark(stepper: MatStepper) {
     (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#d12929";
+    
+    const formInputs = document.querySelectorAll('#submitForm' + (stepper.selectedIndex + 1) + ' input');
+    for (const node of Array.from(formInputs)) {
+      if ((<HTMLInputElement>node).checked) {
+        var quesid = (<HTMLInputElement>node).getAttribute('queid');
+        this.quesResponses[quesid as string] = [(<HTMLInputElement>node).value];
+        if ((<HTMLInputElement>node).value === this.quesAns[quesid as string]) {
+          if (!this.correctAnswers.includes(quesid as string)) {
+            // Add the string to the list
+            this.correctAnswers.push(quesid as string);
+          }
+          console.log("correct ans");
+        } else {
+          const ansIndex = this.correctAnswers.indexOf(quesid as string);
+          if (ansIndex !== -1) {
+            // Remove the value if it exists
+            this.correctAnswers.splice(ansIndex, 1);
+          }
+          console.log("wrong ans");
+        }
+        // console.log(this.quizDetails.questions[quesid as string].correct_answers);
+        break;
+      }
+    }
+    this.testData['user_answers']         =  JSON.stringify(this.quesResponses);
+    this.testData['correct_answers']      =  JSON.stringify(this.correctAnswers);
+    this.testData['total_obtained_marks'] =  (this.quizDetails.total_marks/this.quizDetails.items) * this.correctAnswers.length;
+    this.testData['date_updated']         =  Math.floor(new Date().getTime() / 1000).toString();
+    this.testData['is_submitted']         =  0;
+    localStorage.setItem("QUIZDATA"+this.quizDetails.id,JSON.stringify(this.testData));
+    
     stepper.next();
   }
   move(stepper: MatStepper, index: number) {
@@ -155,7 +244,7 @@ export class QuizComponent  implements OnInit {
     });
     // console.log(inputCheck);
     if (inputCheck) {
-      (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#00bf63";
+      // (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#00bf63";
     } else {
       (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#ff1616";
     }

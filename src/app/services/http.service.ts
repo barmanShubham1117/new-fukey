@@ -104,6 +104,21 @@ export class HttpService {
     return this.http.post(environment.BASE_API_URL + 'upload_profile_photo', formData);
   }
   
+  // save data in `quiz_results` table
+  public submitTest(data: any, userId: any) {
+    const formData: FormData = new FormData();
+    formData.append('quiz_id',               data['quiz_id']);
+    formData.append('user_id',               userId);
+    formData.append('user_answers',          data['user_answers']);
+    formData.append('correct_answers',       data['correct_answers']);
+    formData.append('total_obtained_marks',  data['total_obtained_marks']);
+    formData.append('date_added',            data['date_added']);
+    formData.append('date_updated',          data['date_updated']);
+    formData.append('is_submitted',          data['is_submitted']);
+
+    return this.http.post(environment.BASE_API_URL + 'submit_test_attempt', formData);
+  }
+
   public getSearchedCourses(val: string) {
     return this.http.get(environment.BASE_API_URL + 'courses_by_search_string?search_string=' + val);
   }
