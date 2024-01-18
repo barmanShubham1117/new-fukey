@@ -45,6 +45,10 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'zoom-non-login',
+        loadChildren: () => import('./zoom-non-login/zoom-non-login.module').then(m => m.NonLoginModule)
+      },
+      {
         path: 'store',
         loadChildren: () => import('./store/store.module').then( m => m.StorePageModule)
       },

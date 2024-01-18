@@ -20,7 +20,7 @@ export class CourseContentPage implements OnInit {
   public COURSE_DATA: any;
   public CONTENT_DATA: any;
   public COURSE_ID: any;
-
+  
   constructor(
     private appService: AppService,
     private httpService: HttpService,
@@ -102,5 +102,14 @@ export class CourseContentPage implements OnInit {
           this.router.navigate(['/tabs/batches/course-content/study-material'], navigationExtras);
       }
     // })
+  }
+  joinMeeting(){
+    const navigationExtras: NavigationExtras = {
+      state: {
+        course: this.COURSE_DATA
+      },
+      replaceUrl: false
+    }
+    this.router.navigate(['/tabs/zoom-non-login'], navigationExtras);
   }
 }

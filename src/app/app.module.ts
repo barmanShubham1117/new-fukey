@@ -18,6 +18,7 @@ import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { SharedModule } from './shared/shared.module'; 
+import { Zoom } from '@ionic-native/zoom/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,7 +31,7 @@ import { SharedModule } from './shared/shared.module';
     AngularFirestoreModule,
     BrowserAnimationsModule
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, HttpClient,SQLite,File,FileTransfer],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, HttpClient,SQLite,File,FileTransfer,Zoom],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

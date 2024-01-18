@@ -16,7 +16,9 @@
       <div class="content-tab">{{ COURSE_DATA.language | uppercase }}</div>
       <div class="content-tab">{{ COURSE_DATA.level | uppercase }}</div>
     </div>
-
+    <ion-button (click)="joinMeeting()">
+      Join Meeting
+    </ion-button> 
 
     <div class="course-description">
       <h3>Course Overview</h3>
@@ -45,7 +47,7 @@
             <ion-icon name="chevron-up-outline" id="collapse{{ i }}" style="display: none;"></ion-icon>
           </div>
         </div>
-
+        
         <div class="section-bodies" id="section-bodies-{{ i }}">
 
           <div class="section-body" *ngFor="let lesson of content.lessons; let j = index;"
