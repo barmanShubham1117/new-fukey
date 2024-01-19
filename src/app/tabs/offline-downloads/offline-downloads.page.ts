@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { DbService } from 'src/app/services/db.service';
 
 @Component({
@@ -21,7 +22,8 @@ export class OfflineDownloadsPage implements OnInit {
 item: any;
   constructor(
     private router: Router,
-    private dbService:DbService
+    private dbService:DbService,
+    private alertController: AlertController
   ) {
     this.USER_ID = localStorage.getItem('USER_ID');
     this.MOBILE = localStorage.getItem('MOBILE');
@@ -66,6 +68,40 @@ item: any;
       replaceUrl: false
     }
     this.router.navigate(['/tabs/offline-downloads/downloads'], navigationExtras);
+  }
+
+  async presentDeleteDialog(title: string, type: string) {
+    const alert = await this.alertController.create({
+      header: `Are sure you want to delete?`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Alert canceled');
+          },
+        },
+        {
+          text: 'Delete',
+          role: 'confirm',
+          handler: () => {
+            console.log(`Alert confirmed: ${title}`);
+            this.dbService.deleteDownloadAssetByBatchName(title, type).then(async () => {
+              if (type === 'pdf') {
+                this.pdfs = [];
+                this.loadPDFDownloadAssets();
+              }
+              else if (type === 'video') {
+                this.pdfs = [];
+                this.loadVideoDownloadAssets();
+              }
+            });
+          },
+        }
+      ],
+    });
+
+    await alert.present();
   }
 
 }

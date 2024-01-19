@@ -24,15 +24,20 @@
         </div>
       </div>
       <div *ngIf="videos.length > 0">
-      <ion-card (click)="openDownloadsPage(item.batchName,'video')" *ngFor="let item of videos | filterpipe: videoBatch : searchableList">
+      <ion-card *ngFor="let item of videos | filterpipe: videoBatch : searchableList">
         <ion-card-header>
-          <div class="card-image">
-            ▶️
+          <div (click)="openDownloadsPage(item.batchName,'video')" style="display: flex; flex-direction: row;">
+            <div class="card-image">
+              ▶️
+            </div>
+            <div class="card-content">
+              <ion-card-title>{{ item.batchName }}</ion-card-title>
+              <ion-card-subtitle><ion-icon name="person"></ion-icon>{{ item.instructor_name }}</ion-card-subtitle>
+              <!-- <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle> -->
+            </div>
           </div>
-          <div class="card-content">
-            <ion-card-title>{{ item.batchName }}</ion-card-title>
-            <ion-card-subtitle><ion-icon name="person"></ion-icon>{{ item.instructor_name }}</ion-card-subtitle>
-            <!-- <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle> -->
+          <div class="delete-btn" (click)="presentDeleteDialog(item.batchName, 'video')">
+            <ion-icon name="trash-outline"></ion-icon>
           </div>
         </ion-card-header>
       </ion-card>
@@ -56,7 +61,7 @@
         </div>
       </div>
 
-      <!-- <ion-card (click)="openDownloadsPage('file')">
+      <!-- <ion-card>
         <ion-card-header>
           <div class="card-image">
             📁
@@ -66,18 +71,26 @@
             <ion-card-subtitle><ion-icon name="person"></ion-icon>by Instructor</ion-card-subtitle>
             <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle>
           </div>
+          <div class="delete-btn">
+            <ion-icon name="trash-outline"></ion-icon>
+          </div>
         </ion-card-header>
       </ion-card> -->
       <div *ngIf="pdfs.length > 0">
-        <ion-card (click)="openDownloadsPage(item.batchName,'pdf')" *ngFor="let item of pdfs | filterpipe: documentBatch : searchableList">
+        <ion-card *ngFor="let item of pdfs | filterpipe: documentBatch : searchableList">
           <ion-card-header>
-            <div class="card-image">
-              📁
+            <div style="display: flex; flex-direction: row;">
+              <div (click)="openDownloadsPage(item.batchName,'pdf')" class="card-image">
+                📁
+              </div>
+              <div class="card-content">
+                <ion-card-title>{{ item.batchName }}</ion-card-title>
+                <ion-card-subtitle><ion-icon name="person"></ion-icon>{{ item.instructor_name }}</ion-card-subtitle>
+                <!-- <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle> -->
+              </div>
             </div>
-            <div class="card-content">
-              <ion-card-title>{{ item.batchName }}</ion-card-title>
-              <ion-card-subtitle><ion-icon name="person"></ion-icon>{{ item.instructor_name }}</ion-card-subtitle>
-              <!-- <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>Category</ion-card-subtitle> -->
+            <div class="delete-btn" (click)="presentDeleteDialog(item.batchName, 'pdf')">
+              <ion-icon name="trash-outline"></ion-icon>
             </div>
           </ion-card-header>
         </ion-card>

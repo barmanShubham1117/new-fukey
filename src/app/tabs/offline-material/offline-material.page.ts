@@ -59,6 +59,8 @@ export class OfflineMaterialPage implements OnInit {
     this.dbService.dbState().subscribe(async (res) => {
       if(res){
         this.dbService.getDownloadAsset(this.title,this.type).then((data:any)=>{
+              console.log("Offline Material: isFileDownloaded(): ", data);
+              
               Filesystem.getUri({
                 directory: FilesystemDirectory.Data,
                 path: data.filename.replace(/^.*[\\/]/, '')

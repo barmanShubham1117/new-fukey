@@ -13,15 +13,20 @@
       </div>
     </div>
 
-    <ion-card *ngFor="let item of assets | filterpipe: videoTitle : searchableList" (click)="openOfflineMaterial(item.title,'video')">
+    <ion-card *ngFor="let item of assets | filterpipe: videoTitle : searchableList">
       <ion-card-header>
-        <div class="card-image">
-          ▶️
+        <div (click)="openOfflineMaterial(item.title,'video')" style="display: flex; flex-direction: row;">
+          <div class="card-image">
+            ▶️
+          </div>
+          <div class="card-content">
+            <ion-card-title>{{ item.title }}</ion-card-title>
+            <ion-card-subtitle><ion-icon name="person"></ion-icon>by {{ item.instructor_name }}</ion-card-subtitle>
+            <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>{{ item.batchName }}</ion-card-subtitle>
+          </div>
         </div>
-        <div class="card-content">
-          <ion-card-title>{{ item.title }}</ion-card-title>
-          <ion-card-subtitle><ion-icon name="person"></ion-icon>by {{ item.instructor_name }}</ion-card-subtitle>
-          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>{{ item.batchName }}</ion-card-subtitle>
+        <div class="delete-btn" (click)="presentDeleteDialog(item.title, 'video')">
+          <ion-icon name="trash-outline"></ion-icon>
         </div>
       </ion-card-header>
     </ion-card>
@@ -40,15 +45,20 @@
         <span>SORT</span>
       </div>
     </div>
-    <ion-card *ngFor="let item of assets | filterpipe: pdfTitle : searchableList" (click)="openOfflineMaterial(item.title,'pdf')">
+    <ion-card *ngFor="let item of assets | filterpipe: pdfTitle : searchableList">
       <ion-card-header>
-        <div class="card-image">
-          📁
+        <div (click)="openOfflineMaterial(item.title,'pdf')" style="display: flex; flex-direction: row;">
+          <div class="card-image">
+            📁
+          </div>
+          <div class="card-content">
+            <ion-card-title>{{ item.title }}</ion-card-title>
+            <ion-card-subtitle><ion-icon name="person"></ion-icon>by {{ item.instructor_name }}</ion-card-subtitle>
+            <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>{{ item.batchName }}</ion-card-subtitle>
+          </div>
         </div>
-        <div class="card-content">
-          <ion-card-title>{{ item.title }}</ion-card-title>
-          <ion-card-subtitle><ion-icon name="person"></ion-icon>by {{ item.instructor_name }}</ion-card-subtitle>
-          <ion-card-subtitle><ion-icon name="pricetag"></ion-icon>{{ item.batchName }}</ion-card-subtitle>
+        <div class="delete-btn" (click)="presentDeleteDialog(item.title, 'pdf')">
+          <ion-icon name="trash-outline"></ion-icon>
         </div>
       </ion-card-header>
     </ion-card>
