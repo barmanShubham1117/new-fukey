@@ -38,6 +38,36 @@ ion-item {
         font-weight: bold;
     }
 }
+
+#quizResult {
+    color: black;
+
+    .item-inner {
+        border: none;
+    }
+    .about {
+        margin-top: 2rem;
+    }
+    button {
+        width: 48%;
+        padding: 1rem;
+        color: #fff;
+        border-radius: 10px;
+    }
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        button {
+            background-color: #1A4789;
+        }
+    }
+    #start-btn {
+        background-color: #007600;
+        margin: 3rem auto;
+        display: block;
+        font-weight: bold;
+    }
+}
 .quiz-info {
     background: whitesmoke;
     color: black;

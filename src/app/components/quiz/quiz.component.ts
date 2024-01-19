@@ -75,7 +75,7 @@ export class QuizComponent  implements OnInit {
         // console.log(question.correct_answers[0]);
         this.quesAns[question.id] = question.correct_answers[0];
       });
-      console.log(this.quesResponses);
+      // console.log(this.quesResponses);
       this.appService.dismissLoading();
       // this.startTimer();
     });
@@ -155,6 +155,7 @@ export class QuizComponent  implements OnInit {
       });
       this.httpService.updateUserCurrentProgress(this.USER_ID,this.currentLesson.course_id,this.currentLesson.id).subscribe((response: any) => {
         console.log(response);
+        this.onNextBtnPressed();
       });
     }
   }
