@@ -9,13 +9,14 @@ import { AppService } from './app.service';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { FileOpener } from "@capacitor-community/file-opener";
 import { Platform } from '@ionic/angular';
-import { Directory, Filesystem, DownloadFileResult, DownloadFileOptions } from "@capacitor/filesystem";
+import { Directory, Filesystem, DownloadFileResult, DownloadFileOptions, DeleteFileOptions } from "@capacitor/filesystem";
 import { Preferences } from "@capacitor/preferences";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DbService {
+
   private storage!: SQLiteObject;
   private tableName = "offline_download_assets";
   private downloadAssets = new BehaviorSubject([]);
@@ -23,6 +24,7 @@ export class DbService {
   private isDbReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private downloadProgress = 0;
   private downloadUrl = "";
+
   constructor(
     private platform: Platform,
     private sqlite: SQLite,
@@ -44,9 +46,11 @@ export class DbService {
         .catch(e => console.log(e));
     });
   }
+
   dbState() {
     return this.isDbReady.asObservable();
   }
+
   private createTable() {
     this.storage.executeSql("CREATE TABLE IF NOT EXISTS " + this.tableName + " (id INTEGER PRIMARY KEY AUTOINCREMENT,title Text,filename TEXT, desc Text,batchName Text,instructor_name Text,type Text)", [])
       .then(() => {
@@ -54,6 +58,7 @@ export class DbService {
       })
       .catch(e => console.log(e));
   }
+
   async downloadFile(url: string, title: string, desc: string, batchName: string, instructor_name: string, type: string):Promise<Observable<any>> {
       this.downloadUrl = url ? url : this.downloadUrl;
     const name = this.downloadUrl.substring(this.downloadUrl.lastIndexOf("/") + 1);
@@ -91,92 +96,200 @@ export class DbService {
       
     } catch (e) {
       return new Observable(observer =>{
-      console.log(e);
-      this.appService.presentToast('Error to download media.','bottom');
-      this.cleanupDownload(progress);
-      observer.next("error");
-      });
+        console.log(e);
+        this.appService.presentToast('Error to download media.','bottom');
+        this.cleanupDownload(progress);
+        observer.next("error");
+        });
     }
 
     
+  }
+  
+  async deleteFile(filename: string) {
+    const options: DeleteFileOptions = {
+      path: filename,
+      directory: Directory.Data,
+    };
+
+    await Filesystem.deleteFile(options).then(() => {
+      this.appService.presentToast('File deleted successfully.','bottom');
+    })    
   }
 
   cleanupDownload(progress: PluginListenerHandle) {
     this.downloadProgress = 0;
     progress.remove();
   }
-getDownloadAssets(type: string) : Promise < any[] > {
-  return this.storage
-    .executeSql('SELECT * FROM ' + this.tableName + ' where type=? group by batchName', [type])
-    .then((res) => {
-      let items: any[] = [];
-      if (res.rows.length > 0) {
-        for (var i = 0; i < res.rows.length; i++) {
-          console.log("Batch Name", res.rows.item(i).batchName);
-          items.push({
-            id: res.rows.item(i).id,
-            batchName: res.rows.item(i).batchName,
-            instructor_name: res.rows.item(i).instructor_name,
-          });
-        }
-      }
-      return items;
-    });
-}
-getDownloadAssetsByBatchName(batchName: string, type: string) : Promise < any[] > {
-  return this.storage
-    .executeSql('SELECT * FROM ' + this.tableName + ' where batchName=? and type=?', [batchName, type])
-    .then((res) => {
-      let items: any[] = [];
-      if (res.rows.length > 0) {
-        for (var i = 0; i < res.rows.length; i++) {
 
-          items.push({
-            id: res.rows.item(i).id,
-            title: res.rows.item(i).title,
-            batchName: res.rows.item(i).batchName,
-            instructor_name: res.rows.item(i).instructor_name,
-            type: res.rows.item(i).type
-          });
+  getDownloadAssets(type: string) : Promise < any[] > {
+    return this.storage
+      .executeSql('SELECT * FROM ' + this.tableName + ' where type=? group by batchName', [type])
+      .then((res) => {
+        let items: any[] = [];
+        if (res.rows.length > 0) {
+          for (var i = 0; i < res.rows.length; i++) {
+            console.log("Batch Name", res.rows.item(i).batchName);
+            items.push({
+              id: res.rows.item(i).id,
+              batchName: res.rows.item(i).batchName,
+              instructor_name: res.rows.item(i).instructor_name,
+            });
+          }
         }
+        return items;
+      });
+  }
+
+  getDownloadAssetsByBatchName(batchName: string, type: string) : Promise < any[] > {
+    return this.storage
+      .executeSql('SELECT * FROM ' + this.tableName + ' where batchName=? and type=?', [batchName, type])
+      .then((res) => {
+        let items: any[] = [];
+        if (res.rows.length > 0) {
+          for (var i = 0; i < res.rows.length; i++) {
+
+            items.push({
+              id: res.rows.item(i).id,
+              title: res.rows.item(i).title,
+              batchName: res.rows.item(i).batchName,
+              instructor_name: res.rows.item(i).instructor_name,
+              type: res.rows.item(i).type
+            });
+          }
+        }
+        return items;
+      });
+    }
+
+  getDownloadAsset(title: any, type: string): Promise < object > {
+    return this.storage
+      .executeSql('SELECT * FROM ' + this.tableName + ' WHERE title = ? and type = ?', [title, type])
+      .then((res) => {
+        return {
+          id: res.rows.item(0).id,
+          title: res.rows.item(0).title,
+          filename: res.rows.item(0).filename,
+          blob_type: res.rows.item(0).blob_type,
+          desc: res.rows.item(0).desc,
+          batchName: res.rows.item(0).batchName,
+          instructor_name: res.rows.item(0).instructor_name,
+          type: res.rows.item(0).type,
+          status: 'Found'
+        };
+      })
+      .catch((error) => {
+        return {
+          status: 'Error'
+        };
+      });
+  }
+
+  async deleteDownloadAsset(title: any, type: string) {
+
+    const dataInfo = await this.storage
+      .executeSql('SELECT * FROM ' + this.tableName + ' WHERE title = ? and type = ?', [title, type])
+      .then((res) => {
+        return {
+          filename: res.rows.item(0).filename,
+          status: 'Found'
+        };
+      })
+      .catch((error) => {
+        return {
+          filename: '',
+          status: 'Error'
+        };
+      });
+
+      if (dataInfo.status === 'Found' && dataInfo.filename !== '') {
+        console.log("DB Service: deleteDownloadAsset() response : ", dataInfo.filename);
+        console.log("DB Service: deleteDownloadAsset() response : ", dataInfo.filename.substring(dataInfo.filename.lastIndexOf("/") + 1));
+
+        this.deleteFile(dataInfo.filename.substring(dataInfo.filename.lastIndexOf("/") + 1));
       }
-      return items;
-    });
-}
-getDownloadAsset(title: any, type: string): Promise < object > {
-  return this.storage
-    .executeSql('SELECT * FROM ' + this.tableName + ' WHERE title = ? and type = ?', [title, type])
-    .then((res) => {
-      return {
-        id: res.rows.item(0).id,
-        title: res.rows.item(0).title,
-        filename: res.rows.item(0).filename,
-        blob_type: res.rows.item(0).blob_type,
-        desc: res.rows.item(0).desc,
-        batchName: res.rows.item(0).batchName,
-        instructor_name: res.rows.item(0).instructor_name,
-        type: res.rows.item(0).type,
-        status: 'Found'
-      };
-    })
-    .catch((error) => {
-      return {
-        status: 'Error'
-      };
-    });
-}
-deleteDownloadAsset(title: any, type: string): Promise < object > {
-  return this.storage
-    .executeSql('DELETE FROM ' + this.tableName + ' WHERE title = ? and type = ?', [title, type])
-    .then((_) => {
-      return {
-        status: 'Deleted'
-      };
-    })
-    .catch((error) => {
-      return {
-        status: 'Error'
-      };
-    });
-}
+    
+
+    return this.storage
+      .executeSql('DELETE FROM ' + this.tableName + ' WHERE title = ? and type = ?', [title, type])
+      .then((_) => {
+        return {
+          status: 'Deleted'
+        };
+      })
+      .catch((error) => {
+        return {
+          status: 'Error'
+        };
+      });
+  }
+
+  async deleteDownloadAssetByBatchName(batchName: any, type: string) {
+    let items: any[] = [];
+
+    const dataInfo = await this.storage
+      .executeSql('SELECT * FROM ' + this.tableName + ' WHERE batch_name = ? and type = ?', [batchName, type])
+      .then((res) => {
+        if (res.rows.length > 0) {
+          for (var i = 0; i < res.rows.length; i++) {
+            let fileName = res.rows.item(i).fileName
+            console.log("File Name", fileName);
+
+            items.push({
+              files : fileName
+            });
+            
+            this.deleteFile(fileName.substring(fileName.lastIndexOf("/") + 1));
+          }
+        }
+
+        return {
+          files: items
+        };
+      })
+      .catch((error) => {
+        return {
+          filename: '',
+          status: 'Error'
+        };
+      });
+
+      items.forEach((item) => {
+        console.log("DB Service: deleteDownloadAssetByBatchName() response : ", item.fileName.substring(item.fileName.lastIndexOf("/") + 1));
+      })
+    
+
+    return this.storage
+      .executeSql('DELETE FROM ' + this.tableName + ' WHERE batch_name = ? and type = ?', [batchName, type])
+      .then((_) => {
+        return {
+          status: 'Deleted'
+        };
+      })
+      .catch((error) => {
+        return {
+          status: 'Error'
+        };
+      });
+  }
+
+  // async getAllRecords() {
+  //   return this.storage
+  //     .executeSql('SELECT * FROM ' + this.tableName + ' WHERE id NOT LIKE ?', [0])
+  //     .then((res) => {
+  //       let items: any[] = [];
+  //       if (res.rows.length > 0) {
+  //         for (var i = 0; i < res.rows.length; i++) {
+  //           console.log("Batch Name", res.rows.item(i).batchName);
+  //           items.push({
+  //             id: res.rows.item(i).id,
+  //             batchName: res.rows.item(i).batchName,
+  //             instructor_name: res.rows.item(i).instructor_name,
+  //             filename: res.rows.item(i).filename,
+  //           });
+  //         }
+  //       }
+  //       return items;
+  //     });
+  // }
 }
