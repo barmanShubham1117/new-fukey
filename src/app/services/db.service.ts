@@ -41,7 +41,7 @@ export class DbService {
           this.storage = db;
           this.createTable();
         })
-        .catch(e => console.log(e));
+        .catch(e => console.log("cordova ssqkiete"+e));
     });
   }
   dbState() {
@@ -60,6 +60,7 @@ export class DbService {
     const progress = await Filesystem.addListener('progress', progress => {
       this.downloadProgress = Math.round((progress.bytes / progress.contentLength) * 100);
     });
+    console.log("data directory"+Directory.Data);
     const options: DownloadFileOptions = {
       url: this.downloadUrl,
       path: name,

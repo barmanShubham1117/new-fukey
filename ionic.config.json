@@ -1,7 +1,7 @@
 {
   "name": "fukey",
   "integrations": {
-    "capacitor": {}
+    "cordova": {}
   },
   "type": "angular"
 }

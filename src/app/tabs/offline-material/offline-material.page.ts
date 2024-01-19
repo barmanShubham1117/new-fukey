@@ -7,7 +7,7 @@ import { HttpService } from 'src/app/services/http.service';
 import { AppService } from 'src/app/services/app.service';
 import { DbService } from 'src/app/services/db.service';
 import { File } from '@ionic-native/file/ngx';
-import { Filesystem, FilesystemDirectory } from '@capacitor/filesystem';
+import { Directory, Filesystem, FilesystemDirectory } from '@capacitor/filesystem';
 import { FileOpener } from '@capacitor-community/file-opener';
 
 @Component({
@@ -60,12 +60,12 @@ export class OfflineMaterialPage implements OnInit {
       if(res){
         this.dbService.getDownloadAsset(this.title,this.type).then((data:any)=>{
               Filesystem.getUri({
-                directory: FilesystemDirectory.Data,
+                directory: Directory.Data,
                 path: data.filename.replace(/^.*[\\/]/, '')
               }).then((getUriResult) => {
                 let path = getUriResult.uri;
                 path = this.win.Ionic.WebView.convertFileSrc(path);
-                console.log("File path",path);
+                console.log("File path",data.filename);
                 this.fileSrc = path;
                 console.log("data"+data.type);
                 if(data.type=="video"){

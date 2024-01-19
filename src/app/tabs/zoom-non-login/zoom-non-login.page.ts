@@ -65,7 +65,7 @@ export class NonLoginPage {
       no_text_password: true,
       no_text_meeting_id: false,
       no_button_leave: false
-    };
+    };  
     // Call join meeting method.
     this.zoomService.joinMeeting(this.meetingNumber, this.meetingPassword, this.displayName, options)
         .then((success) => {
