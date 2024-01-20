@@ -1,4 +1,8 @@
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
   <div class="main-container" style="min-height: 100%;">
 
     <ion-segment value="documents" (ionChange)="changeActiveTab($event)">
@@ -79,8 +83,8 @@
       <div *ngIf="pdfs.length > 0">
         <ion-card *ngFor="let item of pdfs | filterpipe: documentBatch : searchableList">
           <ion-card-header>
-            <div style="display: flex; flex-direction: row;">
-              <div (click)="openDownloadsPage(item.batchName,'pdf')" class="card-image">
+            <div style="display: flex; flex-direction: row;" (click)="openDownloadsPage(item.batchName,'pdf')">
+              <div class="card-image">
                 📁
               </div>
               <div class="card-content">

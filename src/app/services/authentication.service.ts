@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat';
+import { AppService } from './app.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import firebase from 'firebase/compat';
 export class AuthenticationService {
   public confirmationResult?: firebase.auth.ConfirmationResult;
 
-  constructor(private fireAuth: AngularFireAuth) { }
+  constructor(private fireAuth: AngularFireAuth, private appService: AppService) { }
 
   // async signInWithPhoneNumber(mobile: string) {}
   public async signInWithPhoneNumber(recaptchaVerifier: any, phoneNumber: any) {
@@ -40,6 +41,8 @@ export class AuthenticationService {
 				})
 				.catch((error) => {
 					console.log('ERROR');
+					this.appService.dismissLoading();
+					this.appService.presentToast("Invalid OTP.", "bottom");
 					
 					reject(error.message);
 				});

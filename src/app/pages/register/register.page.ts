@@ -6,6 +6,7 @@ import firebase from 'firebase/compat/app';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { HttpService } from 'src/app/services/http.service';
 import { AppService } from 'src/app/services/app.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-register',
@@ -17,18 +18,26 @@ export class RegisterPage implements OnInit {
 	public recaptchaVerifier?: firebase.auth.RecaptchaVerifier;
   public classList: any;
   public isClassListAvailable: boolean = false;
+
+  public FCM_TOKEN: any;
+
   constructor(
     public router: Router,
     public formBuilder: FormBuilder,
     private auth: AuthenticationService,
     private httpService: HttpService,
     private angularFireAuth: AngularFireAuth,
-    private appService: AppService
+    private appService: AppService,
+    private storageService: StorageService
   ) {
    }
 
   ngOnInit() {
     localStorage.clear();
+
+    this.FCM_TOKEN = this.storageService.getStorage("push_notification_token");
+    console.log("Register page: ngOnit(): ", this.FCM_TOKEN);
+    
     
     this.httpService.getClassList().subscribe((response: any) => {
       this.classList = response;
@@ -59,7 +68,7 @@ export class RegisterPage implements OnInit {
 		});
 	}
 
-  async onSubmit(formData: { fullName: string, mobile: string, email: string, class: string, school: string, city: string, tnc: any }) {
+  async onSubmit(formData: { fullName: string, mobile: string, email: string, class: string, school: string, city: string, tnc: any }, fcm_token: any) {
     console.log(formData);
 
     if (formData.fullName == '') {
@@ -77,29 +86,33 @@ export class RegisterPage implements OnInit {
     } else if (formData.tnc != true) {
       this.appService.presentToast('Please accept Terms and Conditons.', "bottom");
     } else {
+      this.appService.showLoadingScreen("Registration in progress..");
 
-      this.httpService.register(formData).subscribe(async (response: any) => {
+      this.httpService.register(formData, fcm_token).subscribe(async (response: any) => {
           console.log(response);
 
-          if(response.validity) {
-            localStorage.setItem('USER_ID', response.user_id);
-            localStorage.setItem('MOBILE', formData.mobile);
-            localStorage.setItem('EMAIL', formData.email);
-
-            const msg = 'Sending OTP to +91 ' + formData.mobile;
-
-            // this.appService.showLoadingScreen(msg);
-
-            this.auth.signInWithPhoneNumber(this.recaptchaVerifier, '+91' + formData.mobile)
-              .then((success) => {
-                // this.appService.dismissLoadingScreen();
-                console.log('SUCCESS: OTP sent successfully.');
-                this.appService.presentToast('OTP sent successfully.', "bottom");
-                this.router.navigate(['/register-verify'], { replaceUrl: true });
-              });
-          } else {
-            this.appService.presentToast(response.message, "bottom");
-          }
+          this.appService.dismissLoading().then(() => {
+            if(response.validity) {
+              localStorage.setItem('USER_ID', response.user_id);
+              localStorage.setItem('MOBILE', formData.mobile);
+              localStorage.setItem('EMAIL', formData.email);
+  
+              const msg = 'Sending OTP to +91 ' + formData.mobile;
+  
+              this.appService.showLoadingScreen(msg);
+  
+              this.auth.signInWithPhoneNumber(this.recaptchaVerifier, '+91' + formData.mobile)
+                .then((success) => {
+                  this.appService.dismissLoading().then(() => {
+                    console.log('SUCCESS: OTP sent successfully.');
+                    this.appService.presentToast('OTP sent successfully.', "bottom");
+                    this.router.navigate(['/register-verify'], { replaceUrl: true });
+                  });
+                });
+            } else {
+              this.appService.presentToast(response.message, "bottom");
+            }
+          });
       });
     }
   }

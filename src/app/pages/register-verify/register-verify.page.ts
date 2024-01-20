@@ -34,7 +34,7 @@ export class RegisterVerifyPage implements OnInit {
   
   verifyOTP(formData: { otp: string}) {
     console.log(formData);
-    // this.appService.showLoadingScreen("Verifying...")
+    this.appService.showLoadingScreen("Verifying...")
     
     this.auth.enterVerificationCode(formData.otp)
       .then(async (data) => {
@@ -46,24 +46,17 @@ export class RegisterVerifyPage implements OnInit {
 
         this.httpService.updateStatus(this.userId)
           .subscribe((data: any) => {
-            // this.appService.dismissLoadingScreen();
-            if (data.status) {
-              this.httpService.getAccessToken(this.mobile, this.userId).subscribe((response: any) => {
-                localStorage.setItem('TOKEN', response.token);
-                this.router.navigate(['/tabs/home'], { replaceUrl: true });
-              });
-              
-              // const phnNumber = this.user.phoneNumber.match(/\d{10}/);
-              // localStorage.setItem('MOBILE', phnNumber);
-              
-              // this.appService.dismissLoadingScreen();
-              // this.router.navigate(['/tabs/home'], { replaceUrl: true });
-            } else {
-              this.appService.presentToast("Invaild OTP", "bottom");
-            }
+            this.appService.dismissLoading().then(() => {
+              if (data.status) {
+                this.httpService.getAccessToken(this.mobile, this.userId).subscribe((response: any) => {
+                  localStorage.setItem('TOKEN', response.token);
+                  this.router.navigate(['/tabs/home'], { replaceUrl: true });
+                });
+              } else {
+                this.appService.presentToast("Invaild OTP", "bottom");
+              }
+            });
           });
-
-          // this.appService.dismissLoadingScreen();
       });
   }
 

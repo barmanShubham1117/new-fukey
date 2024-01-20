@@ -43,9 +43,9 @@ export class HttpService {
     this.TOKEN = undefined;
   }
 
-  public register(formData:any) {
+  public register(formData:any, fcmToken:any) {
 
-    let body = `first_name=${formData.fullName}&last_name=%20&email=${formData.email}&password=%20&city=${formData.city}&mobile=%2B91${formData.mobile}&class=${formData.class}&school=${formData.school}&city=${formData.city}`;
+    let body = `first_name=${formData.fullName}&last_name=%20&email=${formData.email}&password=%20&city=${formData.city}&mobile=%2B91${formData.mobile}&class=${formData.class}&school=${formData.school}&city=${formData.city}&fcm_token=${fcmToken}`;
 
     const httpOptions = {
       headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
@@ -54,9 +54,9 @@ export class HttpService {
     return this.http.post(environment.BASE_API_URL + 'signup', body, httpOptions);
   }
   
-  public checkUser(mobile: any) {
+  public checkUser(mobile: any, fcmToken: string) {
 
-    let body = `mobile=%2B91${mobile}`;
+    let body = `mobile=%2B91${mobile}&fcm_token=${fcmToken}`;
 
     const httpOptions = {
       headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')

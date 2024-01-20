@@ -29,9 +29,9 @@ item: any;
     this.MOBILE = localStorage.getItem('MOBILE');
     this.TOKEN = localStorage.getItem('TOKEN');
    }
-
+  
   async ngOnInit() {
-    this.dbService.dbState().subscribe(async (res) => {
+        this.dbService.dbState().subscribe(async (res) => {
       if(res){
         await this.loadPDFDownloadAssets();
         await this.loadVideoDownloadAssets();        
@@ -102,6 +102,15 @@ item: any;
     });
 
     await alert.present();
+  }
+
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      // Any calls to load data go here
+      this.loadPDFDownloadAssets();
+      this.loadVideoDownloadAssets();
+      event.target.complete();
+    }, 2);
   }
 
 }

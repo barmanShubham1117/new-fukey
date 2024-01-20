@@ -7,6 +7,7 @@ import { HttpService } from 'src/app/services/http.service';
 import { App } from '@capacitor/app';
 import Swiper from 'swiper';
 import { Capacitor } from '@capacitor/core';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -32,6 +33,8 @@ export class HomePage implements OnInit {
 
   public showEnrolledCourses: boolean = false;
 
+  public FCM_TOKEN: string = '';
+
   start: any;
   tap = 0;
 
@@ -43,6 +46,7 @@ export class HomePage implements OnInit {
     private el: ElementRef,
     private platform: Platform,
     private router: Router,
+    private storageService: StorageService,
     @Optional() private routerOutlet?: IonRouterOutlet
   ) {
     this.start = 0;
@@ -218,5 +222,8 @@ export class HomePage implements OnInit {
     // } else {
     //   this.appService.presentToast("Data is there in localStorage", "bottom");
     // }
+
+    this.FCM_TOKEN = this.storageService.getStorage("push_notification_token").value;
+    console.log("Home page: ngOnit(): ", this.FCM_TOKEN);
   }
 }
