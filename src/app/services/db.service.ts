@@ -23,13 +23,15 @@ export class DbService {
   private isDbReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private downloadProgress = 0;
   private downloadUrl = "";
+  private uploadStatus = 0;
   constructor(
     private platform: Platform,
     private sqlite: SQLite,
     private httpClient: HttpClient,
     private appService: AppService,
     private httpService: HttpService,
-    private file: File
+    private file: File,
+    private fileTransfer: FileTransfer
   ) {
     this.platform.ready().then(() => {
       this.sqlite
@@ -56,55 +58,105 @@ export class DbService {
   }
   async downloadFile(url: string, title: string, desc: string, batchName: string, instructor_name: string, type: string):Promise<Observable<any>> {
       this.downloadUrl = url ? url : this.downloadUrl;
+      const transfer: FileTransferObject = this.fileTransfer.create();
     const name = this.downloadUrl.substring(this.downloadUrl.lastIndexOf("/") + 1);
-    const progress = await Filesystem.addListener('progress', progress => {
-      this.downloadProgress = Math.round((progress.bytes / progress.contentLength) * 100);
+    // const progress = await this.fileTransfer.p('progress', progress => {
+    //   this.downloadProgress = Math.round((progress.bytes / progress.contentLength) * 100);
+    // });
+    transfer.onProgress((progressEvent: ProgressEvent): void => {
+      this.uploadStatus = Math.floor(progressEvent.loaded / progressEvent.total * 
+      100);
+      console.log("Upload Progress () => ", this.uploadStatus);
+      console.log("progressEvent.loaded ", progressEvent.loaded);
+      console.log("progressEvent.total ", progressEvent.total);
     });
-    console.log("data directory"+Directory.Data);
-    const options: DownloadFileOptions = {
-      url: this.downloadUrl,
-      path: name,
-      progress: true,
-      directory: Directory.Data,
-      responseType: "blob" as "blob",
-      webFetchExtra: { mode: 'no-cors' as RequestMode }
-    };
 
     try {
-      const response: DownloadFileResult = await Filesystem.downloadFile(options)
-      const path = response.path as string;
-      this.appService.presentToast('File saved successfully.','bottom');
-      return new Observable(observer =>{
-        this.storage.executeSql("INSERT INTO " + this.tableName + " (title,filename,desc,batchName,instructor_name,type) VALUES (?,?,?,?,?,?)", [title, path, desc, batchName, instructor_name, type])
-          .then(() => {
-            this.appService.dismissLoading().then(() => {
-              observer.next("done");
-            });
-          })
-          .catch((error) => {
-            this.appService.dismissLoading().then(() => {
-              console.log('Error inserting media data into the table:' + error, 'bottom');
-              observer.next("error");
-            });
-
+      return transfer.download(this.downloadUrl, this.file.dataDirectory + name).then(
+        (entry) => {
+          return new Observable(observer =>{
+            const path = (this.file.dataDirectory +  name) as string;
+            console.log(path);
+            this.storage.executeSql("INSERT INTO " + this.tableName + " (title,filename,desc,batchName,instructor_name,type) VALUES (?,?,?,?,?,?)", [title, path, desc, batchName, instructor_name, type])
+              .then(() => {
+                this.appService.dismissLoading().then(() => {
+                  this.appService.presentToast('File saved successfully.','bottom');
+                  observer.next("done");
+                });
+              })
+              .catch((error) => {
+                this.appService.dismissLoading().then(() => {
+                  console.log('Error inserting media data into the table:' + error, 'bottom');
+                  observer.next("error");
+                });
+    
+              });
           });
-      });
+        });
+      
+      
       
     } catch (e) {
       return new Observable(observer =>{
       console.log(e);
       this.appService.presentToast('Error to download media.','bottom');
-      this.cleanupDownload(progress);
+      this.cleanupDownload();
       observer.next("error");
       });
     }
 
     
   }
+  // async downloadFile(url: string, title: string, desc: string, batchName: string, instructor_name: string, type: string):Promise<Observable<any>> {
+  //     this.downloadUrl = url ? url : this.downloadUrl;
+  //   const name = this.downloadUrl.substring(this.downloadUrl.lastIndexOf("/") + 1);
+  //   const progress = await Filesystem.addListener('progress', progress => {
+  //     this.downloadProgress = Math.round((progress.bytes / progress.contentLength) * 100);
+  //   });
+  //   console.log("data directory",Directory.Data);
+  //   const options: DownloadFileOptions = {
+  //     url: this.downloadUrl,
+  //     path: name,
+  //     progress: true,
+  //     directory: Directory.Data,
+  //     responseType: "blob" as "blob",
+  //     webFetchExtra: { mode: 'no-cors' as RequestMode }
+  //   };
 
-  cleanupDownload(progress: PluginListenerHandle) {
-    this.downloadProgress = 0;
-    progress.remove();
+  //   try {
+  //     const response: DownloadFileResult = await Filesystem.downloadFile(options)
+  //     const path = response.path as string;
+  //     this.appService.presentToast('File saved successfully.','bottom');
+  //     return new Observable(observer =>{
+  //       this.storage.executeSql("INSERT INTO " + this.tableName + " (title,filename,desc,batchName,instructor_name,type) VALUES (?,?,?,?,?,?)", [title, path, desc, batchName, instructor_name, type])
+  //         .then(() => {
+  //           this.appService.dismissLoading().then(() => {
+  //             observer.next("done");
+  //           });
+  //         })
+  //         .catch((error) => {
+  //           this.appService.dismissLoading().then(() => {
+  //             console.log('Error inserting media data into the table:' + error, 'bottom');
+  //             observer.next("error");
+  //           });
+
+  //         });
+  //     });
+      
+  //   } catch (e) {
+  //     return new Observable(observer =>{
+  //     console.log(e);
+  //     this.appService.presentToast('Error to download media.','bottom');
+  //     this.cleanupDownload(progress);
+  //     observer.next("error");
+  //     });
+  //   }
+
+    
+  // }
+
+  cleanupDownload() {
+    this.uploadStatus = 0;
   }
 getDownloadAssets(type: string) : Promise < any[] > {
   return this.storage
