@@ -31,6 +31,10 @@ export class TabsPage implements OnInit {
     this.router.navigate(['/tabs/offline-downloads']);
   }
 
+  navigateToEditProfile() {
+    this.router.navigate(['/tabs/edit-profile']);
+  }
+
   logout() {
     localStorage.clear();
     this.router.navigate(['/login'], { replaceUrl: true});

@@ -6,6 +6,8 @@ import firebase from 'firebase/compat/app';
 import { AppService } from 'src/app/services/app.service';
 import { StorageService } from 'src/app/services/storage.service';
 
+export const FCM_TOKEN = 'push_notification_token';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -18,6 +20,7 @@ export class LoginPage implements OnInit {
   private USER_ID: any;
   private MOBILE: any;
   private TOKEN: any;
+  private FCM_TOKEN: any;
 
   constructor(
     private router:Router,
@@ -33,6 +36,13 @@ export class LoginPage implements OnInit {
     console.log("HOME PAGE : GET DATA : TOKEN : ", this.TOKEN);
 
     localStorage.clear();
+    
+    this.logFCMToken();
+  }
+
+  async logFCMToken() {
+    this.FCM_TOKEN = JSON.parse((await this.storageService.getStorage(FCM_TOKEN)).value);
+    console.log(FCM_TOKEN, this.FCM_TOKEN);
   }
 
   navigateToTargetPage() {
@@ -64,12 +74,8 @@ export class LoginPage implements OnInit {
   
   async onSubmit(formData: {mobile: string}) {    
     if (formData.mobile != "") {
-      // this.appService.showLoadingScreen("Verifying...");
-
-      this.httpService.checkUser(formData.mobile, this.storageService.getStorage('FCM_TOKEN')).subscribe((response: any) => {
+      this.httpService.checkUser(formData.mobile, this.FCM_TOKEN).subscribe((response: any) => {
         console.log(response);
-        // this.appService.dismissLoading();
-          
           if (response.status) {
             localStorage.setItem('MOBILE', formData.mobile);
             
@@ -83,7 +89,6 @@ export class LoginPage implements OnInit {
                     console.log('SUCCESS: OTP sent successfully.');
                     this.appService.presentToast('OTP sent successfully.', "bottom");
                     this.router.navigate(['/login-verify'], { replaceUrl: true });
-                  // });
                 })
                 .catch((error) => {
                   this.appService.dismissLoading().then(() => {
@@ -91,17 +96,12 @@ export class LoginPage implements OnInit {
                     throw error;
                   });
                 });
-  
           } else {
-            // Invaild user
             this.appService.presentToast('Invaild mobile number.', "bottom");
           }
-
-        // });
       })
     } else {
       this.appService.presentToast('Please enter mobile no.', "bottom");
     }
   }
-
 }

@@ -8,6 +8,9 @@ import { HttpService } from 'src/app/services/http.service';
 import { AppService } from 'src/app/services/app.service';
 import { StorageService } from 'src/app/services/storage.service';
 
+export const FCM_TOKEN = 'push_notification_token';
+
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
@@ -19,7 +22,7 @@ export class RegisterPage implements OnInit {
   public classList: any;
   public isClassListAvailable: boolean = false;
 
-  public FCM_TOKEN: any;
+  private FCM_TOKEN: any;
 
   constructor(
     public router: Router,
@@ -33,17 +36,20 @@ export class RegisterPage implements OnInit {
    }
 
   ngOnInit() {
-    localStorage.clear();
-
-    this.FCM_TOKEN = this.storageService.getStorage("push_notification_token");
-    console.log("Register page: ngOnit(): ", this.FCM_TOKEN);
-    
+    localStorage.clear();    
     
     this.httpService.getClassList().subscribe((response: any) => {
       this.classList = response;
       this.isClassListAvailable = true;
       console.log('CLASS LIST: ', this.classList);
     })
+
+    this.logFCMToken();
+  }
+
+  async logFCMToken() {
+    this.FCM_TOKEN = JSON.parse((await this.storageService.getStorage(FCM_TOKEN)).value);
+    console.log(FCM_TOKEN, this.FCM_TOKEN);
   }
 
   async ionViewDidEnter() {
@@ -68,7 +74,7 @@ export class RegisterPage implements OnInit {
 		});
 	}
 
-  async onSubmit(formData: { fullName: string, mobile: string, email: string, class: string, school: string, city: string, tnc: any }, fcm_token: any) {
+  async onSubmit(formData: { fullName: string, mobile: string, email: string, class: string, school: string, city: string, tnc: any }) {
     console.log(formData);
 
     if (formData.fullName == '') {
@@ -88,7 +94,7 @@ export class RegisterPage implements OnInit {
     } else {
       this.appService.showLoadingScreen("Registration in progress..");
 
-      this.httpService.register(formData, fcm_token).subscribe(async (response: any) => {
+      this.httpService.register(formData, this.FCM_TOKEN).subscribe(async (response: any) => {
           console.log(response);
 
           this.appService.dismissLoading().then(() => {
