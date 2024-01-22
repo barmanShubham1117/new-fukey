@@ -31,7 +31,15 @@ export class NonLoginPage {
     private appService: AppService,
     private ngZone: NgZone,
     public platform: Platform
-  ) { }
+  ) {
+    appService.showLoadingScreen("Joining...");
+    setTimeout(() => {
+      appService.dismissLoading()
+        .then(() => {
+          this.joinMeeting();
+        });
+    }, 5000)
+   }
 
   /**
    * Join a meeting.
@@ -100,7 +108,7 @@ export class NonLoginPage {
           meetingNumber: this.meetingNumber,
           password: this.meetingPassword,
           userEmail: "jayant.jain.co@gmail.com",
-          userName: "Jayant Jain",
+          userName: "Testing Zoom",
         }).then(() => {
           this.startedMeeting = true;
           console.log("Width", this.platform.width());

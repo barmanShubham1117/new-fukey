@@ -14,13 +14,13 @@ export class AppComponent {
     public router:Router,
     private fcmService: FcmService
   ) {
-    this.platform.ready().then(() => {
-      this.fcmService.initPush().then(() => { 
-        this.router.navigateByUrl('/splash', { replaceUrl: true });
-      });
-    })
-    .catch((error: any) => {
-      console.error(error);
-    });
+    // this.platform.ready().then(() => {
+    //   this.fcmService.initPush().then(() => { 
+    //     this.router.navigateByUrl('/splash', { replaceUrl: true });
+    //   });
+    // })
+    // .catch((error: any) => {
+    //   console.error(error);
+    // });
   }
 }

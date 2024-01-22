@@ -110,6 +110,6 @@ export class CourseContentPage implements OnInit {
       },
       replaceUrl: false
     }
-    this.router.navigate(['/tabs/zoom-non-login'], navigationExtras);
+    this.router.navigate(['/zoom-non-login'], navigationExtras);
   }
 }

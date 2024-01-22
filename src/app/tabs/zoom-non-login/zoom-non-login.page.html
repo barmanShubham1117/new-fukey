@@ -1,9 +1,9 @@
 <ion-content [fullscreen]="true" id="zoomWindow">
   <ion-card>
-  <div id="meetingSDKElement"></div>
+  <div id="meetingSDKElement" allow="camera; microphone"></div>
   </ion-card>
-  <ion-card *ngIf="!startedMeeting">
-    <ion-card-content padding>
+  <!-- <ion-card *ngIf="!startedMeeting">
+    <ion-card-content>
       <div>
         <ion-button expand="full" (click)="joinMeeting()">
           <ion-icon slot="start" name="videocam"></ion-icon>
@@ -11,5 +11,5 @@
         </ion-button>
       </div>
     </ion-card-content>
-  </ion-card>
+  </ion-card> -->
 </ion-content>

@@ -31,6 +31,10 @@ const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.module').then( m => m.TabsPageModule)
   },
   {
+    path: 'zoom-non-login',
+    loadChildren: () => import('./tabs/zoom-non-login/zoom-non-login.module').then(m => m.NonLoginModule)
+  },
+  {
     path: '',
     redirectTo: 'splash',
     pathMatch: 'full'
