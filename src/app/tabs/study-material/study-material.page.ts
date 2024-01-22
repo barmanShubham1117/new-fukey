@@ -27,11 +27,13 @@ export class StudyMaterialPage implements OnInit {
   public isNextBtnDisabled: any;
   public pdfUrl: any;
   public quizUrl: any;
-
+  
   private USER_ID: any;
   private MOBILE: any;
   private TOKEN: any;
-
+  SDK_KEY: string = "rwSerL6sSma9PNEmQ1uUrw";
+  SDK_SECRET: string = "XS3EC7ymY2S94GdAKl1q17TQdpRzbzSm";
+  public zoom_active= false;
   constructor(
     private sanitizer: DomSanitizer,
     private router: Router,
