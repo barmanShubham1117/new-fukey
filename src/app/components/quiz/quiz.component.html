@@ -73,10 +73,17 @@
   </div>
 </div>
 <div id="quizResult" *ngIf="currentLesson.is_completed === 1">
-<h2>Quiz Attempted</h2>
-<button>View Your Result</button>
-<div class="nav-buttons">
-  <button [disabled]="isPreviousBtnDisabled" id="previous-btn" (click)="onPreviousBtnPressed()">PREVIOUS</button>
-  <button [disabled]="isNextBtnDisabled" id="next-btn" (click)="onNextBtnPressed()">NEXT</button>
-</div>
+  <ion-item class="header">
+    <ion-label>Practice Test:<br>{{ quizDetails?.title }}</ion-label>
+  </ion-item>
+  <div id="about" class="ion-padding">
+    <div class="intructions" *ngIf="quizDetails?.summary"><b>Instruction: </b><p>{{quizDetails?.summary}}</div>
+    <p class="duration" *ngIf="quizDetails?.duration_sec"><b>Test Duration: </b>{{quizDetails.duration_sec / 60}} Minutes</p>
+    <p class="questions" *ngIf="quizDetails?.items"><b>Total Questions: </b>{{quizDetails?.items}}</p>
+    <p class="total_marks" *ngIf="quizDetails?.total_marks"><b>Maximum Marks: </b>{{quizDetails?.total_marks}}</p>
+    <div class="nav-buttons">
+      <button [disabled]="isPreviousBtnDisabled" id="previous-btn" (click)="onPreviousBtnPressed()">PREVIOUS</button>
+      <button [disabled]="isNextBtnDisabled" id="next-btn" (click)="onNextBtnPressed()">NEXT</button>
+    </div>
+  </div>
 </div>

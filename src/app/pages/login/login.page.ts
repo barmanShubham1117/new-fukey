@@ -23,7 +23,8 @@ export class LoginPage implements OnInit {
     private router:Router,
     private authService: AuthenticationService,
     private httpService: HttpService,
-    private appService: AppService
+    private appService: AppService,
+    private storageService: StorageService
   ) {}
 
   ngOnInit() {
@@ -63,14 +64,13 @@ export class LoginPage implements OnInit {
   
   async onSubmit(formData: {mobile: string}) {    
     if (formData.mobile != "") {
-      this.appService.showLoadingScreen("Verifying...");
+      // this.appService.showLoadingScreen("Verifying...");
 
-      this.httpService.checkUser(formData.mobile).subscribe((response: any) => {
+      this.httpService.checkUser(formData.mobile, this.storageService.getStorage('FCM_TOKEN')).subscribe((response: any) => {
         console.log(response);
-        this.appService.dismissLoading().then(() => {
+        // this.appService.dismissLoading();
           
           if (response.status) {
-            // Vaild user
             localStorage.setItem('MOBILE', formData.mobile);
             
             this.appService.showLoadingScreen("Sending OTP to +91 " + formData.mobile);
@@ -79,11 +79,11 @@ export class LoginPage implements OnInit {
                 .then((success) => {
                   console.log("LOGIN PAGE : onSubmit() : success : ", success);
                   
-                  this.appService.dismissLoading().then(() => {
+                  this.appService.dismissLoading();
                     console.log('SUCCESS: OTP sent successfully.');
                     this.appService.presentToast('OTP sent successfully.', "bottom");
                     this.router.navigate(['/login-verify'], { replaceUrl: true });
-                  });
+                  // });
                 })
                 .catch((error) => {
                   this.appService.dismissLoading().then(() => {
@@ -97,7 +97,7 @@ export class LoginPage implements OnInit {
             this.appService.presentToast('Invaild mobile number.', "bottom");
           }
 
-        });
+        // });
       })
     } else {
       this.appService.presentToast('Please enter mobile no.', "bottom");

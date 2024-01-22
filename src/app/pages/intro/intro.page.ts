@@ -40,13 +40,13 @@ export class IntroPage implements AfterViewInit {
   }
 
   goNext() {
-    // this.swiperEx?.nativeElement.swiper.slideNext(1000);
-    // // console.log('changed: ', this.swiperEx?.nativeElement.swiper.activeIndex);
-    // this.start = this.swiperEx?.nativeElement.swiper.activeIndex;
-    console.log("Button pressed");
-    this.storageService.getStorage('push_notification_token').then((data: any) => {
-      console.log("TOKEN: ", data);
-    });
+    this.swiperEx?.nativeElement.swiper.slideNext(1000);
+    // console.log('changed: ', this.swiperEx?.nativeElement.swiper.activeIndex);
+    this.start = this.swiperEx?.nativeElement.swiper.activeIndex;
+    // console.log("Button pressed");
+    // this.storageService.getStorage('push_notification_token').then((data: any) => {
+    //   console.log("TOKEN: ", data);
+    // });
     
   }
 

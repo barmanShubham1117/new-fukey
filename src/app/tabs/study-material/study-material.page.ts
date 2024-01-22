@@ -96,7 +96,16 @@ export class StudyMaterialPage implements OnInit {
   }
   async downloadVideo() {
     this.appService.showLoadingScreen('Downloading offline media..');
-      await (await this.dbService.downloadFile(this.currentLesson.video_url_web, this.currentLesson.title, this.currentLesson.summary, this.currentLesson.course_name, this.currentLesson.instructor_name, "video")).subscribe((result)=>{
+      await (
+        await this.dbService.downloadFile(
+          this.currentLesson.video_url_web, 
+          this.currentLesson.title, 
+          this.currentLesson.summary, 
+          this.currentLesson.course_name, 
+          this.currentLesson.instructor_name, 
+          "video"
+        )
+      ).subscribe((result)=>{
         this.appService.dismissLoading().then(() => {
           if(result){
             this.fileDownloaded = true;

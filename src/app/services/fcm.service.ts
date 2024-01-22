@@ -29,9 +29,9 @@ export class FcmService {
   ) { }
 
   async initPush() {
-    // if (Capacitor.getPlatform() !== 'web') {
+    if (Capacitor.getPlatform() !== 'web') {
       this.registerPush();
-    // }
+    }
   }
 
   private async registerPush() {
