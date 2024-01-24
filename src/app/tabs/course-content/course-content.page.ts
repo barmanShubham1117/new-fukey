@@ -3,6 +3,8 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AppService } from 'src/app/services/app.service';
 import { HttpService } from 'src/app/services/http.service';
 import { Browser } from '@capacitor/browser'; 
+import { environment } from 'src/environments/environment';
+
 @Component({
   selector: 'app-course-content',
   templateUrl: './course-content.page.html',
@@ -112,6 +114,6 @@ export class CourseContentPage implements OnInit {
     //   replaceUrl: false
     // }
     // this.router.navigate(['/zoom-non-login'], navigationExtras);
-    await Browser.open({ url: 'https://learn.fukeyeducation.com/addons/liveclass/join/18' });
+    await Browser.open({ url: environment.BASE_URL+'/addons/liveclass/join/'+this.COURSE_ID });
   }
 }
