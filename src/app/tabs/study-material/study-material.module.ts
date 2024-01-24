@@ -8,7 +8,6 @@ import { StudyMaterialPageRoutingModule } from './study-material-routing.module'
 import { StudyMaterialPage } from './study-material.page';
 import { QuizComponent } from 'src/app/components/quiz/quiz.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { SafePipe } from 'src/app/safe.pipe';
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { File } from '@ionic-native/file/ngx';
 
@@ -31,7 +30,7 @@ import {MatButtonModule} from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
   ],
-  declarations: [StudyMaterialPage,SafePipe,QuizComponent],
+  declarations: [StudyMaterialPage,QuizComponent],
   providers:[SQLite,File]
 })
 export class StudyMaterialPageModule {}

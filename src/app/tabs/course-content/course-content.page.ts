@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AppService } from 'src/app/services/app.service';
 import { HttpService } from 'src/app/services/http.service';
-
+import { Browser } from '@capacitor/browser'; 
 @Component({
   selector: 'app-course-content',
   templateUrl: './course-content.page.html',
@@ -13,7 +13,8 @@ export class CourseContentPage implements OnInit {
   private TOKEN: any = '';
   private USER_ID: any = '';
   private MOBILE: any = '';
-
+  public iframeSrc = "";
+  public showIframe = false;
   public isCourseDataAvailable: boolean = false;
   public isContentDataAvailable: boolean = false;
 
@@ -103,13 +104,16 @@ export class CourseContentPage implements OnInit {
       }
     // })
   }
-  joinMeeting(){
-    const navigationExtras: NavigationExtras = {
-      state: {
-        course: this.COURSE_DATA
-      },
-      replaceUrl: false
-    }
-    this.router.navigate(['/zoom-non-login'], navigationExtras);
+  async joinMeeting(){
+    // const navigationExtras: NavigationExtras = {
+    //   state: {
+    //     course: this.COURSE_DATA
+    //   },
+    //   replaceUrl: false
+    // }
+    // this.router.navigate(['/zoom-non-login'], navigationExtras);
+    // this.showIframe = true;
+    // this.iframeSrc = "/zoom-non-login";
+    await Browser.open({ url: 'https://learn.fukeyeducation.com/addons/liveclass/join/18' });
   }
 }

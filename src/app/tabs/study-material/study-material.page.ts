@@ -5,9 +5,7 @@ import { LoadingController } from '@ionic/angular';
 import { HttpService } from 'src/app/services/http.service';
 
 import { AppService } from 'src/app/services/app.service';
-import { SafePipe } from 'src/app/safe.pipe';
-import { QuizComponent } from 'src/app/components/quiz/quiz.component';
-import { FileActionService } from 'src/app/services/fileaction.service';
+
 import { DbService } from 'src/app/services/db.service';
 
 @Component({

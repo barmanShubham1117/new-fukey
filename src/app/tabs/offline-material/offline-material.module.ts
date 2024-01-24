@@ -6,7 +6,6 @@ import { IonicModule } from '@ionic/angular';
 
 
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { SafePipe } from 'src/app/safe.pipe';
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { OfflineMaterialPageRoutingModule } from './offline-material-routing.module';
