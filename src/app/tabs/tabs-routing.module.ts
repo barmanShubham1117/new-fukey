@@ -73,12 +73,28 @@ const routes: Routes = [
         loadChildren: () => import('./offline-material/offline-material.module').then( m => m.OfflineMaterialPageModule)
       },
       {
+        path: 'ebooks',
+        loadChildren: () => import('./ebooks/ebooks.module').then( m => m.EbooksPageModule)
+      },
+      {
+        path: 'about',
+        loadChildren: () => import('./about/about.module').then( m => m.AboutPageModule)
+      },
+      {
+        path: 'tnc',
+        loadChildren: () => import('./tnc/tnc.module').then( m => m.TncPageModule)
+      },
+      {
+        path: 'privacy-policy',
+        loadChildren: () => import('./privacy-policy/privacy-policy.module').then( m => m.PrivacyPolicyPageModule)
+      },
+      {
         path: '',
         pathMatch: 'full',
         redirectTo: '/tabs/home',
       }
     ]
-  }
+  },
 ];
 
 @NgModule({

@@ -39,6 +39,10 @@ const routes: Routes = [
     redirectTo: 'splash',
     pathMatch: 'full'
   },
+  {
+    path: 'zoom-meet',
+    loadChildren: () => import('./pages/zoom-meet/zoom-meet.module').then( m => m.ZoomMeetPageModule)
+  },
   ];
 
 @NgModule({

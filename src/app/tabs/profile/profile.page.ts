@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpService } from 'src/app/services/http.service';
 
 @Component({
@@ -22,7 +23,8 @@ export class ProfilePage implements OnInit {
   };
 
   constructor(
-    private httpService: HttpService
+    private httpService: HttpService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -33,6 +35,18 @@ export class ProfilePage implements OnInit {
 
       this.user.image = response.image;
     })
+  }
+
+  navigateToAbout() {
+    this.router.navigate(['/tabs/about']);
+  }
+
+  navigateToTnC() {
+    this.router.navigate(['/tabs/tnc']);
+  }
+  
+  navigateToPrivacyPolicy() {
+    this.router.navigate(['/tabs/privacy-policy']);
   }
 
 }

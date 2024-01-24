@@ -112,8 +112,6 @@ export class CourseContentPage implements OnInit {
     //   replaceUrl: false
     // }
     // this.router.navigate(['/zoom-non-login'], navigationExtras);
-    // this.showIframe = true;
-    // this.iframeSrc = "/zoom-non-login";
     await Browser.open({ url: 'https://learn.fukeyeducation.com/addons/liveclass/join/18' });
   }
 }

@@ -25,6 +25,7 @@ export class QuizComponent  implements OnInit {
   public lessonIndex: any;
   public currentLesson: any;
   public quizDetails: any;
+  public quizAttempt: any;
   public quesItems: any;
   public timerCount: any;
   public timeRed: any;
@@ -52,6 +53,8 @@ export class QuizComponent  implements OnInit {
     this.USER_ID = localStorage.getItem('USER_ID');
     this.MOBILE = localStorage.getItem('MOBILE');
     this.TOKEN = localStorage.getItem('TOKEN');
+    this.quizAttempt = [];
+    this.quizAttempt.can_attempt = true;
 
     this.courseData = this.router.getCurrentNavigation()?.extras.state?.['course'];
     this.data = this.router.getCurrentNavigation()?.extras.state?.['data'];
@@ -63,6 +66,16 @@ export class QuizComponent  implements OnInit {
     this.timerCount = "Get Ready!"
     this.attempQuiz = false;
     this.getDetails();
+    this.httpService.getQuizAttempt(this.currentLesson.id,this.USER_ID).subscribe((response: any) => {
+      this.quizAttempt = response;
+      if (this.quizAttempt.status) {
+        this.quizAttempt.can_attempt = false;
+      } else {
+        this.quizAttempt.can_attempt = true;
+      }
+      console.log("Quiz Attempt Details", this.quizAttempt);
+    });
+
   }
 
   async getDetails() {
@@ -155,7 +168,16 @@ export class QuizComponent  implements OnInit {
       });
       this.httpService.updateUserCurrentProgress(this.USER_ID,this.currentLesson.course_id,this.currentLesson.id).subscribe((response: any) => {
         console.log(response);
-        this.onNextBtnPressed();
+        this.httpService.getQuizAttempt(this.currentLesson.id,this.USER_ID).subscribe((response: any) => {
+          this.quizAttempt = response;
+          if (this.quizAttempt.status) {
+            this.quizAttempt.can_attempt = false;
+          } else {
+            this.quizAttempt.can_attempt = true;
+          }
+          console.log("Updated Quiz Attempt Details", this.quizAttempt);
+        });
+        // this.onNextBtnPressed();
       });
     }
   }
@@ -199,12 +221,19 @@ export class QuizComponent  implements OnInit {
     this.testData['date_updated']         =  Math.floor(new Date().getTime() / 1000).toString();
     this.testData['is_submitted']         =  0;
     localStorage.setItem("QUIZDATA"+this.quizDetails.id,JSON.stringify(this.testData));
-
+    console.log(stepper.selectedIndex);
+    if (stepper.selectedIndex === this.quizDetails.items) {
+      this.complete(stepper);
+    }
+    if ((<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).classList.contains('bg-marked')) {
+      (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).classList.remove('bg-marked');
+    }
     stepper.next();
   }
   mark(stepper: MatStepper) {
-    (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#d12929";
-    
+    (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#673ab7";
+    (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).classList.add('bg-marked');
+
     const formInputs = document.querySelectorAll('#submitForm' + (stepper.selectedIndex + 1) + ' input');
     for (const node of Array.from(formInputs)) {
       if ((<HTMLInputElement>node).checked) {
@@ -244,10 +273,12 @@ export class QuizComponent  implements OnInit {
       inputCheck = inputCheck || (<HTMLInputElement>node).checked;
     });
     // console.log(inputCheck);
-    if (inputCheck) {
-      // (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#00bf63";
-    } else {
-      (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#ff1616";
+    if (!(<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).classList.contains('bg-marked')) {
+      if (inputCheck) {
+        (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#00bf63";
+      } else {
+        (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).style.backgroundColor = "#ff1616";
+      }
     }
     stepper.selectedIndex = index;
   }
