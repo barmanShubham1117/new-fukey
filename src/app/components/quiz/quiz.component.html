@@ -1,4 +1,4 @@
-<div id="quiz" *ngIf="currentLesson?.is_completed === 0 && attempQuiz === false">
+<div id="quiz" *ngIf="this.quizAttempt?.can_attempt && attempQuiz === false">
   <ion-item class="header">
     <ion-label>Practice Test:<br>{{ quizDetails?.title }}</ion-label>
   </ion-item>
@@ -14,7 +14,7 @@
     </div>
   </div>
 </div>
-<div id="attempQuiz" *ngIf="currentLesson?.is_completed === 0 && attempQuiz === true">
+<div id="attempQuiz" *ngIf="this.quizAttempt?.can_attempt && attempQuiz === true">
   <ion-accordion-group>
     <ion-accordion value="first">
       <ion-item slot="header">
@@ -72,15 +72,18 @@
     
   </div>
 </div>
-<div id="quizResult" *ngIf="currentLesson.is_completed === 1">
+<div id="quizResult" *ngIf="!this.quizAttempt?.can_attempt">
   <ion-item class="header">
     <ion-label>Practice Test:<br>{{ quizDetails?.title }}</ion-label>
   </ion-item>
   <div id="about" class="ion-padding">
     <div class="intructions" *ngIf="quizDetails?.summary"><b>Instruction: </b><p>{{quizDetails?.summary}}</div>
     <p class="duration" *ngIf="quizDetails?.duration_sec"><b>Test Duration: </b>{{quizDetails.duration_sec / 60}} Minutes</p>
+    <p class="time_taken" *ngIf="quizAttempt?.time_taken"><b>Time Taken: </b>{{quizAttempt?.time_taken / 60}} Minutes</p>
     <p class="questions" *ngIf="quizDetails?.items"><b>Total Questions: </b>{{quizDetails?.items}}</p>
+    <p class="correct_questions" *ngIf="quizAttempt?.correct_question"><b>Correct Questions: </b>{{quizAttempt?.correct_question}}</p>
     <p class="total_marks" *ngIf="quizDetails?.total_marks"><b>Maximum Marks: </b>{{quizDetails?.total_marks}}</p>
+    <p class="marks_scored" *ngIf="quizAttempt?.score"><b>Marks Scored: </b>{{quizAttempt?.score}}</p>
     <div class="nav-buttons">
       <button [disabled]="isPreviousBtnDisabled" id="previous-btn" (click)="onPreviousBtnPressed()">PREVIOUS</button>
       <button [disabled]="isNextBtnDisabled" id="next-btn" (click)="onNextBtnPressed()">NEXT</button>

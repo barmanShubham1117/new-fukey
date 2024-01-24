@@ -206,4 +206,14 @@ export class HttpService {
   public getQuiz(lesson_id: any) {
     return this.http.get(environment.BASE_API_URL + 'quiz_questions_by_id?quiz_id=' + lesson_id);
   }
+
+  public getQuizAttempt(quiz_id: any, user_id: any) {
+    let body = `user_id=${user_id}&quiz_id=${quiz_id}`;
+
+    const httpOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    };
+    return this.http.post(environment.BASE_API_URL + 'get_test_attempt', body, httpOptions);
+  }
+
 }
