@@ -135,6 +135,10 @@ export class HttpService {
     return this.http.get(environment.BASE_API_URL + 'all_courses');
   }
 
+  public getAllEbooks() {
+    return this.http.get(environment.BASE_API_URL + 'all_ebooks');
+  }
+
   public getFreeCourses() {
     return this.http.get(environment.BASE_API_URL + 'free_courses');
   }

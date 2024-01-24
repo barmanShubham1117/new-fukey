@@ -16,9 +16,8 @@
       <div class="content-tab">{{ COURSE_DATA.language | uppercase }}</div>
       <div class="content-tab">{{ COURSE_DATA.level | uppercase }}</div>
     </div>
-    <ion-button (click)="joinMeeting()">
-      Join Meeting
-    </ion-button> 
+
+    <div class="join-meeting" (click)="joinMeeting(COURSE_DATA.live_class_url)">Join Live Class</div>
 
     <div class="course-description">
       <h3>Course Overview</h3>

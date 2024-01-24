@@ -41,7 +41,7 @@
                 <div class="course-image" style="background: url('{{enroll.thumbnail}}');background-position: center; background-repeat: no-repeat; background-size: cover;"></div>
                 <div class="course-details">
                   <div class="course-name">{{ enroll.title }}</div>
-                  <div class="course-timing">Timing: 7:45 PM</div>
+                  <div class="course-timing" *ngIf="enroll.live_class_datetime">Live class at <br>{{ enroll.live_class_datetime }}</div>
                   <div class="course-leave">
                     <ion-icon name="enter"></ion-icon>
                   </div>

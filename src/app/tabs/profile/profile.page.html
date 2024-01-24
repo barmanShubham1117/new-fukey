@@ -22,7 +22,7 @@
 
     <div class="general-settings">General Settings</div>
 
-    <div class="option">
+    <div class="option" (click)="navigateToAbout()">
       <div class="option-icon about">
         <ion-icon name="pencil-outline"></ion-icon>
       </div>
@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div class="option">
+    <div class="option" (click)="navigateToTnC()">
       <div class="option-icon terms-and-conditions">
         <ion-icon name="alert-outline"></ion-icon>
       </div>
@@ -44,7 +44,7 @@
         </div>
       </div>
     </div>
-    <div class="option">
+    <div class="option" (click)="navigateToPrivacyPolicy()">
       <div class="option-icon privacy-policy">
         <ion-icon name="lock-closed-outline"></ion-icon>
       </div>

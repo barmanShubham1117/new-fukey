@@ -103,13 +103,17 @@ export class CourseContentPage implements OnInit {
       }
     // })
   }
-  joinMeeting(){
-    const navigationExtras: NavigationExtras = {
-      state: {
-        course: this.COURSE_DATA
-      },
-      replaceUrl: false
-    }
-    this.router.navigate(['/zoom-non-login'], navigationExtras);
+  // joinMeeting(){
+  //   const navigationExtras: NavigationExtras = {
+  //     state: {
+  //       course: this.COURSE_DATA
+  //     },
+  //     replaceUrl: false
+  //   }
+  //   this.router.navigate(['/zoom-meet'], navigationExtras);
+  // }
+
+  joinMeeting(url: string) {
+    this.appService.presentToast("Joining meeting", "bottom");
   }
 }
