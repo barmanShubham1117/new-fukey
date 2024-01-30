@@ -19,6 +19,7 @@ export class CourseContentPage implements OnInit {
   public showIframe = false;
   public isCourseDataAvailable: boolean = false;
   public isContentDataAvailable: boolean = false;
+  public isEnrolledCourse: boolean = false;
 
   public COURSE_DATA: any;
   public CONTENT_DATA: any;
@@ -50,8 +51,19 @@ export class CourseContentPage implements OnInit {
 
         this.isCourseDataAvailable = true;
 
+        // this.isEnrolledCourse = this.checkCourse();
+        // console.log(this.isEnrolledCourse);
+        
+
         this.getContents();
       });
+  }
+
+  checkCourse() {
+    let eCourses = localStorage.getItem('ENROLLED_COURSES')!.split(',');
+    console.log("eCourses: ", eCourses);
+    
+    return eCourses.includes(this.COURSE_ID);
   }
   getContents() {
     this.httpService.getSectionsAndLessonsUsingCourseID(this.TOKEN, this.COURSE_ID)
@@ -82,7 +94,7 @@ export class CourseContentPage implements OnInit {
   }
 
   openStudyMaterial(data: any, chapterIndex: any, lessonIndex: any, course_id: any, lesson_id: any) {
-    // this.httpService.updateUserCurrentProgress(this.USER_ID, course_id, lesson_id).subscribe((response: any) => {
+    this.httpService.updateUserCurrentProgress(this.USER_ID, course_id, lesson_id).subscribe((response: any) => {
       console.log(data);
       console.log(chapterIndex + ' : ' + lessonIndex);
       console.log(data[chapterIndex].lessons[lessonIndex]);
@@ -104,7 +116,7 @@ export class CourseContentPage implements OnInit {
       
           this.router.navigate(['/tabs/batches/course-content/study-material'], navigationExtras);
       }
-    // })
+    })
   }
   async joinMeeting(){
     // const navigationExtras: NavigationExtras = {
@@ -114,6 +126,7 @@ export class CourseContentPage implements OnInit {
     //   replaceUrl: false
     // }
     // this.router.navigate(['/zoom-non-login'], navigationExtras);
-    await Browser.open({ url: environment.BASE_URL+'/addons/liveclass/join/'+this.COURSE_ID });
+    
+    await Browser.open({ url: environment.BASE_URL+'addons/liveclass/join/'+this.COURSE_ID });
   }
 }

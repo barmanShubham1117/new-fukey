@@ -8,6 +8,7 @@ import { App } from '@capacitor/app';
 import Swiper from 'swiper';
 import { Capacitor } from '@capacitor/core';
 import { StorageService } from 'src/app/services/storage.service';
+import { FcmService } from 'src/app/services/fcm.service';
 
 @Component({
   selector: 'app-home',
@@ -47,6 +48,7 @@ export class HomePage implements OnInit {
     private platform: Platform,
     private router: Router,
     private storageService: StorageService,
+    private fcmService: FcmService,
     @Optional() private routerOutlet?: IonRouterOutlet
   ) {
     this.start = 0;
@@ -107,6 +109,12 @@ export class HomePage implements OnInit {
       this.username = response.first_name;
       this.userpic = 'https://learn.fukeyeducation.com/uploads/user_image/' + response.image + '.jpg';
 
+      if (localStorage.getItem('SUBSCRIBE_CLASS_TOPIC') !== 'true') {
+        if (Capacitor.getPlatform() !== 'web') {
+          this.fcmService.subscribe(response.topic, 'SUBSCRIBE_CLASS_TOPIC');
+        }
+      }
+
       this.appService.dismissLoading();
     })
   }
@@ -136,6 +144,24 @@ export class HomePage implements OnInit {
             el: '.swiper-pagination',
           },
         });
+
+        if (localStorage.getItem('SUBSCRIBE_COURSE_TOPIC') !== 'true') {
+          // if (Capacitor.getPlatform() !== 'web') {
+            console.log("Topics to subscribe:");
+            
+            let eCourses: any[] = []
+            this.enrolledCourses.forEach((course: any) => {
+              console.log(course.title + ': ' + course.topic);
+              eCourses.push(course.id);
+              
+              // this.fcmService.subscribe(course.topic, 'SUBSCRIBE_COURSE_TOPIC');
+            });
+            console.log('ENROLLED_COURSES', eCourses);
+            
+            localStorage.setItem('ENROLLED_COURSES', JSON.stringify(eCourses));
+          // }
+        }
+
       } else {
         const sec = this.el.nativeElement.querySelector('#showEnrollCourse');
         sec.style.display = 'none';

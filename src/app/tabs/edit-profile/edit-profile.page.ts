@@ -14,6 +14,7 @@ export class EditProfilePage implements OnInit {
     class: '',
     city: '',
     mobile: '',
+    // email: '',
     school: '',
     image: '',
   };
@@ -51,6 +52,8 @@ export class EditProfilePage implements OnInit {
 
   getMobileNumber() {
     setTimeout(() => {
+      console.log("EDIT PROFILE PAGE: getMobileNumber(): " + this.MOBILE);
+      
       this.httpService.getUserViaMobile(this.MOBILE).subscribe((response: any) => {
         console.log(response);
         this.user.name = response.first_name;
@@ -58,6 +61,8 @@ export class EditProfilePage implements OnInit {
         this.user.school = response.school;
         this.user.class = response.class;
         this.user.mobile = response.mobile;
+        this.user.mobile = response.mobile;
+        // this.user.email = response.email;
         this.user.image = response.image;
         this.appService.dismissLoading();
       });
@@ -75,6 +80,7 @@ export class EditProfilePage implements OnInit {
     const school = this.el.nativeElement.querySelector("#school").value;  
     const city = this.el.nativeElement.querySelector("#city").value;
     const mobile = this.el.nativeElement.querySelector("#mobile").value;
+    // const email = this.el.nativeElement.querySelector("#email").value;
 
     if (fullName == '' || fullName == null) {
       this.appService.presentToast('Full Name is required.', "bottom");
@@ -84,19 +90,24 @@ export class EditProfilePage implements OnInit {
       this.appService.presentToast('School is required.', "bottom");
     } else if (city == '' || city == null) {
       this.appService.presentToast('City is required.', "bottom");
-    } else {
+    } 
+    // else if (email == '' || email == null) {
+    //   this.appService.presentToast('Email is required.', "bottom");
+    // } 
+    else {
       const formData = {
         fullName: fullName,
         class: std,
         school: school,
         city: city,
-        mobile: mobile
+        mobile: mobile,
+        // email: email
       }
 
       console.log(formData);
       
-      formData.mobile = this.user.mobile;
-      console.log(formData);
+      // formData.mobile = this.user.mobile;
+      // console.log(formData);
       // this.appService.showLoadingScreen('Updating your info..');
       this.httpService.updateUserInfo(formData).subscribe((response: any) => {
         // this.appService.dismissLoadingScreen();

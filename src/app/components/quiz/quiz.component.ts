@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, Inject  } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Inject, Input, Output, EventEmitter  } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpService } from 'src/app/services/http.service';
 import { AppService } from 'src/app/services/app.service';
@@ -40,6 +40,8 @@ export class QuizComponent  implements OnInit {
   private MOBILE: any;
   private TOKEN: any;
 
+  @Input() hero: any;
+  @Output() closeQuizComponent = new EventEmitter();
   constructor(
     private router: Router,
     private httpService: HttpService,
@@ -48,7 +50,7 @@ export class QuizComponent  implements OnInit {
     @Inject(DOCUMENT) document: Document
     ) { }
     
-    ngOnInit() {
+  ngOnInit() {
     this.appService.showLoadingScreen("Setting up your Environment");
     this.USER_ID = localStorage.getItem('USER_ID');
     this.MOBILE = localStorage.getItem('MOBILE');
@@ -56,20 +58,28 @@ export class QuizComponent  implements OnInit {
     this.quizAttempt = [];
     this.quizAttempt.can_attempt = true;
 
-    this.courseData = this.router.getCurrentNavigation()?.extras.state?.['course'];
-    this.data = this.router.getCurrentNavigation()?.extras.state?.['data'];
-    this.chapterIndex = this.router.getCurrentNavigation()?.extras.state?.['chapterIndex'];
-    this.lessonIndex = this.router.getCurrentNavigation()?.extras.state?.['lessonIndex'];
-    // console.log("quiz; ",this.data);
+    this.courseData = this.hero.course;
+    this.data = this.hero.data;
+    this.chapterIndex = this.hero.chapterIndex;
+    this.lessonIndex = this.hero.lessonIndex;
+
+    console.log("quiz; ",this.data);
+    console.log("quiz; ",this.courseData);
+    console.log("quiz; ",this.chapterIndex);
+    console.log("quiz; ",this.lessonIndex);
+
     this.currentLesson = this.data[this.chapterIndex].lessons[this.lessonIndex];
-    // console.log("quiz; ",this.currentLesson);
+
+    console.log("quiz; ",this.currentLesson);
     this.timerCount = "Get Ready!"
     this.attempQuiz = false;
     this.getDetails();
     this.httpService.getQuizAttempt(this.currentLesson.id,this.USER_ID).subscribe((response: any) => {
       this.quizAttempt = response;
+      console.log("quizAttempt: ", response);
       if (this.quizAttempt.status) {
         this.quizAttempt.can_attempt = false;
+        this.quizAttempt.time_taken = parseFloat((this.quizAttempt.time_taken / 60).toString()).toFixed(2);
       } else {
         this.quizAttempt.can_attempt = true;
       }
@@ -166,6 +176,9 @@ export class QuizComponent  implements OnInit {
       this.httpService.submitTest(this.testData, this.USER_ID).subscribe((response: any) => {
         console.log(response);
       });
+
+      console.log("Progress Error: " + this.USER_ID + " : " + this.currentLesson.course_id + " : " + this.currentLesson.id);
+      
       this.httpService.updateUserCurrentProgress(this.USER_ID,this.currentLesson.course_id,this.currentLesson.id).subscribe((response: any) => {
         console.log(response);
         this.httpService.getQuizAttempt(this.currentLesson.id,this.USER_ID).subscribe((response: any) => {
@@ -222,12 +235,12 @@ export class QuizComponent  implements OnInit {
     this.testData['is_submitted']         =  0;
     localStorage.setItem("QUIZDATA"+this.quizDetails.id,JSON.stringify(this.testData));
     console.log(stepper.selectedIndex);
-    if (stepper.selectedIndex === this.quizDetails.items) {
-      this.complete(stepper);
-    }
+
     if ((<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).classList.contains('bg-marked')) {
       (<HTMLElement>document.getElementById('ques' + (stepper.selectedIndex + 1))).classList.remove('bg-marked');
     }
+    console.log("INDEX: ", stepper.selectedIndex);
+    
     stepper.next();
   }
   mark(stepper: MatStepper) {
@@ -284,60 +297,14 @@ export class QuizComponent  implements OnInit {
   }
 
   onPreviousBtnPressed() {
-    console.log('BEFORE: ', this.chapterIndex);
-    console.log('BEFORE: ', this.lessonIndex);
-
-    if (this.chapterIndex <= 0) {
-      if (this.lessonIndex <= 0) {
-        // Last chapter, so do nothing.
-        document.getElementById('previous-btn')!.style.backgroundColor = '#8d8f93';
-      } else {
-        this.lessonIndex--;
-      }
-    } else {
-      if (this.lessonIndex <= 0) {
-        this.chapterIndex--;
-        this.lessonIndex = (this.data[this.chapterIndex].lessons.length -1);
-      } else {
-        this.lessonIndex--;
-      }
-    }
-
-    this.currentLesson = this.data[this.chapterIndex].lessons[this.lessonIndex];
-
-    console.log('AFTER: ', this.chapterIndex);
-    console.log('AFTER: ', this.lessonIndex);
+    console.log("Button Pressed");
+    
+    this.closeQuizComponent.emit(false);
   }
   
   onNextBtnPressed() {
-    console.log('BEFORE: ', this.chapterIndex);
-    console.log('BEFORE: ', this.lessonIndex);
-
-    if (this.chapterIndex >= (this.data.length - 1)) {
-      if (this.lessonIndex >= (this.data[this.chapterIndex].lessons.length - 1)) {
-        // Last chapter, so do nothing.
-        document.getElementById('next-btn')!.style.backgroundColor = '#8d8f93';
-      } else {
-        this.lessonIndex++;
-      }
-    } else {
-      if (this.lessonIndex >= (this.data[this.chapterIndex].lessons.length - 1)) {
-          this.lessonIndex = 0;
-          this.chapterIndex++;
-      } else {
-        this.lessonIndex++;
-      }
-    }
-
-    this.currentLesson = this.data[this.chapterIndex].lessons[this.lessonIndex];
-
-    console.log('Current Lesson: ', this.currentLesson);
-    console.log('AFTER: ', this.chapterIndex);
-    console.log('AFTER: ', this.lessonIndex);
-
-    console.log('data: ', this.data);
-    console.log('course_id: ', this.courseData.id);
-    console.log('lesson_id: ', this.data[this.chapterIndex].lessons[this.lessonIndex].id);
-
+    console.log("Button Pressed");
+    
+    this.closeQuizComponent.emit(true);
   }
 }

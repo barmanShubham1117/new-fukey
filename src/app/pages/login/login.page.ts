@@ -5,6 +5,8 @@ import { HttpService } from 'src/app/services/http.service';
 import firebase from 'firebase/compat/app';
 import { AppService } from 'src/app/services/app.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { FcmService } from 'src/app/services/fcm.service';
+import { Capacitor } from '@capacitor/core';
 
 export const FCM_TOKEN = 'push_notification_token';
 
@@ -27,7 +29,8 @@ export class LoginPage implements OnInit {
     private authService: AuthenticationService,
     private httpService: HttpService,
     private appService: AppService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private fcmService: FcmService
   ) {}
 
   ngOnInit() {
@@ -78,6 +81,10 @@ export class LoginPage implements OnInit {
         console.log(response);
           if (response.status) {
             localStorage.setItem('MOBILE', formData.mobile);
+
+            // if (Capacitor.getPlatform() !== 'web') {
+            //   this.fcmService.subscribe("all", 'SUBSCRIBE_ALL_TOPIC');
+            // }
             
             this.appService.showLoadingScreen("Sending OTP to +91 " + formData.mobile);
   

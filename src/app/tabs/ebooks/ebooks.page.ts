@@ -15,7 +15,7 @@ export class EbooksPage implements OnInit {
   private MOBILE: any = '';
   
   public ebooks: any;
-  public newEBooks: any;
+  public newEBooks: any = [];
   public isStudyMaterialsAvailable: boolean = false;
 
   constructor(
@@ -26,11 +26,12 @@ export class EbooksPage implements OnInit {
 
   ngOnInit() {
     this.httpService.getAllEbooks().subscribe((response: any) => {
-      console.log("EBOOKS PAGE: getAllEbooks(): ", response);
+      console.log("EBOOKS PAGE: getAllEbooks(): " + response);
       
       this.ebooks = response;
       if (this.ebooks.length > 0) {
         this.isStudyMaterialsAvailable = true;
+        this.createSubarrays();
       }
     });
   }
@@ -43,5 +44,9 @@ export class EbooksPage implements OnInit {
       this.newEBooks.push(subArray);
     }
     console.log('NEW ARRAY: ', this.newEBooks);
+  }
+
+  getBooksDescription(description: string) {
+    return description.slice(0, )
   }
 }

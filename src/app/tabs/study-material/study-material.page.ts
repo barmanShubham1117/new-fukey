@@ -15,6 +15,7 @@ import { DbService } from 'src/app/services/db.service';
 })
 export class StudyMaterialPage implements OnInit {
 
+  public all: any;
   public data: any;
   public courseData: any;
   public chapterIndex: any;
@@ -52,6 +53,14 @@ export class StudyMaterialPage implements OnInit {
     this.data = this.router.getCurrentNavigation()?.extras.state?.['data'];
     this.chapterIndex = this.router.getCurrentNavigation()?.extras.state?.['chapterIndex'];
     this.lessonIndex = this.router.getCurrentNavigation()?.extras.state?.['lessonIndex'];
+
+    this.all = {
+      course: this.courseData,
+      data: this.data,
+      chapterIndex: this.chapterIndex,
+      lessonIndex: this.lessonIndex
+    }
+
     this.currentLesson = this.data[this.chapterIndex].lessons[this.lessonIndex];
     this.currentLesson.instructor_name  = this.courseData.instructor_name;
     this.currentLesson.course_name  = this.courseData.title;
@@ -187,6 +196,14 @@ export class StudyMaterialPage implements OnInit {
     this.currentLesson.instructor_name  = this.courseData.instructor_name;
     this.currentLesson.course_name  = this.courseData.title;
     console.log("Current Course Name",this.currentLesson.course_name);
+
+    this.all = {
+      course: this.courseData,
+      data: this.data,
+      chapterIndex: this.chapterIndex,
+      lessonIndex: this.lessonIndex
+    }
+
     await this.isFileDownloaded();
   }
   
@@ -214,7 +231,25 @@ export class StudyMaterialPage implements OnInit {
     this.currentLesson.instructor_name  = this.courseData.instructor_name;
     this.currentLesson.course_name  = this.courseData.title;
     console.log("Current Course Name",this.currentLesson.course_name);
+
+    this.all = {
+      course: this.courseData,
+      data: this.data,
+      chapterIndex: this.chapterIndex,
+      lessonIndex: this.lessonIndex
+    }
+
     await this.isFileDownloaded();
+  }
+
+  async closeQuizComponent(is_next_btn_pressed: any) {
+    console.log("Quiz closed..!!", is_next_btn_pressed);
+
+    if (is_next_btn_pressed) {
+      this.onNextBtnPressed();
+    } else {
+      this.onPreviousBtnPressed();
+    }
   }
 
 }

@@ -87,3 +87,9 @@ ion-tab-button {
 .active>ion-icon {
     color: rgb(62, 164, 253);
 }
+
+@media (min-width:600px)  {
+    ion-menu {
+        --width: 17rem;
+    }
+}

@@ -43,6 +43,8 @@
     <iframe [src]="quizUrl | safe: 'resourceUrl'" style="width: 100vw;min-height: calc(100vh - 120px);max-height: calc(100vh - 120px);overflow: hidden;border: none;margin: 0 !important;"></iframe>
   </div> -->
   
-  <app-quiz *ngIf="currentLesson.lesson_type === 'quiz'"></app-quiz>
+  <div *ngIf="currentLesson.lesson_type === 'quiz'">
+    <app-quiz [hero]="all" (closeQuizComponent)="closeQuizComponent($event)"></app-quiz>
+  </div>
 
 </ion-content>

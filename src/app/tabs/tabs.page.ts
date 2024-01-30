@@ -37,6 +37,11 @@ export class TabsPage implements OnInit {
     this.closeMenu();
     this.router.navigate(['/tabs/offline-downloads']);
   }
+  
+  navigateToEbooks() {
+    this.closeMenu();
+    this.router.navigate(['/tabs/ebooks']);
+  }
 
   navigateToEditProfile() {
     this.closeMenu()
@@ -60,7 +65,7 @@ export class TabsPage implements OnInit {
 
   logout() {
     localStorage.clear();
-    this.router.navigate(['/login'], { replaceUrl: true});
+    this.router.navigate(['/login'], { replaceUrl: true });
   }
 
 }

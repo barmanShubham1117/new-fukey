@@ -3,7 +3,7 @@
     <ion-label>Practice Test:<br>{{ quizDetails?.title }}</ion-label>
   </ion-item>
   <div id="about" class="ion-padding">
-    <div class="intructions" *ngIf="quizDetails?.summary"><b>Instruction: </b><p>{{quizDetails?.summary}}</div>
+    <div class="intructions" *ngIf="quizDetails?.summary"><b>Instruction: </b>{{quizDetails?.summary}}</div>
     <p class="duration" *ngIf="quizDetails?.duration_sec"><b>Test Duration: </b>{{quizDetails.duration_sec / 60}} Minutes</p>
     <p class="questions" *ngIf="quizDetails?.items"><b>Total Questions: </b>{{quizDetails?.items}}</p>
     <p class="total_marks" *ngIf="quizDetails?.total_marks"><b>Maximum Marks: </b>{{quizDetails?.total_marks}}</p>
@@ -58,7 +58,8 @@
           <div class="actions">
             <div>
               <button type="button" mat-button mat-raised-button class="bg-marked" (click)="mark(stepper)">Mark For Review</button>
-              <button type="button" mat-button mat-raised-button class="bg-save-next" (click)="next(stepper)">Save & Next</button>
+              <button type="button" mat-button mat-raised-button class="bg-save-next" id="save-next-btn" (click)="next(stepper)" [disabled]="stepper.selectedIndex === (quizDetails.items - 1)">Save & Next</button>
+              <!-- <button type="button" mat-button mat-raised-button class="bg-save-next" id="save-next-btn" (click)="next(stepper)">Save & Next</button> -->
             </div>
             <div>
               <button type="button" mat-button mat-raised-button class="bg-clear-response" (click)="clear(stepper)">Clear Response</button>
@@ -79,7 +80,7 @@
   <div id="about" class="ion-padding">
     <div class="intructions" *ngIf="quizDetails?.summary"><b>Instruction: </b><p>{{quizDetails?.summary}}</div>
     <p class="duration" *ngIf="quizDetails?.duration_sec"><b>Test Duration: </b>{{quizDetails.duration_sec / 60}} Minutes</p>
-    <p class="time_taken" *ngIf="quizAttempt?.time_taken"><b>Time Taken: </b>{{quizAttempt?.time_taken / 60}} Minutes</p>
+    <p class="time_taken" *ngIf="quizAttempt?.time_taken"><b>Time Taken: </b>{{quizAttempt?.time_taken}} Minutes</p>
     <p class="questions" *ngIf="quizDetails?.items"><b>Total Questions: </b>{{quizDetails?.items}}</p>
     <p class="correct_questions" *ngIf="quizAttempt?.correct_question"><b>Correct Questions: </b>{{quizAttempt?.correct_question}}</p>
     <p class="total_marks" *ngIf="quizDetails?.total_marks"><b>Maximum Marks: </b>{{quizDetails?.total_marks}}</p>

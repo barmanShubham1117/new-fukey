@@ -164,7 +164,7 @@ export class HttpService {
   }
 
   public updateUserInfo(formData: any) {
-    let body = `first_name=${formData.fullName}&mobile=%2B91${formData.mobile}&class=${formData.class}&school=${formData.school}&city=${formData.city}`;
+    let body = `first_name=${formData.fullName}&mobile=${formData.mobile}&class=${formData.class}&school=${formData.school}&city=${formData.city}`;
 
     const httpOptions = {
       headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
@@ -214,6 +214,10 @@ export class HttpService {
       headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     };
     return this.http.post(environment.BASE_API_URL + 'get_test_attempt', body, httpOptions);
+  }
+
+  public getTopicName(table: string, name: string) {
+    return this.http.get(environment.BASE_API_URL + 'topic_name?table=' + table + '&name=' + name );
   }
 
 }

@@ -8,6 +8,11 @@ import { StorageService } from './storage.service';
 import * as firebase from 'firebase/app';
 import 'firebase/messaging';
 import { environment } from 'src/environments/environment';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+// import { AngularFireMessaging } from '@angular/fire/messaging'
+
+import { FCM } from "@capacitor-community/fcm";
+// import { PushNotifications } from "@capacitor/push-notifications";
 
 
 
@@ -25,7 +30,8 @@ export class FcmService {
   }
 
   constructor(
-    private storageService: StorageService
+    private storageService: StorageService,
+    private firestore: AngularFirestore
   ) { }
 
   async initPush() {
@@ -119,5 +125,20 @@ export class FcmService {
     PushNotifications.addListener('pushNotificationActionPerformed', notification => {
       console.log('Push notification action performed', notification.actionId, notification.inputValue);
     });
+  }
+
+  subscribe(topic: string, key: string): string {
+    FCM.subscribeTo({topic: topic})
+      .then((res) => { 
+        console.log('Subscribed to: ', res);
+        localStorage.setItem(key, 'true');
+      })
+      .catch((err) => { 
+        console.log("Error Topic", key);
+        
+        console.error('Error: ', err);
+      });
+
+    return topic;
   }
 }

@@ -1,10 +1,10 @@
 <ion-content class="ion-padding">
   <div class="page-header">STUDY MATERIALS</div>
 
-  <div class="row" *ngFor="let ebooks of newEBooks;">
-    <div class="ebook-container" *ngFor="let ebook of ebooks;">
+  <div class="row" *ngFor="let books of newEBooks;">
+    <div class="ebook-container" *ngFor="let ebook of books;">
       <div class="image-container">
-        <img src="/"+{{ebook.thumbnail}} alt="">
+        <img src="https://learn.fukeyeducation.com/uploads/ebook/thumbnails/{{ ebook.thumbnail }}" alt="">
       </div>
 
       <div class="details-container">
@@ -13,14 +13,14 @@
         <div class="ebook-cost" *ngIf="ebook.price !== 0">{{ ebook.price }}</div>
         <div class="publication-name">{{ ebook.publication_name }}</div>
         <div class="author-name">{{ ebook.edition }}</div>
-        <div class="published-date">{{ ebook.description }}</div>
+        <!-- <div class="published-date">{{ ebook.description }}</div> -->
         <!-- <div class="category-name">Demo</div> -->
       </div>
     </div>
   </div>
   
-  <!-- <div class="text-center"  *ngIf="!isStudyMaterialsAvailable">
+  <div class="text-center"  *ngIf="!isStudyMaterialsAvailable">
     There are no study materials available now, <br>
     please try again later,
-  </div> -->
+  </div>
 </ion-content>

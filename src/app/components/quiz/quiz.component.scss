@@ -213,6 +213,10 @@ ion-item {
                 }
             }
         }
+
+        button:disabled{
+            background: #888888 !important;
+        }
     }
 }
 :host {

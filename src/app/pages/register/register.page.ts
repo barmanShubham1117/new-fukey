@@ -7,6 +7,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { HttpService } from 'src/app/services/http.service';
 import { AppService } from 'src/app/services/app.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { FcmService } from 'src/app/services/fcm.service';
 
 export const FCM_TOKEN = 'push_notification_token';
 
@@ -31,7 +32,8 @@ export class RegisterPage implements OnInit {
     private httpService: HttpService,
     private angularFireAuth: AngularFireAuth,
     private appService: AppService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private fcmService: FcmService
   ) {
    }
 
@@ -96,6 +98,12 @@ export class RegisterPage implements OnInit {
 
       this.httpService.register(formData, this.FCM_TOKEN).subscribe(async (response: any) => {
           console.log(response);
+
+          this.httpService.getTopicName("category", formData.class).subscribe(async (topicName: any) => {
+            const topic = topicName.topic;
+            this.fcmService.subscribe(topic, 'SUBSCRIBE_CLASS_TOPIC');
+            // localStorage.setItem('SUBSCRIBE_CLASS_TOPIC', 'true');
+          });
 
           this.appService.dismissLoading().then(() => {
             if(response.validity) {
