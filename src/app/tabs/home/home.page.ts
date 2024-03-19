@@ -38,6 +38,8 @@ export class HomePage implements OnInit {
 
   start: any;
   tap = 0;
+  selectedItem: string | null = null;
+  @ViewChild('classList', { static: true }) itemListRef: ElementRef | null = null;
 
   subscribe: any;
   constructor(
@@ -81,6 +83,27 @@ export class HomePage implements OnInit {
         }
       })
     }
+  }
+
+  items = [
+    { content: 'Item 1' },
+    { content: 'Item 2' },
+    { content: 'Item 3' },
+    { content: 'Item 4' }
+  ];
+
+  onItemClick(selectedItem: HTMLElement) {
+    if (this.itemListRef) {
+    console.log('Title: ', selectedItem.innerHTML);
+
+    const items = this.itemListRef.nativeElement.querySelectorAll('.class-item');
+    items.forEach((item: any) => item.classList.remove('selected'));
+
+    selectedItem.classList.add('selected');
+    } else {
+      console.log(this.itemListRef);
+    }
+    
   }
 
   goToBatchesTab() {
@@ -130,12 +153,6 @@ export class HomePage implements OnInit {
       if (this.noOfEnrolledCourse > 0) {
         this.showEnrolledCourses = true;
 
-        const sec = this.el.nativeElement.querySelector('#showEnrollCourse');
-        sec.style.display = 'block';
-
-        const hec = this.el.nativeElement.querySelector('#hideEnrollCourse');
-        hec.style.display = 'none';
-
         const swiper = new Swiper('.swiper', {
           direction: 'horizontal',
           loop: true,
@@ -163,13 +180,13 @@ export class HomePage implements OnInit {
         }
 
       } else {
-        const sec = this.el.nativeElement.querySelector('#showEnrollCourse');
-        sec.style.display = 'none';
+        
+        // const sec = this.el.nativeElement.querySelector('#enrolled-batches');
+        // sec.style.display = 'block';
 
-        const hec = this.el.nativeElement.querySelector('#hideEnrollCourse');
-        hec.style.display = 'block';
+        const hec = this.el.nativeElement.querySelector('#enrolled-batches');
+        hec.style.display = 'none';
       }
-      
       this.appService.dismissLoading();
       this.getUserDetail();
     });

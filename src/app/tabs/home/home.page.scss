@@ -3,7 +3,7 @@
     padding: 0.5rem;
     // display: flex;
     flex-direction: column;
-    height: 100%;
+    height: auto;
 }
 
 .welcome {
@@ -33,15 +33,71 @@
     color: black;
 }
 
-.ad {
-    background: url('/assets/ad.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    // height: 25%;
-    height: calc(calc(95vw / 380) * 181);
-    margin-bottom: 5%;
-    margin-top: -2rem;
+.promo-video {
+    width: 99%;
+}
+
+.live-classes {
+    margin: 1rem 0;
+}
+.live-classes-container {
+    height: 100%;
+    border: 3px solid #d91111;
+    border-radius: 20px;
+    background: rgb(253 211 211 / 58%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #d91111;
+
+    .live-class-status {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        background: #d91111;
+        padding: 0.5rem 1rem;
+        color: #ffffff;
+        font-weight: 600;
+        border-radius: 20px;
+    }
+}
+.upcoming-classes-container {
+    height: 100%;
+    border: 3px solid #2b50d5;
+    border-radius: 20px;
+    background: rgba(211, 222, 253, 0.5803921569);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #2b50d5;
+
+    .upcoming-class-status {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        background: #2b50d5;
+        padding: 0.5rem 1rem;
+        color: #ffffff;
+        font-weight: 600;
+        border-radius: 20px;
+    }
+}
+.class-name {
+    margin-top: 1rem;
+    margin-left: 1rem;
+    font-size: 1rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+}
+.subject-name {
+    margin-left: 1rem;
+    font-size: 1.6rem;
+    line-height: 1.8rem;
+}
+.class-timing {
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
 }
 
 .enrolled-batches {
@@ -53,11 +109,17 @@
     justify-content: space-between;
     color: black;
 }
+#live-classes-title,
 #enrolled-batches-title,
 #for-you-title {
     font-size: 0.8rem;
     font-weight: bolder;
     color: black;
+}
+.course-image {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    border-radius: 8px;
 }
 #enrolled-batches-all,
 #for-you-all {
@@ -75,7 +137,7 @@
     height: 100%;
 }
 .course-container {
-    height: 75%;
+    height: auto;
     background-color: #F2F2F2;
     border-radius: 8px;
     box-shadow: rgb(0, 0, 0) 1px 1.95px 1.6px;
@@ -83,41 +145,34 @@
     margin-right: 5px;
     align-items: center;
 }
-.course-image {
-    height: 10rem;
-    width: 10rem;
-    background: url('/assets/new/img1.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    margin-left: 1.5%;
-    border-radius: 8px;
+
+.upcoming-class-slide,
+.live-class-slide {
+    aspect-ratio: 2 / 1;
 }
-.course-details {
-    display: flex;
-    flex-direction: column;
-    height: 90%;
-    width: 65%;
-    padding: 0 0.5em;
-    letter-spacing: .5px;
+
+.class-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 20px;
 }
-.course-name {
-    font-weight: 600;
-    font-size: 0.8rem;
-    color: black;
+.class-item {
+    background-color: #ffffff;
+    border: 1px solid #3582f5;
+    border-radius: 10rem;
+    padding: 10px;
+    text-align: center;
+    color: #3582f5;
+    font-size: 1rem;
 }
-.course-timing {
-    font-weight: 400;
-    font-size: 0.7rem;
-    color: red;
-}
-.course-leave {
-    height: 100%;
-    color: blue;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-end;
-    font-size: 1.2rem;
+.class-wrapper .selected {
+    background-color: #3582f5;
+    border-radius: 10rem;
+    padding: 10px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 1rem;
 }
 
 .for-you {
@@ -132,9 +187,6 @@
 .for-you-content {
     height: 90%;
 }
-// swiper-container {
-//     height: 100%;
-// }
 .for-you-slide {
     height: 100%;
     display: flex;
