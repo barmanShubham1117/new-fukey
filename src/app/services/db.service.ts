@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PluginListenerHandle, Plugins } from '@capacitor/core';
+import { Capacitor, PluginListenerHandle, Plugins } from '@capacitor/core';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { HttpClient } from '@angular/common/http';
 import { File } from '@ionic-native/file/ngx';
@@ -19,6 +19,7 @@ export class DbService {
 
   private storage!: SQLiteObject;
   private tableName = "offline_download_assets";
+  private tableName2 = "chats";
   private downloadAssets = new BehaviorSubject([]);
   private fileAssets = new BehaviorSubject([]);
   private isDbReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -33,18 +34,21 @@ export class DbService {
     private httpService: HttpService,
     private file: File
   ) {
-    this.platform.ready().then(() => {
-      this.sqlite
-        .create({
-          name: 'fukey_local_storage.db',
-          location: 'default',
-        })
-        .then((db: SQLiteObject) => {
-          this.storage = db;
-          this.createTable();
-        })
-        .catch(e => console.log(e));
-    });
+    if (Capacitor.getPlatform() !== 'web') {
+      this.platform.ready().then(() => {
+        this.sqlite
+          .create({
+            name: 'fukey_local_storage.db',
+            location: 'default',
+          })
+          .then((db: SQLiteObject) => {
+            this.storage = db;
+            this.createTable();
+            this.createChatTable();
+          })
+          .catch(e => console.log(e));
+      });
+    }
   }
 
   dbState() {
@@ -57,6 +61,70 @@ export class DbService {
         this.isDbReady.next(true);
       })
       .catch(e => console.log(e));
+  }
+
+  private createChatTable() {
+    this.storage.executeSql("CREATE TABLE IF NOT EXISTS " + this.tableName2 + " (id INTEGER PRIMARY KEY AUTOINCREMENT,notification_title Text, notification_body Text,category Text, timestamp varchar)", [])
+      .then(() => {
+        console.log("Chat Table created successfully.");
+        
+        this.isDbReady.next(true);
+      })
+      .catch(e => console.log(e));
+  }
+
+  // async insertRecord(notification_title: string, notification_body: string, category: string, timestamp: number) {}
+
+  async insertMessage(notification_title: string, notification_body: string, category: string, timestamp: number) {
+    try {
+      await this.storage.executeSql('INSERT INTO ' + this.tableName2 + ' (notification_title, notification_body, category, timestamp) VALUES (?, ?, ?, ?)', [notification_title, notification_body, category, timestamp]);
+      console.log('Data inserted!');
+      console.log('Data inserted successfully!');
+
+    } catch (error: any) {
+      console.error('Error inserting data:', error);
+    }
+  }
+
+  async getAllMessages() {
+    try {
+      const data = await this.storage.executeSql('SELECT * FROM ' + this.tableName2, []);
+      const rows = data.rows;
+
+      for (let i = 0; i < rows.length; i++) {
+        const rowData = rows.item(i);
+        console.log('Record:', rowData);
+      }
+    } catch(error: any) {
+      console.error('Error getting all messages:', error);
+    }
+  }
+
+  async getLastMessage(category: string) {
+    try {
+      const data = await this.storage.executeSql('SELECT * FROM ' + this.tableName2 + ' WHERE category=? ORDER BY id DESC LIMIT 1', [category]);
+      const rows = data.rows;
+
+      if (rows.length > 0) {
+        const rowData = rows.item(0);
+        console.log(rowData);
+        
+        return rowData.notification_body;
+      } else {
+        return 'No new messages';
+      }
+    } catch(error: any) {
+      console.error('Error getting all messages:', error);
+    }
+  }
+
+  async clearChatTable() {
+    try {
+      await this.storage.executeSql(`DELETE FROM ${this.tableName2}`, []);
+      console.log(`Table ${this.tableName2} emptied successfully!`);
+    } catch (error: any) {
+      console.error('Error clearing all messages:', error);
+    }
   }
 
   async downloadFile(url: string, title: string, desc: string, batchName: string, instructor_name: string, type: string):Promise<Observable<any>> {

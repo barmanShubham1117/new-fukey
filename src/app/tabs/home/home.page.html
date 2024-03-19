@@ -9,7 +9,12 @@
       </div>
     </div>
 
-    <div class="ad"></div>
+    <div class="ad">
+      <video autoplay loop>
+        <source src="https://fukeyeducation.com/videos/Introduction%20to%20Fukey%20Education.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
 
     <div class="enrolled-batches">
       <div class="enrolled-batches-header">
@@ -37,15 +42,19 @@
         <div class="swiper">
           <div class="swiper-wrapper">            
             <div class="swiper-slide" *ngFor="let enroll of enrolledCourses;">
-              <div class="course-container" (click)="navigateToCourseContentPage(enroll.id)">
-                <div class="course-image" style="background: url('{{enroll.thumbnail}}');background-position: center; background-repeat: no-repeat; background-size: cover;"></div>
+              <div class="course-container" style="background: url('{{enroll.banner}}');background-position: center; background-repeat: no-repeat; background-size: cover;" (click)="navigateToCourseContentPage(enroll.id)">
+
+                <!-- <div class="course-image" ></div> -->
+                
+                <!-- <div class="course-image" style="background: url('{{enroll.thumbnail}}');background-position: center; background-repeat: no-repeat; background-size: cover;"></div>
                 <div class="course-details">
                   <div class="course-name">{{ enroll.title }}</div>
                   <div class="course-timing" *ngIf="enroll.live_class_datetime">Live class at <br>{{ enroll.live_class_datetime }}</div>
                   <div class="course-leave">
                     <ion-icon name="enter"></ion-icon>
                   </div>
-                </div>
+                </div> -->
+
               </div>
             </div>
           </div>
@@ -54,6 +63,91 @@
         
       </div>
     </div>
+    
+    <div class="live-classes" *ngIf="allLiveClasses.length > 0">
+      <div class="live-classes-header" style="margin-bottom: 0;">
+        <span id="live-classes-title"><b>Live Classes</b></span>
+        <!-- <span id="live-classes-all" (click)="goToBatchesTab()"><a>View All<b>></b></a></span> -->
+      </div>
+
+      <!-- <div *ngFor="let enroll of enrolledCourses;"> -->
+
+        <div id="showLiveClasses" class="live-classes-content">
+          <div class="swiper">
+            <div class="swiper-wrapper">            
+              <div class="swiper-slide" *ngFor="let class of allLiveClasses;">
+
+                <div class="live-class-container" *ngIf="isClassStarted(class.time)">
+                  <div class="live-class-header">
+                    <span class="live-class-title">{{ class.meeting_name }}</span>
+                    <ion-button shape="round" size="small" color="danger" class="live-class-status">LIVE</ion-button>
+                  </div>
+                  <div class="live-class-footer">
+                    <span class="timer-icon"></span>
+                    <span class="live-class-timing">{{ extractTimeFromTimestamp(class.time) }}</span>
+                  </div>
+                  <div class="live-class-footer">
+                    <span class="calender-icon"></span>
+                    <span class="live-class-date">{{ extractDateFromTimestamp(class.time) }}</span>
+                  </div>
+                </div>
+                <div class="upcoming-class-container" *ngIf="!isClassStarted(class.time)">
+                  <div class="upcoming-class-header">
+                    <span class="upcoming-class-title">Course Title</span>
+                    <ion-button shape="round" size="small" color="primary" class="upcoming-class-status">UPCOMING</ion-button>
+                  </div>
+                  <div class="upcoming-class-footer">
+                    <span class="timer-icon"></span>
+                    <span class="upcoming-class-timing">09:00 AM</span>
+                  </div>
+                  <div class="upcoming-class-footer">
+                    <span class="calender-icon"></span>
+                    <span class="upcoming-class-date">15 February, 2024</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+          
+        </div>
+        
+        <div *ngIf="enrolledCourses.length > 0" id="showUpcomingClasses" class="upcoming-classes-content">
+          <div class="swiper">
+            <div class="swiper-wrapper">            
+              <div class="swiper-slide">
+                
+              </div>
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+          
+        </div>
+
+      <!-- </div> -->
+
+    </div>
+
+    <section id="explore-courses" class="mat-elevation-z4">
+      <div class="languages">
+        <span class="language" (click)="selectLanguage('english')">ENGLISH</span>
+        <span class="language" (click)="selectLanguage('hindi')">HINDI</span>
+      </div>
+
+      <mat-tab-group dynamicHeight class="mt-5">
+        <mat-tab label="{{class.name}}" *ngFor="let class of classList;">
+          <div class="subjects" *ngIf="allCourses.length > 0">
+
+            <div class="subject" *ngFor="let course of getCourses(selectedLanguage, class.id);" (click)="navigateToCourseContentPage(course.id)">
+              <i class="icon fas fa-calculator"></i>
+              <div>{{ extractSubjectName(course.title) }}</div>
+            </div>
+
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+      
+    </section>
 
     <div class="for-you">
       <div class="for-you-header">
@@ -92,7 +186,7 @@
           
           </div>
 
-          <div class="swiper-pagination"></div>
+          <!-- <div class="swiper-pagination"></div> -->
 
         </div>
       </div>

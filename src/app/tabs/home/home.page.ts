@@ -9,6 +9,7 @@ import Swiper from 'swiper';
 import { Capacitor } from '@capacitor/core';
 import { StorageService } from 'src/app/services/storage.service';
 import { FcmService } from 'src/app/services/fcm.service';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +17,7 @@ import { FcmService } from 'src/app/services/fcm.service';
   styleUrls: ['./home.page.scss'],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [IonicModule, CommonModule]
+  imports: [IonicModule, CommonModule, MatTabsModule]
 })
 export class HomePage implements OnInit {
 
@@ -26,11 +27,18 @@ export class HomePage implements OnInit {
 
   public username: string = 'user';
   public userpic: string = '/assets/new/img2.jpg';
-  public allCourses: any;
+  public courseByClass: any;
   public enrolledCourses: any[] = [];
   public enrolledCourseArray: any[] = [];
   public noOfEnrolledCourse: any = 0;
   public newAllCourses: any[] = [];
+  public allLiveClasses: any[] = [];
+  public allCourses: any[] = [];
+  public courseList: any[] = [];
+  public classList: any[] = [];
+  public englishCourseList: any[] = [];
+  public hindiCourseList: any[] = [];
+  public selectedLanguage: string = "english";
 
   public showEnrolledCourses: boolean = false;
 
@@ -39,6 +47,79 @@ export class HomePage implements OnInit {
   start: any;
   tap = 0;
 
+  public isClassStarted = (timestampString: any) => {
+    const timestamp = Number(timestampString);
+    const currentTime = Date.now();
+    return currentTime / 1000 >= timestamp;
+  };
+
+  public extractTimeFromTimestamp = (timestampString: any) => {
+    if (!/^\d+$/.test(timestampString)) {
+      return null;
+    }
+  
+    const date = new Date(Number(timestampString) * 1000);
+  
+    const hours = date.getHours() % 12 || 12;
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const period = date.getHours() >= 12 ? 'PM' : 'AM';
+  
+    return `${hours.toString().padStart(2, '0')}:${minutes} ${period}`;
+  };
+
+  public extractDateFromTimestamp = (timestampString: any) => {
+    if (!/^\d+$/.test(timestampString)) {
+      return null;
+    }
+
+    const date = new Date(Number(timestampString) * 1000);
+
+    const options = {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    };
+
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+
+    return `${day} ${monthNames[monthIndex]}, ${year}`;
+  };
+  
+  public getCourses = (medium: string, category: string) => {
+    this.courseList = [];
+    let list = [];
+    if (medium === 'english') {
+      list = this.englishCourseList;
+    } else {
+      list = this.hindiCourseList;
+    }
+    for (const c of list) {
+      if ((c.language == medium) && (c.category_id == category)) {
+        this.courseList.push(c);
+      }
+    }
+    // console.log("Medium: " + medium);
+    // console.log("Category ID: " + category);
+    // console.log("List: " + this.courseList.length);
+    
+    return this.courseList;
+  }
+
+  public extractSubjectName = (text: string): string | null => {
+    const regex = / (?=\d)/;
+    const parts = text.split(regex);
+    const subjectName = parts[0];
+    // console.log("SUBJECT NAME: " + subjectName);
+    
+  
+    return subjectName;
+  }
+  
   subscribe: any;
   constructor(
     private httpService: HttpService,
@@ -83,6 +164,10 @@ export class HomePage implements OnInit {
     }
   }
 
+  selectLanguage(language: string) {
+    this.selectedLanguage = language;
+  }
+
   goToBatchesTab() {
     this.navCtrl.navigateRoot('/tabs/batches');
   }
@@ -90,17 +175,49 @@ export class HomePage implements OnInit {
     this.navCtrl.navigateRoot('/tabs/store');
   }
 
-  async getAllCourses() {
-    console.log('getAllCourses: USER_ID: ', this.USER_ID);
+  async getAllLiveClasses() {
+    this.httpService.getAllLiveClasses().subscribe((response: any) => {
+      this.allLiveClasses = response;
+      console.log('All Live Class Details: ', this.allLiveClasses);
+    });
+    this.appService.dismissLoading();
+  }
+
+  async getCoursesByClass() {
+    console.log('getCoursesByClass: USER_ID: ', this.USER_ID);
 
     this.httpService.getCoursesByClass(this.USER_ID).subscribe((response) => {
-      this.allCourses = response;
-      console.log('All Courses: ', this.allCourses);
+      this.courseByClass = response;
+      console.log('All Courses: ', this.courseByClass);
       this.createSubarrays();
 
       this.getEnrolledCourses();
     });
     this.appService.dismissLoading();
+  }
+
+  async getAllCourses() {
+    this.httpService.getAllCourses().subscribe((response: any) => {
+      this.allCourses = response;
+      for(const course of this.allCourses) {
+        if(course.language == 'english') {
+          this.englishCourseList.push(course);
+        }
+        else if(course.language == 'hindi') {
+          this.hindiCourseList.push(course);
+        }
+      }
+      console.log("English Course List: ", this.englishCourseList);
+      console.log("Hindi Course List: ", this.hindiCourseList);
+    });
+  }
+
+  async getClassList() {
+    this.httpService.getClassList().subscribe((response: any) => {
+      this.classList = response;
+      console.log("Class List: ", this.classList);
+      
+    });
   }
 
   async getUserDetail() {
@@ -114,6 +231,8 @@ export class HomePage implements OnInit {
           this.fcmService.subscribe(response.topic, 'SUBSCRIBE_CLASS_TOPIC');
         }
       }
+
+      this.getAllLiveClasses();
 
       this.appService.dismissLoading();
     })
@@ -194,20 +313,22 @@ export class HomePage implements OnInit {
           this.TOKEN = response.token;
           localStorage.setItem('TOKEN', this.TOKEN);
           console.log("TOKEN1: ", response);
-          this.getAllCourses();
+          this.getCoursesByClass();
         });
       }
       else {
-        this.getAllCourses();
+        this.getCoursesByClass();
       }
     }
+    this.getAllCourses();
+    this.getClassList();
   }
 
   createSubarrays() {
-    const originalLength = this.allCourses.length;
+    const originalLength = this.courseByClass.length;
 
     for (let i = 0; i < originalLength; i += 2) {
-      const subArray = this.allCourses.slice(i, i + 2);
+      const subArray = this.courseByClass.slice(i, i + 2);
       this.newAllCourses.push(subArray);
     }
     console.log('NEW ARRAY: ', this.newAllCourses);

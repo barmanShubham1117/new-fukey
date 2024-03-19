@@ -124,7 +124,7 @@ export class HttpService {
   }
 
   public getClassList() {
-    return this.http.get(environment.BASE_API_URL + 'class_list/10');
+    return this.http.get(environment.BASE_API_URL + 'class_list/0');
   }
 
   public getEnrolledCourses(token: string) {
@@ -218,6 +218,10 @@ export class HttpService {
 
   public getTopicName(table: string, name: string) {
     return this.http.get(environment.BASE_API_URL + 'topic_name?table=' + table + '&name=' + name );
+  }
+  
+  public getAllLiveClasses() {
+    return this.http.get(environment.BASE_API_URL + 'all_live_classes');
   }
 
 }

@@ -12,6 +12,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 // import { AngularFireMessaging } from '@angular/fire/messaging'
 
 import { FCM } from "@capacitor-community/fcm";
+import { DbService } from './db.service';
 // import { PushNotifications } from "@capacitor/push-notifications";
 
 
@@ -31,7 +32,8 @@ export class FcmService {
 
   constructor(
     private storageService: StorageService,
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    private dbService: DbService
   ) { }
 
   async initPush() {
@@ -63,6 +65,8 @@ export class FcmService {
          // Listen for incoming push notifications
         PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
           console.log('Push notification received', notification);
+
+          this.dbService.insertMessage(notification.title!, notification.body!, 'dummy', new Date().getTime())
         });
       }
 
