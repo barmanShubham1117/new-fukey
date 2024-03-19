@@ -1,20 +1,33 @@
 <ion-content class="ion-padding">
-  <div class="page-title">All Messages</div>
+  <div class="page-title" (click)="navigateToMessages()">All Messages</div>
 
   <div class="messages">
     <div class="grid-container">
-      <div class="grid-item">
-        <div class="chat-image"></div>
+      <div class="grid-item" (click)="showMessages()">
+        <div class="chat-image">
+          <img src="/assets/logo.png" alt="" srcset="">
+        </div>
         <div class="chat-details">
-          <div class="chat-title">Class 9th Social Science</div>
-          <div class="last-message">Class curriculum updated...</div>
+          <div class="chat-title">Fukey Education</div>
+          <div class="last-message">{{ getLastMessage('dummy') }}</div>
         </div>
       </div>
-      <div class="grid-item">
-        <div class="chat-image"></div>
+      <div class="grid-item" (click)="deleteMessages()">
+        <div class="chat-image">
+          {{ CLASS_NO }}
+        </div>
         <div class="chat-details">
-          <div class="chat-title">Class 9th Social Science</div>
-          <div class="last-message">Class curriculum updated...</div>
+          <div class="chat-title">{{ CLASS }}</div>
+          <div class="last-message">{{ getLastMessage(CLASS) }}</div>
+        </div>
+      </div>
+      <div class="grid-item" (click)="deleteMessages()" *ngFor="let course of enrolledCourses">
+        <div class="chat-image">
+          <img src="{{ course.thumbnail }}" alt="" srcset="">
+        </div>
+        <div class="chat-details">
+          <div class="chat-title">{{ course.title }}</div>
+          <div class="last-message">{{ getLastMessage(course.token) }}</div>
         </div>
       </div>
     </div>

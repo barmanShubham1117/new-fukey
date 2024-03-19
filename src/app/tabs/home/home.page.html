@@ -1,6 +1,8 @@
 <ion-content>
   <div class="main-layout">
 
+    <!-- WELCOME NOTE STARTS HERE -->
+
     <div class="welcome">
       <div class="profile-pic" style="background: url('{{ userpic }}');"></div>
       <div class="welcome-note">
@@ -9,20 +11,28 @@
       </div>
     </div>
 
+    <!-- WELCOME NOTE ENDS HERE -->
+
+
+    <!-- INTRODUCTION VIDEO STARTS HERE -->
+
     <video class="promo-video" src="assets/video/Introduction to Fukey Education.mp4" autoplay loop></video>
 
-    <div class="live-classes" id="live-classes">
+    <!-- INTRODUCTION VIDEO ENDS HERE -->
+
+
+    <!-- LIVE CLASS STARTS HERE -->
+
+    <div class="live-classes" id="live-classes" *ngIf="allLiveClasses.length > 0">
       <div class="live-classes-header">
         <span id="live-classes-title"><b>Live Classes</b></span>
       </div>
 
       <div id="live-classes-div" class="live-classes-div">
-
         <div class="swiper">
           <div class="swiper-wrapper">
-
-            <div class="swiper-slide upcoming-class-slide">
-              <div class="upcoming-classes-container">
+            <div class="swiper-slide upcoming-class-slide" *ngFor="let class of allLiveClasses;">
+              <div class="upcoming-classes-container" *ngIf="!isClassStarted(class.time)">
                 <div class="upcoming-class-status">UPCOMING</div>
                 <div>
                   <div class="class-name">Class 12</div>
@@ -30,26 +40,26 @@
                 </div>
                 <div class="class-timing">01:00 PM, 18/03/24</div>
               </div>
-            </div>
-            
-            <div class="swiper-slide live-class-slide">
-              <div class="live-classes-container">
+              <div class="live-classes-container" *ngIf="isClassStarted(class.time)">
                 <div class="live-class-status">LIVE</div>
                 <div>
                   <div class="class-name">Class 12</div>
-                  <div class="subject-name">Business Studies 12th (English)</div>
+                  <div class="subject-name">{{ class.meeting_name }}</div>
                 </div>
-                <div class="class-timing">01:00 PM, 18/03/24</div>
+                <div class="class-timing">{{ extractTimeFromTimestamp(class.time) }}, {{ extractDateFromTimestamp(class.time) }}</div>
               </div>
             </div>
-
           </div>
-
           <div class="swiper-pagination" style="display: none;"></div>
         </div>
 
       </div>
     </div>
+
+    <!-- LIVE CLASS ENDS HERE -->
+
+
+    <!-- ENROLLED BATCHES STARTS HERE -->
 
     <div class="enrolled-batches" id="enrolled-batches">
       <div class="enrolled-batches-header">
@@ -74,22 +84,43 @@
       </div>
     </div>
 
-    <div class="subject-wise-categorization">
-      <ion-card>
-        <div class="class-wrapper" #classList>
-          <div class="class-item" *ngFor="let item of items" #itemElement (click)="onItemClick(itemElement)">
-            {{ item.content }}
-          </div>
-        </div>
+    <!-- ENROLLED BATCHES ENDS HERE -->
 
+
+    <!-- SUBJECT-WISE CATEGORIZATION STARTS HERE -->
+
+    <div class="subject-wise-categorization">
+      <div class="medium-switch">
+        <div class="button r" id="button-3">
+          <input type="checkbox" class="checkbox" (change)="onCheckboxChange($event)" checked="{{ isChecked }}"/>
+          <div class="knobs"></div>
+          <div class="layer"></div>
+        </div>
+      </div>
+      <div class="class-wrapper" #classesList>
+        <div class="class-item" *ngFor="let class of classList" #itemElement (click)="onItemClick(itemElement, class.id)">
+          {{ class.name }}
+        </div>
+      </div>
+      <!-- <ion-card style="margin: 0;"> -->
         <div class="subject-wrapper">
           <div class="subject-item">
-            <div class="subject-name">Business Studies</div>
-            <div class="subject-icon"></div>
+            <div class="subject-item-name">Business Studies</div>
+          </div>
+          <div class="subject-item">
+            <div class="subject-item-name">Business Studies</div>
+          </div>
+          <div class="subject-item">
+            <div class="subject-item-name">Business Studies</div>
           </div>
         </div>
-      </ion-card>
+      <!-- </ion-card> -->
     </div>
+
+    <!-- SUBJECT-WISE CATEGORIZATION ENDS HERE -->
+
+
+    <!-- FOR-YOU STARTS HERE -->
 
     <div class="for-you">
       <div class="for-you-header">
@@ -128,10 +159,13 @@
           
           </div>
 
-          <div class="swiper-pagination"></div>
+          <!-- <div class="swiper-pagination"></div> -->
 
         </div>
       </div>
     </div>
+
+    <!-- FOR-YOU ENDS HERE -->
+
   </div>
 </ion-content>
