@@ -38,13 +38,12 @@ export class HomePage implements OnInit {
   public classList: any[] = [];
   public englishCourseList: any[] = [];
   public hindiCourseList: any[] = [];
-  public selectedLanguage: string = "english";
+  public subjectList: any[] = [];
 
+  public selectedLanguage: string = "english";
   private classNo: any;
   public isChecked: boolean = false;
-
   public showEnrolledCourses: boolean = false;
-
   public FCM_TOKEN: string = '';
 
   start: any;
@@ -119,9 +118,6 @@ export class HomePage implements OnInit {
     const regex = / (?=\d)/;
     const parts = text.split(regex);
     const subjectName = parts[0];
-    // console.log("SUBJECT NAME: " + subjectName);
-    
-  
     return subjectName;
   }
   
@@ -172,6 +168,7 @@ export class HomePage implements OnInit {
   onCheckboxChange(event: any) {
     this.isChecked = event.target.checked;
     console.log("Checkbox is now:", this.isChecked);
+    this.showSubjects();
   }
 
   onItemClick(selectedItem: HTMLElement, classId: string) {
@@ -180,18 +177,28 @@ export class HomePage implements OnInit {
     console.log('ID: ', classId);
     this.classNo = classId;
 
-
     const items = this.itemListRef.nativeElement.querySelectorAll('.class-item');
     items.forEach((item: any) => item.classList.remove('selected'));
-
     selectedItem.classList.add('selected');
+
+    this.showSubjects();
     } else {
       console.log(this.itemListRef);
     }
   }
 
-  selectLanguage(language: string) {
-    this.selectedLanguage = language;
+  showSubjects() {
+    if (this.isChecked) {
+      this.subjectList = this.allCourses.filter(object => object.category_id === this.classNo && object.language === 'hindi');
+    } else {
+      this.subjectList = this.allCourses.filter(object => object.category_id === this.classNo && object.language === 'english');
+    }
+
+    console.log(this.classNo);
+    console.log(this.isChecked);
+    console.log(this.subjectList);
+    console.log(this.allCourses);
+    
   }
 
   goToBatchesTab() {

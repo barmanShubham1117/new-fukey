@@ -98,20 +98,14 @@
         </div>
       </div>
       <div class="class-wrapper" #classesList>
-        <div class="class-item" *ngFor="let class of classList" #itemElement (click)="onItemClick(itemElement, class.id)">
+        <div class="class-item" *ngFor="let class of classList; let i = index" #itemElement (click)="onItemClick(itemElement, class.id)">
           {{ class.name }}
         </div>
       </div>
       <!-- <ion-card style="margin: 0;"> -->
-        <div class="subject-wrapper">
-          <div class="subject-item">
-            <div class="subject-item-name">Business Studies</div>
-          </div>
-          <div class="subject-item">
-            <div class="subject-item-name">Business Studies</div>
-          </div>
-          <div class="subject-item">
-            <div class="subject-item-name">Business Studies</div>
+        <div class="subject-wrapper" *ngIf="subjectList.length > 0">
+          <div class="subject-item" *ngFor="let subject of subjectList">
+            <div class="subject-item-name">{{ extractSubjectName(subject.title) }}</div>
           </div>
         </div>
       <!-- </ion-card> -->

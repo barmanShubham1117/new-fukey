@@ -198,9 +198,15 @@
     text-align: center;
     background: #1b59b5;
     color: #ffffff;
+    display: flex;
     border-radius: 20px;
     box-shadow: 3px 3px 5px #000000;
+    justify-content: center;
+    align-items: center;
 
+    .subject-item-name {
+        font-size: 0.8rem;
+    }
     .subject-item-icon {
         position: absolute;
     }
