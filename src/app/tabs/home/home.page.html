@@ -35,15 +35,15 @@
               <div class="upcoming-classes-container" *ngIf="!isClassStarted(class.time)">
                 <div class="upcoming-class-status">UPCOMING</div>
                 <div>
-                  <div class="class-name">Class 12</div>
-                  <div class="subject-name">Business Studies 12th (English)</div>
+                  <div class="class-name">{{ class.name }}</div>
+                  <div class="subject-name">{{ class.meeting_name }}</div>
                 </div>
-                <div class="class-timing">01:00 PM, 18/03/24</div>
+                <div class="class-timing">{{ extractTimeFromTimestamp(class.time) }}, {{ extractDateFromTimestamp(class.time) }}</div>
               </div>
               <div class="live-classes-container" *ngIf="isClassStarted(class.time)">
                 <div class="live-class-status">LIVE</div>
                 <div>
-                  <div class="class-name">Class 12</div>
+                  <div class="class-name">{{ class.name }}</div>
                   <div class="subject-name">{{ class.meeting_name }}</div>
                 </div>
                 <div class="class-timing">{{ extractTimeFromTimestamp(class.time) }}, {{ extractDateFromTimestamp(class.time) }}</div>

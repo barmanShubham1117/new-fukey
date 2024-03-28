@@ -85,6 +85,9 @@
     <p class="correct_questions" *ngIf="quizAttempt?.correct_question"><b>Correct Questions: </b>{{quizAttempt?.correct_question}}</p>
     <p class="total_marks" *ngIf="quizDetails?.total_marks"><b>Maximum Marks: </b>{{quizDetails?.total_marks}}</p>
     <p class="marks_scored" *ngIf="quizAttempt?.score"><b>Marks Scored: </b>{{quizAttempt?.score}}</p>
+
+    <button id="retest-btn" (click)="onRetestBtnPressed()">RETEST</button>
+
     <div class="nav-buttons">
       <button [disabled]="isPreviousBtnDisabled" id="previous-btn" (click)="onPreviousBtnPressed()">PREVIOUS</button>
       <button [disabled]="isNextBtnDisabled" id="next-btn" (click)="onNextBtnPressed()">NEXT</button>

@@ -307,4 +307,10 @@ export class QuizComponent  implements OnInit {
     
     this.closeQuizComponent.emit(true);
   }
+
+  onRetestBtnPressed() {
+    this.quizAttempt.can_attempt = true;
+    console.log('onRetestBtnPressed');
+    
+  }
 }
