@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  BASE_URL: 'http://localhost/',
-  BASE_API_URL: 'http://localhost/api/',
+  BASE_URL: 'https://learn.fukeyeducation.com/',
+  BASE_API_URL: 'https://learn.fukeyeducation.com/api/',
   firebaseConfig: {
     apiKey: "AIzaSyDpe8lvcG2YXYhM_tD1SqWA1Cs4yxGJVpI",
     authDomain: "fukey-education.firebaseapp.com",
