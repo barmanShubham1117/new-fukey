@@ -1,6 +1,10 @@
 <ion-content>
   <div class="page-header">Enrolled Batches</div>
 
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <div class="batch-list" *ngIf="isEnrolledCourseAvailable">
 
     <div *ngFor="let course of enrolledCourses;" class="course-container" (click)="navigateToCourseContentPage(course.id)">

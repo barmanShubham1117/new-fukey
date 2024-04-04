@@ -15,9 +15,10 @@
     height: 4rem;
     width: 4rem;
     border-radius: 50%;
-    // background: url('/assets/new/img2.jpg');
-    background-position: center !important;
-    background-size: cover !important;
+    background-image: url('/assets/default_user.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     border: 2px solid rgb(31, 8, 235);
 }
 .welcome-note {

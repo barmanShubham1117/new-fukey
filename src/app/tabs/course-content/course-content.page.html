@@ -26,7 +26,7 @@
       <div class="description" [innerHTML]="COURSE_DATA.description"></div>
     </div>
 
-    <div class="course-description">
+    <div class="course-description" *ngIf="CONTENT_DATA.length > 0">
       <h3>Curriculum for this course</h3>
     </div>
 

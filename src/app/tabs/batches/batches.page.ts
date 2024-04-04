@@ -72,4 +72,10 @@ export class BatchesPage implements OnInit {
     this.router.navigate(['/tabs/batches/course-content'], navigationExtras);
   }
 
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      this.getData();
+      event.target.complete();
+    }, 2000);
+  }
 }

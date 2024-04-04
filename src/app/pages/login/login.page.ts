@@ -74,39 +74,48 @@ export class LoginPage implements OnInit {
 		});
 	}
 
+  removeWhiteSpaces(str: String) {
+    return str.replace(/\s+/g, "");
+  }
+
   
   async onSubmit(formData: {mobile: string}) {    
     if (formData.mobile != "") {
-      this.httpService.checkUser(formData.mobile, this.FCM_TOKEN).subscribe((response: any) => {
-        console.log(response);
-          if (response.status) {
-            localStorage.setItem('MOBILE', formData.mobile);
-
-            // if (Capacitor.getPlatform() !== 'web') {
-            //   this.fcmService.subscribe("all", 'SUBSCRIBE_ALL_TOPIC');
-            // }
-            
-            this.appService.showLoadingScreen("Sending OTP to +91 " + formData.mobile);
+      if (this.removeWhiteSpaces(formData.mobile.toString()).length == 10) {
+        this.httpService.checkUser(formData.mobile, this.FCM_TOKEN).subscribe((response: any) => {
+          console.log(response);
+            if (response.status) {
+              localStorage.setItem('MOBILE', formData.mobile);
   
-            this.authService.signInWithPhoneNumber(this.recaptchaVerifier, '+91' + formData.mobile)
-                .then((success) => {
-                  console.log("LOGIN PAGE : onSubmit() : success : ", success);
-                  
-                  this.appService.dismissLoading();
-                    console.log('SUCCESS: OTP sent successfully.');
-                    this.appService.presentToast('OTP sent successfully.', "bottom");
-                    this.router.navigate(['/login-verify'], { replaceUrl: true });
-                })
-                .catch((error) => {
-                  this.appService.dismissLoading().then(() => {
-                    console.error(error);
-                    throw error;
+              if (Capacitor.getPlatform() !== 'web') {
+                this.fcmService.subscribe("all", 'SUBSCRIBE_ALL_TOPIC');
+                localStorage.setItem('SUBSCRIBE_ALL_TOPIC', 'true');
+              }
+              
+              this.appService.showLoadingScreen("Sending OTP to +91 " + formData.mobile);
+    
+              this.authService.signInWithPhoneNumber(this.recaptchaVerifier, '+91' + formData.mobile)
+                  .then((success) => {
+                    console.log("LOGIN PAGE : onSubmit() : success : ", success);
+                    
+                    this.appService.dismissLoading();
+                      console.log('SUCCESS: OTP sent successfully.');
+                      this.appService.presentToast('OTP sent successfully.', "bottom");
+                      this.router.navigate(['/login-verify'], { replaceUrl: true });
+                  })
+                  .catch((error) => {
+                    this.appService.dismissLoading().then(() => {
+                      console.error(error);
+                      throw error;
+                    });
                   });
-                });
-          } else {
-            this.appService.presentToast('Invaild mobile number.', "bottom");
-          }
-      })
+            } else {
+              this.appService.presentToast('Mobile no. not registered.', "bottom");
+            }
+        })
+      } else {
+      this.appService.presentToast('Invalid mobile no.', "bottom");
+      }
     } else {
       this.appService.presentToast('Please enter mobile no.', "bottom");
     }

@@ -47,6 +47,9 @@ export class RegisterPage implements OnInit {
     })
 
     this.logFCMToken();
+
+    this.appService.showLoadingScreen('Sending OTP to +91 7979912161');
+
   }
 
   async logFCMToken() {
@@ -76,6 +79,10 @@ export class RegisterPage implements OnInit {
 		});
 	}
 
+  removeWhiteSpaces(str: String) {
+    return str.replace(/\s+/g, "");
+  }
+
   async onSubmit(formData: { fullName: string, mobile: string, email: string, class: string, school: string, city: string, tnc: any }) {
     console.log(formData);
 
@@ -83,6 +90,8 @@ export class RegisterPage implements OnInit {
       this.appService.presentToast('Full Name is required.', "bottom");
     } else if (formData.mobile == '') {
       this.appService.presentToast('Mobile is required.', "bottom");
+    } else if (this.removeWhiteSpaces(formData.mobile.toString()).length != 10) {
+      this.appService.presentToast('Invalid Mobile No.', "bottom");
     } else if (formData.email == '') {
       this.appService.presentToast('Email is required.', "bottom");
     } else if (formData.class == '') {
@@ -102,7 +111,7 @@ export class RegisterPage implements OnInit {
           this.httpService.getTopicName("category", formData.class).subscribe(async (topicName: any) => {
             const topic = topicName.topic;
             this.fcmService.subscribe(topic, 'SUBSCRIBE_CLASS_TOPIC');
-            // localStorage.setItem('SUBSCRIBE_CLASS_TOPIC', 'true');
+            localStorage.setItem('SUBSCRIBE_CLASS_TOPIC', 'true');
           });
 
           this.appService.dismissLoading().then(() => {

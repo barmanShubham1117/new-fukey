@@ -64,7 +64,7 @@ export class DbService {
   }
 
   private createChatTable() {
-    this.storage.executeSql("CREATE TABLE IF NOT EXISTS " + this.tableName2 + " (id INTEGER PRIMARY KEY AUTOINCREMENT,notification_title Text, notification_body Text,category Text, timestamp varchar)", [])
+    this.storage.executeSql("CREATE TABLE IF NOT EXISTS " + this.tableName2 + " (id INTEGER PRIMARY KEY AUTOINCREMENT,notification_title Text, notification_body Text, notification_story Text, notification_image Text, timestamp varchar)", [])
       .then(() => {
         console.log("Chat Table created successfully.");
         
@@ -75,9 +75,9 @@ export class DbService {
 
   // async insertRecord(notification_title: string, notification_body: string, category: string, timestamp: number) {}
 
-  async insertMessage(notification_title: string, notification_body: string, category: string, timestamp: number) {
+  async insertMessage(notification_title: string, notification_body: string, notification_story: string, notification_image: string, timestamp: number) {
     try {
-      await this.storage.executeSql('INSERT INTO ' + this.tableName2 + ' (notification_title, notification_body, category, timestamp) VALUES (?, ?, ?, ?)', [notification_title, notification_body, category, timestamp]);
+      await this.storage.executeSql('INSERT INTO ' + this.tableName2 + ' (notification_title, notification_body, notification_story, notification_image, timestamp) VALUES (?, ?, ?, ?, ?)', [notification_title, notification_body, notification_story, notification_image, timestamp]);
       console.log('Data inserted!');
       console.log('Data inserted successfully!');
 
@@ -110,6 +110,35 @@ export class DbService {
         console.log(rowData);
         
         return rowData.notification_body;
+      } else {
+        return 'No new messages';
+      }
+    } catch(error: any) {
+      console.error('Error getting all messages:', error);
+    }
+  }
+
+  async getChats() {
+    try {
+      const data = await this.storage.executeSql('SELECT * FROM ' + this.tableName2 + ' WHERE id IN (SELECT MAX(id) FROM ' + this.tableName2 + ' GROUP BY notification_story);', []);
+      const rows = data.rows;
+
+      if (rows.length > 0) {     
+        return rows;
+      } else {
+        return 'No new messages';
+      }
+    } catch(error: any) {
+      console.error('Error getting all messages:', error);
+    }
+  }
+  async getMessages(story: string) {
+    try {
+      const data = await this.storage.executeSql('SELECT * FROM ' + this.tableName2 + ' WHERE notification_story=? ORDER BY id DESC', [story]);
+      const rows = data.rows;
+
+      if (rows.length > 0) {     
+        return rows;
       } else {
         return 'No new messages';
       }

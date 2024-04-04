@@ -27,6 +27,7 @@ export class HomePage implements OnInit {
 
   public username: string = 'user';
   public userpic: string = '/assets/new/img2.jpg';
+  public userImage: string = '';
   public courseByClass: any;
   public enrolledCourses: any[] = [];
   public enrolledCourseArray: any[] = [];
@@ -50,6 +51,7 @@ export class HomePage implements OnInit {
   tap = 0;
   selectedItem: string | null = null;
   @ViewChild('classesList', { static: true }) itemListRef: ElementRef | null = null;
+  @ViewChild('videoElement') videoElementRef: ElementRef | null = null;
 
   public isClassStarted = (timestampString: any) => {
     const timestamp = Number(timestampString);
@@ -122,6 +124,8 @@ export class HomePage implements OnInit {
   }
   
   subscribe: any;
+  videoElement: any;
+
   constructor(
     private httpService: HttpService,
     private appService: AppService,
@@ -257,7 +261,8 @@ export class HomePage implements OnInit {
     this.httpService.getUserViaMobile(this.MOBILE).subscribe((response: any) => {
       console.log("HOME PAGE : getUserDetail() : response : ", response);
       this.username = response.first_name;
-      this.userpic = 'https://learn.fukeyeducation.com/uploads/user_image/' + response.image + '.jpg';
+      this.userImage = response.image;
+      this.userpic = 'https://learn.fukeyeducation.com/uploads/user_image/' + this.userImage + '.jpg';
 
       if (localStorage.getItem('SUBSCRIBE_CLASS_TOPIC') !== 'true') {
         if (Capacitor.getPlatform() !== 'web') {
@@ -272,6 +277,7 @@ export class HomePage implements OnInit {
   }
 
   async getEnrolledCourses() {
+    console.log('getEnrolledCourses invoked');
     console.log(this.TOKEN);
     this.httpService.getEnrolledCourses(this.TOKEN).subscribe((response: any) => {
       this.enrolledCourses = response;
@@ -280,6 +286,9 @@ export class HomePage implements OnInit {
       console.log('No. of Enrolled Course: ', this.noOfEnrolledCourse);
 
       if (this.noOfEnrolledCourse > 0) {
+        const hec = this.el.nativeElement.querySelector('#enrolled-batches');
+        hec.style.display = 'block';
+
         this.showEnrolledCourses = true;
 
         const swiper = new Swiper('.swiper', {
@@ -287,12 +296,12 @@ export class HomePage implements OnInit {
           loop: true,
           allowSlidePrev: true,
           pagination: {
-            el: '.swiper-pagination',
+            el: '.swiper-pagination2',
           },
         });
 
-        if (localStorage.getItem('SUBSCRIBE_COURSE_TOPIC') !== 'true') {
-          // if (Capacitor.getPlatform() !== 'web') {
+        // if (localStorage.getItem('SUBSCRIBE_COURSE_TOPIC') !== 'true') {
+          if (Capacitor.getPlatform() !== 'web') {
             console.log("Topics to subscribe:");
             
             let eCourses: any[] = []
@@ -300,13 +309,13 @@ export class HomePage implements OnInit {
               console.log(course.title + ': ' + course.topic);
               eCourses.push(course.id);
               
-              // this.fcmService.subscribe(course.topic, 'SUBSCRIBE_COURSE_TOPIC');
+              this.fcmService.subscribe(course.topic, 'SUBSCRIBE_COURSE_TOPIC');
             });
             console.log('ENROLLED_COURSES', eCourses);
             
             localStorage.setItem('ENROLLED_COURSES', JSON.stringify(eCourses));
-          // }
-        }
+          }
+        // }
 
       } else {
         
@@ -365,7 +374,7 @@ export class HomePage implements OnInit {
       loop: true,
       allowSlidePrev: true,
       pagination: {
-        el: '.swiper-pagination',
+        el: '.swiper-pagination1',
       },
     });
   }
@@ -379,7 +388,7 @@ export class HomePage implements OnInit {
     };
     console.log(navigationExtras);
 
-    this.router.navigate(['/tabs/batches/course-content'], navigationExtras);
+    this.router.navigate(['/tabs/home/course-content'], navigationExtras);
   }
 
   swiperSlideChanged() { }
@@ -399,5 +408,44 @@ export class HomePage implements OnInit {
 
     this.FCM_TOKEN = this.storageService.getStorage("push_notification_token").value;
     console.log("Home page: ngOnit(): ", this.FCM_TOKEN);
+  }
+
+  ionViewDidEnter() {
+    console.log("ionViewDidEnter");
+    
+    if (this.videoElementRef) {
+      this.videoElement = this.videoElementRef.nativeElement as HTMLVideoElement;
+
+      if (this.videoElement.paused) {
+        this.videoElement.play();
+      }
+    }
+  }
+
+  ionViewWillLeave() {
+    console.log("ionViewWillLeave");
+    if (this.videoElement) { // Assuming you have a video reference
+      this.videoElement.pause();
+    }
+  }
+
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      this.start = 0;
+      this.getData();
+      event.target.complete();
+    }, 2000);
+  }
+
+  toggleVideo() {
+    if (this.videoElementRef) {
+      this.videoElement = this.videoElementRef.nativeElement as HTMLVideoElement;
+
+      if (this.videoElement.paused) {
+        this.videoElement.play();
+      } else {
+        this.videoElement.pause();
+      }
+    }
   }
 }

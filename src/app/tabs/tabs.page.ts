@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpService } from '../services/http.service';
 import { AppService } from '../services/app.service';
-import { MenuController } from '@ionic/angular';
+import { Browser } from '@capacitor/browser'; 
+import { MenuController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tabs',
@@ -18,7 +19,8 @@ export class TabsPage implements OnInit {
   constructor(
     private router: Router,
     private httpService: HttpService,
-    private menuCtrl: MenuController
+    private menuCtrl: MenuController,
+    private navCtrl: NavController
   ) {
     this.MOBILE = localStorage.getItem('MOBILE');
     httpService.getUserViaMobile(this.MOBILE).subscribe((response: any) => {
@@ -65,7 +67,22 @@ export class TabsPage implements OnInit {
 
   logout() {
     localStorage.clear();
-    this.router.navigate(['/login'], { replaceUrl: true });
+    // this.router.navigateByUrl('/login');
+
+    const navigationExtras = { replaceUrl: true };
+    this.navCtrl.navigateForward(['/login'], navigationExtras);
+  }
+
+  connect(social: string) {
+    if (social === 'facebook') {
+      this.openSocial('https://www.facebook.com/people/Futures-Key/pfbid02JinJLJpBz9kYfuVZPGvwy46sskcFAscvfG9vmSho4A8CBNAbYdQuB6kdvKedFKUUl/?mibextid=ZbWKwL');
+    } else if (social === 'instagram') {
+      this.openSocial('https://www.instagram.com/fukey_education/');
+    }
+  }
+
+  async openSocial(link: string) {
+    await Browser.open({ url: link });
   }
 
 }

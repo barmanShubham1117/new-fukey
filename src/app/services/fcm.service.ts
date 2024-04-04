@@ -66,7 +66,7 @@ export class FcmService {
         PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
           console.log('Push notification received', notification);
 
-          this.dbService.insertMessage(notification.title!, notification.body!, 'dummy', new Date().getTime())
+          this.dbService.insertMessage(notification.title!, notification.body!, notification.data.story!, notification.data.img!, Math.floor(Date.now() / 1000))
         });
       }
 

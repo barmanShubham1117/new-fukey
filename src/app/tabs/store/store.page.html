@@ -1,17 +1,22 @@
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
   <div class="main-container">
     <div class="top-bar">
-      <ion-searchbar class="search-bar" show-clear-button="focus" (search)="searchCourse($event.target)" placeholder="Subject, Topic, etc ..."></ion-searchbar>
-      <ion-button class="filter-btn">
+      <ion-searchbar class="search-bar" show-clear-button="focus" (search)="searchCourse($event.target)" placeholder="Search"></ion-searchbar>
+      <!-- <ion-button class="filter-btn">
         <ion-icon slot="icon-only" name="options-outline"></ion-icon>
-      </ion-button>
+      </ion-button> -->
     </div>
 
     <div class="top-buttons">
-      <ion-button id="select-class-btn" class="my-btn" (click)="changeCategory($event)">All Courses</ion-button>
-      <ion-button id="popular-btn" class="inactive-btn my-btn" (click)="changeCategory($event)">Popular</ion-button>
+      <ion-button id="select-class-btn" class="my-btn" (click)="changeCategory($event)">All</ion-button>
+      <ion-button id="popular-btn" class="inactive-btn my-btn" (click)="changeCategory($event)">Top</ion-button>
       <ion-button id="free-btn" class="inactive-btn my-btn" (click)="changeCategory($event)">Free</ion-button>
-      <ion-button id="tests-btn" class="inactive-btn my-btn" (click)="changeCategory($event)">Tests</ion-button>
+      <ion-button id="english-btn" class="inactive-btn my-btn" (click)="changeCategory($event)">English</ion-button>
+      <ion-button id="hindi-btn" class="inactive-btn my-btn" (click)="changeCategory($event)">Hindi</ion-button>
     </div>
 
     <div class="grid-container">

@@ -224,4 +224,19 @@ export class HttpService {
     return this.http.get(environment.BASE_API_URL + 'all_live_classes');
   }
 
+  public getAndroidRatingLink() {
+    return this.http.get(environment.BASE_API_URL + 'get_android_rating_link');
+  }
+
+  public getAndroidShareLink() {
+    return this.http.get(environment.BASE_API_URL + 'get_android_share_link');
+  }
+  public getIosRatingLink() {
+    return this.http.get(environment.BASE_API_URL + 'get_ios_rating_link');
+  }
+
+  public getIosShareLink() {
+    return this.http.get(environment.BASE_API_URL + 'get_ios_share_link');
+  }
+
 }

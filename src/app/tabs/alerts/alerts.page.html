@@ -1,3 +1,14 @@
 <ion-content class="ion-padding">
+
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
   <div class="page-title">My Message</div>
+
+  <div class="message" *ngFor="let message of messages">
+    <div class="message-title">{{ message.notification_title }}</div>
+    <div class="message-content">{{ message.notification_body }}</div>
+    <div class="message-timestamp">{{ message.timestamp }}</div>
+  </div>
 </ion-content>

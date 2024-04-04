@@ -19,7 +19,7 @@ export class AppComponent {
     if (localStorage.getItem('SUBSCRIBE_ALL_TOPIC') !== 'true') {
       if (Capacitor.getPlatform() !== 'web') {
         fcmService.subscribe("all", 'SUBSCRIBE_ALL_TOPIC');
-        // localStorage.setItem('SUBSCRIBE_ALL_TOPIC', 'true');
+        localStorage.setItem('SUBSCRIBE_ALL_TOPIC', 'true');
       }
     }
 

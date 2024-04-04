@@ -44,8 +44,10 @@ export class StorePage implements OnInit {
       this.allCourses = this.courseList.filter((course: any) => course.rating > 4);
     } else if (this.category == "Free") {
       this.allCourses = this.courseList.filter((course: any) => course.is_free_course === "1");
-    } else if (this.category == "Tests") {
-      // This part will include courses from "Test" category
+    } else if (this.category == "English") {
+      this.allCourses = this.courseList.filter((course: any) => course.language === "english");
+    } else if (this.category == "Hindi") {
+      this.allCourses = this.courseList.filter((course: any) => course.language === "hindi");
     } else {
       this.allCourses = this.courseList;
     }
@@ -60,7 +62,7 @@ export class StorePage implements OnInit {
     };
     console.log(navigationExtras);
 
-    this.router.navigate(['/tabs/batches/course-content'], navigationExtras);
+    this.router.navigate(['/tabs/store/course-content'], navigationExtras);
   }
 
   changeCategory(event: any) {
@@ -78,6 +80,13 @@ export class StorePage implements OnInit {
     this.category = clickedButton.textContent;
 
     this.getSelectedCourses();
+  }
+
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      this.getAllCourses();
+      event.target.complete();
+    }, 2000);
   }
 }
 

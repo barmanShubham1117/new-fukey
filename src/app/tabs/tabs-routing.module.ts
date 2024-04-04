@@ -36,6 +36,24 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'home/course-content',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('./course-content/course-content.module').then( m => m.CourseContentPageModule)
+          }
+        ]
+      },
+      {
+        path: 'store/course-content',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('./course-content/course-content.module').then( m => m.CourseContentPageModule)
+          }
+        ]
+      },
+      {
         path: 'batches/course-content/study-material',
         children: [
           {

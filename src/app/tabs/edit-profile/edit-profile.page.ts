@@ -19,6 +19,7 @@ export class EditProfilePage implements OnInit {
     image: '',
   };
 
+  public classList: any;
   private MOBILE: any;
   private USER_ID: any;
   private selectedFile: any;
@@ -74,13 +75,21 @@ export class EditProfilePage implements OnInit {
     this.getMobileNumber();
   }
 
+  ionViewDidEnter() {
+    this.classList = null;
+    this.httpService.getClassList().subscribe((response: any) => {
+      this.classList = response;
+      console.log('CLASS LIST: ', this.classList);
+    })
+  }
+
   onSubmit() {
-    const fullName = this.el.nativeElement.querySelector("#fullName").value;  
-    const std = this.el.nativeElement.querySelector("#class").value;  
-    const school = this.el.nativeElement.querySelector("#school").value;  
-    const city = this.el.nativeElement.querySelector("#city").value;
-    const mobile = this.el.nativeElement.querySelector("#mobile").value;
-    // const email = this.el.nativeElement.querySelector("#email").value;
+    let fullName = this.el.nativeElement.querySelector("#fullName").value;  
+    let std = this.el.nativeElement.querySelector("#class").value;  
+    let school = this.el.nativeElement.querySelector("#school").value;  
+    let city = this.el.nativeElement.querySelector("#city").value;
+    let mobile = this.el.nativeElement.querySelector("#mobile").value;
+    // let email = this.el.nativeElement.querySelector("#email").value;
 
     if (fullName == '' || fullName == null) {
       this.appService.presentToast('Full Name is required.', "bottom");
@@ -95,6 +104,8 @@ export class EditProfilePage implements OnInit {
     //   this.appService.presentToast('Email is required.', "bottom");
     // } 
     else {
+      mobile = mobile.replace("+", "%2B");
+
       const formData = {
         fullName: fullName,
         class: std,

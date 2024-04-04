@@ -1,9 +1,14 @@
 <ion-content class="ion-padding">
-  <div class="page-title" (click)="navigateToMessages()">All Messages</div>
+  
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="page-title">All Messages</div>
 
   <div class="messages">
     <div class="grid-container">
-      <div class="grid-item" (click)="showMessages()">
+      <!-- <div class="grid-item" (click)="showMessages()">
         <div class="chat-image">
           <img src="/assets/logo.png" alt="" srcset="">
         </div>
@@ -20,14 +25,14 @@
           <div class="chat-title">{{ CLASS }}</div>
           <div class="last-message">{{ getLastMessage(CLASS) }}</div>
         </div>
-      </div>
-      <div class="grid-item" (click)="deleteMessages()" *ngFor="let course of enrolledCourses">
+      </div> -->
+      <div class="grid-item" *ngFor="let chat of chats" (click)="navigateToMessages(chat.notification_story)">
         <div class="chat-image">
-          <img src="{{ course.thumbnail }}" alt="" srcset="">
+          <img src="{{ chat.notification_image }}" alt="" srcset="">
         </div>
         <div class="chat-details">
-          <div class="chat-title">{{ course.title }}</div>
-          <div class="last-message">{{ getLastMessage(course.token) }}</div>
+          <div class="chat-title">{{ chat.notification_story }}</div>
+          <div class="last-message">{{ chat.notification_title }}</div>
         </div>
       </div>
     </div>

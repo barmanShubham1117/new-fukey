@@ -1,10 +1,15 @@
 <ion-content>
   <div class="main-layout">
 
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
     <!-- WELCOME NOTE STARTS HERE -->
 
     <div class="welcome">
-      <div class="profile-pic" style="background: url('{{ userpic }}');"></div>
+      <img class="profile-pic" *ngIf="userImage != null" [src]="userpic">
+      <div class="profile-pic" *ngIf="userImage == null"></div>
       <div class="welcome-note">
         <div class="welcome-title"><b>Welcome, {{ username }}!</b></div>
         <div class="welcome-subtitle">You have {{ noOfEnrolledCourse }} enrolled courses</div>
@@ -16,7 +21,7 @@
 
     <!-- INTRODUCTION VIDEO STARTS HERE -->
 
-    <video class="promo-video" src="assets/video/Introduction to Fukey Education.mp4" autoplay loop></video>
+    <video #videoElement class="promo-video" src="assets/video/Introduction to Fukey Education.mp4" autoplay loop (click)="toggleVideo()"></video>
 
     <!-- INTRODUCTION VIDEO ENDS HERE -->
 
@@ -50,7 +55,7 @@
               </div>
             </div>
           </div>
-          <div class="swiper-pagination" style="display: none;"></div>
+          <div class="swiper-pagination1" style="display: none;"></div>
         </div>
 
       </div>
@@ -78,7 +83,7 @@
             </div>
           </div>
 
-          <div class="swiper-pagination"></div>
+          <div class="swiper-pagination2"></div>
         </div>
 
       </div>
@@ -104,7 +109,7 @@
       </div>
       <!-- <ion-card style="margin: 0;"> -->
         <div class="subject-wrapper" *ngIf="subjectList.length > 0">
-          <div class="subject-item" *ngFor="let subject of subjectList">
+          <div class="subject-item" *ngFor="let subject of subjectList" (click)="navigateToCourseContentPage(subject.id)">
             <div class="subject-item-name">{{ extractSubjectName(subject.title) }}</div>
           </div>
         </div>
