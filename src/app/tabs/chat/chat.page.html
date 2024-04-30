@@ -6,7 +6,7 @@
 
   <div class="page-title">All Messages</div>
 
-  <div class="messages">
+  <div class="messages" *ngIf="isFound">
     <div class="grid-container">
       <!-- <div class="grid-item" (click)="showMessages()">
         <div class="chat-image">
@@ -28,7 +28,8 @@
       </div> -->
       <div class="grid-item" *ngFor="let chat of chats" (click)="navigateToMessages(chat.notification_story)">
         <div class="chat-image">
-          <img src="{{ chat.notification_image }}" alt="" srcset="">
+          <img src="assets/logo.png" alt="" srcset="">
+          <!-- <img src="{{ chat.notification_image }}" alt="" srcset=""> -->
         </div>
         <div class="chat-details">
           <div class="chat-title">{{ chat.notification_story }}</div>
@@ -36,5 +37,9 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div *ngIf="!isFound" class="no-result">
+    <img src="assets/no_messages.png" width="200px" height="200px" alt="" srcset="">
   </div>
 </ion-content>

@@ -4,8 +4,9 @@
 
   <div class="container">
 
-    <div class="profile-image" (click)="fileInput.click()" style="overflow: hidden;">
-      <input #fileInput type="file" (change)="onFileSelected($event)" style="display:none">
+    <div class="profile-image" style="overflow: hidden;">
+    <!-- <div class="profile-image" (click)="fileInput.click()" style="overflow: hidden;"> -->
+      <!-- <input #fileInput type="file" (change)="onFileSelected($event)" style="display:none"> -->
       <img *ngIf="user.image != null" [src]="user.image" alt="" srcset="" style="height: 100%; width: 100%;">
     </div>
 

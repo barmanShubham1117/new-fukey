@@ -12,6 +12,8 @@ export class ChatPage implements OnInit {
 
   public chats: any[] = [];
 
+  public isFound: boolean = false;
+
   constructor(
     private router: Router,
     private httpService: HttpService,
@@ -27,12 +29,19 @@ export class ChatPage implements OnInit {
     
     this.dbService.getChats().then((response: any) => {
       console.log(response);
-      this.chats = [];
-      for(let i = 0; i < response.length; i++) {
-        console.log(response.item(i));
+
+      if (response.length > 0) {
+        this.chats = [];
+        for(let i = 0; i < response.length; i++) {
+          console.log(response.item(i));
+          this.chats.push(response.item(i));
+        }
         
-        this.chats.push(response.item(i));
+        this.isFound = true;
+      } else {
+        this.isFound = false;
       }
+      console.log("isFound: " + this.isFound);
     });
   }
 

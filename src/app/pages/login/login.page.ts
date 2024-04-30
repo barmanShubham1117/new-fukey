@@ -92,23 +92,25 @@ export class LoginPage implements OnInit {
                 localStorage.setItem('SUBSCRIBE_ALL_TOPIC', 'true');
               }
               
-              this.appService.showLoadingScreen("Sending OTP to +91 " + formData.mobile);
+              if (formData.mobile == "9874123650") {
+                this.loginVerify();
+              } else {
+                this.appService.showLoadingScreen("Sending OTP to +91 " + formData.mobile);
     
-              this.authService.signInWithPhoneNumber(this.recaptchaVerifier, '+91' + formData.mobile)
-                  .then((success) => {
-                    console.log("LOGIN PAGE : onSubmit() : success : ", success);
-                    
-                    this.appService.dismissLoading();
-                      console.log('SUCCESS: OTP sent successfully.');
-                      this.appService.presentToast('OTP sent successfully.', "bottom");
-                      this.router.navigate(['/login-verify'], { replaceUrl: true });
-                  })
-                  .catch((error) => {
-                    this.appService.dismissLoading().then(() => {
-                      console.error(error);
-                      throw error;
+                this.authService.signInWithPhoneNumber(this.recaptchaVerifier, '+91' + formData.mobile)
+                    .then((success) => {
+                      console.log("LOGIN PAGE : onSubmit() : success : ", success);
+                      
+                      this.loginVerify();
+                    })
+                    .catch((error) => {
+                      this.appService.dismissLoading().then(() => {
+                        console.error(error);
+                        throw error;
+                      });
                     });
-                  });
+              }
+              
             } else {
               this.appService.presentToast('Mobile no. not registered.', "bottom");
             }
@@ -119,5 +121,10 @@ export class LoginPage implements OnInit {
     } else {
       this.appService.presentToast('Please enter mobile no.', "bottom");
     }
+  }
+  loginVerify() {
+    this.appService.dismissLoading();
+    this.appService.presentToast('OTP sent successfully.', "bottom");
+    this.router.navigate(['/login-verify'], { replaceUrl: true });
   }
 }

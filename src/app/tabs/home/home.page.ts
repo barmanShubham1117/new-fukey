@@ -10,6 +10,7 @@ import { Capacitor } from '@capacitor/core';
 import { StorageService } from 'src/app/services/storage.service';
 import { FcmService } from 'src/app/services/fcm.service';
 import { MatTabsModule } from '@angular/material/tabs';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-home',
@@ -47,6 +48,17 @@ export class HomePage implements OnInit {
   public showEnrolledCourses: boolean = false;
   public FCM_TOKEN: string = '';
 
+  public testimonials: any = [];
+  public isTestimonyAvailabe: boolean = false;
+  idx = 0;
+  private myInterval: any;
+
+  public testimonialName: string = "";
+  public testimonialClass: string = "";
+  public testimonialSchool: string = "";
+  public testimonialDesc: string = "";
+  public testimonialImage: string = "";
+
   start: any;
   tap = 0;
   selectedItem: string | null = null;
@@ -63,13 +75,13 @@ export class HomePage implements OnInit {
     if (!/^\d+$/.test(timestampString)) {
       return null;
     }
-  
+
     const date = new Date(Number(timestampString) * 1000);
-  
+
     const hours = date.getHours() % 12 || 12;
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const period = date.getHours() >= 12 ? 'PM' : 'AM';
-  
+
     return `${hours.toString().padStart(2, '0')}:${minutes} ${period}`;
   };
 
@@ -88,14 +100,14 @@ export class HomePage implements OnInit {
     };
 
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                        'July', 'August', 'September', 'October', 'November', 'December'];
+      'July', 'August', 'September', 'October', 'November', 'December'];
     const day = date.getDate();
     const monthIndex = date.getMonth();
     const year = date.getFullYear();
 
     return `${day} ${monthNames[monthIndex]}, ${year}`;
   };
-  
+
   public getCourses = (medium: string, category: string) => {
     this.courseList = [];
     let list = [];
@@ -109,10 +121,6 @@ export class HomePage implements OnInit {
         this.courseList.push(c);
       }
     }
-    // console.log("Medium: " + medium);
-    // console.log("Category ID: " + category);
-    // console.log("List: " + this.courseList.length);
-    
     return this.courseList;
   }
 
@@ -122,7 +130,7 @@ export class HomePage implements OnInit {
     const subjectName = parts[0];
     return subjectName;
   }
-  
+
   subscribe: any;
   videoElement: any;
 
@@ -150,7 +158,7 @@ export class HomePage implements OnInit {
 
         const currentUrl = window.location.pathname;
         console.log("HOME PAGE : BACK PRESSED : currrentUrl : ", currentUrl);
-        
+
 
         if (currentUrl === '/tabs/home') {
           if (this.tap == 0) {
@@ -177,15 +185,15 @@ export class HomePage implements OnInit {
 
   onItemClick(selectedItem: HTMLElement, classId: string) {
     if (this.itemListRef) {
-    console.log('Title: ', selectedItem.innerHTML);
-    console.log('ID: ', classId);
-    this.classNo = classId;
+      console.log('Title: ', selectedItem.innerHTML);
+      console.log('ID: ', classId);
+      this.classNo = classId;
 
-    const items = this.itemListRef.nativeElement.querySelectorAll('.class-item');
-    items.forEach((item: any) => item.classList.remove('selected'));
-    selectedItem.classList.add('selected');
+      const items = this.itemListRef.nativeElement.querySelectorAll('.class-item');
+      items.forEach((item: any) => item.classList.remove('selected'));
+      selectedItem.classList.add('selected');
 
-    this.showSubjects();
+      this.showSubjects();
     } else {
       console.log(this.itemListRef);
     }
@@ -202,12 +210,14 @@ export class HomePage implements OnInit {
     console.log(this.isChecked);
     console.log(this.subjectList);
     console.log(this.allCourses);
-    
+
+    this.createSubarrays();
   }
 
   goToBatchesTab() {
     this.navCtrl.navigateRoot('/tabs/batches');
   }
+
   goToStoreTab() {
     this.navCtrl.navigateRoot('/tabs/store');
   }
@@ -236,11 +246,11 @@ export class HomePage implements OnInit {
   async getAllCourses() {
     this.httpService.getAllCourses().subscribe((response: any) => {
       this.allCourses = response;
-      for(const course of this.allCourses) {
-        if(course.language == 'english') {
+      for (const course of this.allCourses) {
+        if (course.language == 'english') {
           this.englishCourseList.push(course);
         }
-        else if(course.language == 'hindi') {
+        else if (course.language == 'hindi') {
           this.hindiCourseList.push(course);
         }
       }
@@ -253,7 +263,7 @@ export class HomePage implements OnInit {
     this.httpService.getClassList().subscribe((response: any) => {
       this.classList = response;
       console.log("Class List: ", this.classList);
-      
+
     });
   }
 
@@ -301,24 +311,24 @@ export class HomePage implements OnInit {
         });
 
         // if (localStorage.getItem('SUBSCRIBE_COURSE_TOPIC') !== 'true') {
-          if (Capacitor.getPlatform() !== 'web') {
-            console.log("Topics to subscribe:");
-            
-            let eCourses: any[] = []
-            this.enrolledCourses.forEach((course: any) => {
-              console.log(course.title + ': ' + course.topic);
-              eCourses.push(course.id);
-              
-              this.fcmService.subscribe(course.topic, 'SUBSCRIBE_COURSE_TOPIC');
-            });
-            console.log('ENROLLED_COURSES', eCourses);
-            
-            localStorage.setItem('ENROLLED_COURSES', JSON.stringify(eCourses));
-          }
+        if (Capacitor.getPlatform() !== 'web') {
+          console.log("Topics to subscribe:");
+
+          let eCourses: any[] = []
+          this.enrolledCourses.forEach((course: any) => {
+            console.log(course.title + ': ' + course.topic);
+            eCourses.push(course.id);
+
+            this.fcmService.subscribe(course.topic, 'SUBSCRIBE_COURSE_TOPIC');
+          });
+          console.log('ENROLLED_COURSES', eCourses);
+
+          localStorage.setItem('ENROLLED_COURSES', JSON.stringify(eCourses));
+        }
         // }
 
       } else {
-        
+
         // const sec = this.el.nativeElement.querySelector('#enrolled-batches');
         // sec.style.display = 'block';
 
@@ -358,13 +368,14 @@ export class HomePage implements OnInit {
     }
     this.getAllCourses();
     this.getClassList();
+    this.getTestimonial();
   }
 
   createSubarrays() {
-    const originalLength = this.courseByClass.length;
-
+    const originalLength = this.subjectList.length;
+    this.newAllCourses = [];
     for (let i = 0; i < originalLength; i += 2) {
-      const subArray = this.courseByClass.slice(i, i + 2);
+      const subArray = this.subjectList.slice(i, i + 2);
       this.newAllCourses.push(subArray);
     }
     console.log('NEW ARRAY: ', this.newAllCourses);
@@ -412,7 +423,7 @@ export class HomePage implements OnInit {
 
   ionViewDidEnter() {
     console.log("ionViewDidEnter");
-    
+
     if (this.videoElementRef) {
       this.videoElement = this.videoElementRef.nativeElement as HTMLVideoElement;
 
@@ -427,6 +438,8 @@ export class HomePage implements OnInit {
     if (this.videoElement) { // Assuming you have a video reference
       this.videoElement.pause();
     }
+
+    clearInterval(this.myInterval);
   }
 
   handleRefresh(event: any) {
@@ -448,4 +461,45 @@ export class HomePage implements OnInit {
       }
     }
   }
+
+  async getTestimonial() {
+    this.httpService.getTestimonial().subscribe((response: any) => {
+      console.log(response);
+      this.testimonials = response.testimony;
+
+      if (this.testimonials.length > 0) {
+        this.myInterval = setInterval(() => {
+          this.testimonialName = this.testimonials[this.idx]?.name;
+          this.testimonialImage = environment.BASE_URL + "uploads/testimony/thumbnail/" + this.testimonials[this.idx]?.image;
+          this.testimonialClass = this.testimonials[this.idx]?.class + ", " + this.testimonials[this.idx].school;
+          this.testimonialDesc = this.testimonials[this.idx]?.testimony;
+
+          this.isTestimonyAvailabe = true;
+  
+          console.log(this.idx);
+          this.idx++;
+          if (this.idx > (this.testimonials.length-1)) {
+            this.idx = 0;
+          }
+        }, 12000);
+      }
+    })
+  }
+
+  // updateTestimonials() {  
+  //   let idx = 1
+  //   if (!this.testimonials) {
+  //   } else {
+  //     this.testimonialName = this.testimonials[idx]?.name;
+  //     this.testimonialImage = this.testimonials[idx]?.photo;
+  //     this.testimonialClass = this.testimonials[idx]?.position;
+  //     this.testimonialDesc = this.testimonials[idx]?.text;
+
+  //     console.log(idx);
+  //     idx++;
+  //     if (idx > 4) {
+  //       idx = 0;
+  //     }
+  //   }
+  // }
 }

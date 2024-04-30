@@ -15,17 +15,17 @@
     </ion-segment>
 
     <div *ngIf="activeTab == 'videos'" class="tab-contents">
-      <div class="top-bar">
+      <!-- <div class="top-bar">
         <ion-searchbar class="search-bar" show-clear-button="focus" placeholder="Search" [(ngModel)]="videoBatch"></ion-searchbar>
-      </div>
+      </div> -->
 
       <div class="secondary-container">
-        <span>TOTAL ({{ this.videos.length }})</span>
+        <!-- <span>TOTAL ({{ this.videos.length }})</span> -->
 
-        <div class="sort-area">
+        <!-- <div class="sort-area">
           <ion-icon name="funnel"></ion-icon>
           <span>SORT</span>
-        </div>
+        </div> -->
       </div>
       <div *ngIf="videos.length > 0">
       <ion-card *ngFor="let item of videos | filterpipe: videoBatch : searchableList">
@@ -46,23 +46,23 @@
         </ion-card-header>
       </ion-card>
       </div>
-      <div *ngIf="videos.length == 0">
-          <p>No video found.</p>
+      <div *ngIf="videos.length == 0" class="not-found">
+        <img src="assets/no_result_found.png" width="200px" height="200px" alt="" srcset="">
       </div>
     </div>
     
     <div *ngIf="activeTab == 'documents'" class="tab-contents">
       <div class="top-bar">
-        <ion-searchbar class="search-bar" show-clear-button="focus" placeholder="Search" [(ngModel)]="documentBatch"></ion-searchbar>
+        <!-- <ion-searchbar class="search-bar" show-clear-button="focus" placeholder="Search" [(ngModel)]="documentBatch"></ion-searchbar> -->
       </div>
 
       <div class="secondary-container">
-        <span>TOTAL ({{ this.pdfs.length }})</span>
+        <!-- <span>TOTAL ({{ this.pdfs.length }})</span> -->
 
-        <div class="sort-area">
+        <!-- <div class="sort-area">
           <ion-icon name="funnel"></ion-icon>
           <span>SORT</span>
-        </div>
+        </div> -->
       </div>
 
       <!-- <ion-card>
@@ -99,8 +99,8 @@
           </ion-card-header>
         </ion-card>
         </div>
-        <div *ngIf="pdfs.length == 0">
-          <p>No document found.</p>
+        <div *ngIf="pdfs.length == 0" class="not-found">
+          <img src="assets/no_result_found.png" width="200px" height="200px" alt="" srcset="">
       </div>
     </div>
 

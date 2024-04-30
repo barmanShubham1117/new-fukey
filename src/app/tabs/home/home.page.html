@@ -91,6 +91,30 @@
 
     <!-- ENROLLED BATCHES ENDS HERE -->
 
+    <!-- VISION-MISSION STARTS HERE -->
+
+    <ion-card class="card">
+      <ion-card-header>
+        <ion-card-title class="card-title">VISION</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="card-content">
+        Fukey Education envisions a world where learning knows no boundaries and every individual has the opportunity to unlock their full potential.
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="card">
+      <ion-card-header>
+        <ion-card-title class="card-title">MISSION</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content class="card-content">
+        Our mission is to revolutionize education by providing accessible, engaging, and personalized learning experiences that empower individuals to thrive in an ever-changing world.
+      </ion-card-content>
+    </ion-card>
+
+    <!-- VISION-MISSION ENDS HERE -->
+
 
     <!-- SUBJECT-WISE CATEGORIZATION STARTS HERE -->
 
@@ -107,13 +131,50 @@
           {{ class.name }}
         </div>
       </div>
-      <!-- <ion-card style="margin: 0;"> -->
         <div class="subject-wrapper" *ngIf="subjectList.length > 0">
           <div class="subject-item" *ngFor="let subject of subjectList" (click)="navigateToCourseContentPage(subject.id)">
+            <div style="margin: 1rem 0;">
+              <i class="fas fa-puzzle-piece" style="font-size: 2.5rem; color: #3582f5;"></i>
+            </div>
             <div class="subject-item-name">{{ extractSubjectName(subject.title) }}</div>
           </div>
         </div>
-      <!-- </ion-card> -->
+    </div>
+
+    <div class="for-you" *ngIf="subjectList.length > 0">
+      <div class="for-you-content">
+        <div class="swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide for-you-slide" *ngFor="let all of newAllCourses;">
+              <div class="for-you-course-container" *ngFor="let course of all;" (click)="navigateToCourseContentPage(course.id)">
+                <div class="for-you-course-image" style="background: url('{{course.thumbnail}}');background-position: center; background-repeat: no-repeat; background-size: cover;"></div>
+                <div class="for-you-course-details">
+                  <div class="for-you-course-name">{{ course.title }}</div>
+                  <div class="course-key-points">
+                    <div>
+                      <ion-icon class="library" name="library"></ion-icon> {{ course.level }}
+                    </div>
+                    <div>
+                      <ion-icon class="star" name="star"></ion-icon> {{ course.number_of_ratings }}/5.0 Rating
+                    </div>
+                    <div>
+                      <ion-icon class="people" name="people"></ion-icon> {{ course.total_enrollment }}
+                    </div>
+                  </div>
+                  <div class="view-details">
+                    <a>View Details<b>></b></a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          
+          </div>
+
+          <!-- <div class="swiper-pagination"></div> -->
+
+        </div>
+      </div>
     </div>
 
     <!-- SUBJECT-WISE CATEGORIZATION ENDS HERE -->
@@ -121,7 +182,7 @@
 
     <!-- FOR-YOU STARTS HERE -->
 
-    <div class="for-you">
+    <!-- <div class="for-you">
       <div class="for-you-header">
         <span id="for-you-title"><b>For You</b></span>
         <span id="for-you-all" (click)="goToStoreTab()"><a>View All<b>></b></a></span>
@@ -158,13 +219,31 @@
           
           </div>
 
-          <!-- <div class="swiper-pagination"></div> -->
+          <div class="swiper-pagination"></div>
 
+        </div>
+      </div>
+    </div> -->
+
+    <!-- FOR-YOU ENDS HERE -->
+
+    <!-- TESTIMONIAL STARTS HERE -->
+
+    <div class="testimonial-container" *ngIf="isTestimonyAvailabe">
+      <div class="progress-bar"></div>
+      <div class="fas fa-quote-right fa-quote"></div>
+      <div class="fas fa-quote-left fa-quote"></div>
+      <p class="testimonial">{{testimonialDesc}}</p>
+      <div class="user">
+        <img src="{{testimonialImage}}" alt="{{testimonialName}}" class="user-image">
+        <div class="user-details">
+          <h4 class="username">{{testimonialName}}</h4>
+          <p class="role">{{testimonialClass}}</p>
         </div>
       </div>
     </div>
 
-    <!-- FOR-YOU ENDS HERE -->
+    <!-- TESTIMONIAL ENDS HERE -->
 
   </div>
 </ion-content>

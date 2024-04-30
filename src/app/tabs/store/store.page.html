@@ -5,7 +5,7 @@
   
   <div class="main-container">
     <div class="top-bar">
-      <ion-searchbar class="search-bar" show-clear-button="focus" (search)="searchCourse($event.target)" placeholder="Search"></ion-searchbar>
+      <ion-searchbar class="search-bar" show-clear-button="always" (search)="searchCourse($event.target)" placeholder="Search" debounce="1000" (ionInput)="textChanged($event.target)"></ion-searchbar>
       <!-- <ion-button class="filter-btn">
         <ion-icon slot="icon-only" name="options-outline"></ion-icon>
       </ion-button> -->
@@ -19,7 +19,7 @@
       <ion-button id="hindi-btn" class="inactive-btn my-btn" (click)="changeCategory($event)">Hindi</ion-button>
     </div>
 
-    <div class="grid-container">
+    <div class="grid-container" *ngIf="isFound">
 
       <div *ngFor="let course of allCourses;" class="grid-item" (click)="navigateToCourseContentPage(course.id)">
         <img src="{{ course.thumbnail }}" alt="" srcset="">
@@ -34,6 +34,10 @@
         </div>
       </div>
 
+    </div>
+
+    <div *ngIf="!isFound" class="no-result">
+      <img src="assets/no_result_found.png" width="200px" height="200px" alt="" srcset="">
     </div>
   </div>
 </ion-content>

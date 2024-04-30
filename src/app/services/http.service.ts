@@ -239,4 +239,8 @@ export class HttpService {
     return this.http.get(environment.BASE_API_URL + 'get_ios_share_link');
   }
 
+  public getTestimonial() {
+    return this.http.get(environment.BASE_API_URL + 'student_testimony');
+  }
+
 }

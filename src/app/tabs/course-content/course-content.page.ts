@@ -19,7 +19,9 @@ export class CourseContentPage implements OnInit {
   public showIframe = false;
   public isCourseDataAvailable: boolean = false;
   public isContentDataAvailable: boolean = false;
+
   public isEnrolledCourse: boolean = false;
+  public enrolledCourses: any[] =[];
 
   public COURSE_DATA: any;
   public CONTENT_DATA: any;
@@ -50,21 +52,32 @@ export class CourseContentPage implements OnInit {
         console.log('COURSE_DATA: ', this.COURSE_DATA);
 
         this.isCourseDataAvailable = true;
+        this.appService.dismissLoading();
 
-        // this.isEnrolledCourse = this.checkCourse();
-        // console.log(this.isEnrolledCourse);
-        
-
-        this.getContents();
+        this.getEnrolledCourses();
       });
   }
 
-  checkCourse() {
-    let eCourses = localStorage.getItem('ENROLLED_COURSES')!.split(',');
-    console.log("eCourses: ", eCourses);
-    
-    return eCourses.includes(this.COURSE_ID);
+  getEnrolledCourses(): boolean {
+    this.httpService.getEnrolledCourses(this.TOKEN).subscribe((response: any) => {
+      this.enrolledCourses = response;
+      console.log('Enrolled Course: ', this.enrolledCourses);
+
+      if (this.enrolledCourses.length > 0) {
+        for (let i = 0; i < this.enrolledCourses.length; i++) {
+          console.log(this.enrolledCourses[i].id);
+          console.log(this.COURSE_DATA.id);
+
+          if (this.enrolledCourses[i].id == this.COURSE_DATA.id) {
+            this.isEnrolledCourse = true;
+            this.getContents();  
+          }
+        }
+      }
+    });
+    return this.isEnrolledCourse;
   }
+
   getContents() {
     this.httpService.getSectionsAndLessonsUsingCourseID(this.TOKEN, this.COURSE_ID)
       .subscribe((response: any) => {
