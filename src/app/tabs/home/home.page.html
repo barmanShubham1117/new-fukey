@@ -123,7 +123,10 @@
         <div class="button r" id="button-3">
           <input type="checkbox" class="checkbox" (change)="onCheckboxChange($event)" checked="{{ isChecked }}"/>
           <div class="knobs"></div>
-          <div class="layer"></div>
+          <div class="layer">
+            <span style="color: #f44336">ENGLISH</span>
+            <span style="color: #03a9f4">HINDI</span>
+          </div>
         </div>
       </div>
       <div class="class-wrapper" #classesList>
@@ -134,7 +137,7 @@
         <div class="subject-wrapper" *ngIf="subjectList.length > 0">
           <div class="subject-item" *ngFor="let subject of subjectList" (click)="navigateToCourseContentPage(subject.id)">
             <div style="margin: 1rem 0;">
-              <i class="fas fa-puzzle-piece" style="font-size: 2.5rem; color: #3582f5;"></i>
+              <i class="{{ subject.icon }}" style="font-size: 2.5rem; color: #3582f5;"></i>
             </div>
             <div class="subject-item-name">{{ extractSubjectName(subject.title) }}</div>
           </div>

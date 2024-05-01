@@ -246,6 +246,8 @@ export class HomePage implements OnInit {
   async getAllCourses() {
     this.httpService.getAllCourses().subscribe((response: any) => {
       this.allCourses = response;
+      console.log(response);
+      
       for (const course of this.allCourses) {
         if (course.language == 'english') {
           this.englishCourseList.push(course);
