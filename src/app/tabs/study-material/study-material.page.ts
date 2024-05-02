@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
@@ -7,11 +7,21 @@ import { HttpService } from 'src/app/services/http.service';
 import { AppService } from 'src/app/services/app.service';
 
 import { DbService } from 'src/app/services/db.service';
+import { HammerGestureConfig } from '@angular/platform-browser';
+import * as Hammer from 'hammerjs';
+
 
 @Component({
   selector: 'app-study-material',
   templateUrl: './study-material.page.html',
   styleUrls: ['./study-material.page.scss'],
+  providers: [
+    {
+      provide: HammerGestureConfig,
+      useClass:  HammerGestureConfig,
+      multi: true
+    }
+  ]
 })
 export class StudyMaterialPage implements OnInit {
 
@@ -33,13 +43,21 @@ export class StudyMaterialPage implements OnInit {
   SDK_KEY: string = "rwSerL6sSma9PNEmQ1uUrw";
   SDK_SECRET: string = "XS3EC7ymY2S94GdAKl1q17TQdpRzbzSm";
   public zoom_active= false;
+
+  zoom = 1;
+  z = 1;
+  minZoom = 0.5;
+  maxZoom = 3;
+  @ViewChild('pdfContainer') pdfContainer: ElementRef | undefined;
+
   constructor(
     private sanitizer: DomSanitizer,
     private router: Router,
     private loader: LoadingController,
     private httpService: HttpService,
     private appService: AppService,
-    private dbService:DbService
+    private dbService:DbService,
+    private hammerConfig: HammerGestureConfig
   ) { 
   }
 
@@ -68,6 +86,15 @@ export class StudyMaterialPage implements OnInit {
     // if (this.currentLesson.lesson_type == 'quiz') {
     //   this.quizUrl = "https://learn.rahulshrivastava.in/home/start_quiz/" + this.currentLesson.id + "/" + this.USER_ID;
     // }
+  }
+
+  ngAfterViewInit() {
+    const hammer = new Hammer(this.pdfContainer!.nativeElement);
+    hammer.get('pinch').set({enable: true});
+    hammer.on('pinch', (ev) => {
+      this.zoom = ev.scale;
+      console.log("ZOOM2: " + this.zoom);
+    });
   }
 
   async download() {

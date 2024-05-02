@@ -23,8 +23,10 @@
     </div>
 
     <div *ngIf="currentLesson.lesson_type === 'other'">
+      <div #pdfContainer class="pdf-container">
       <pdf-viewer [src]="currentLesson.attachment_url" [render-text]="true" [original-size]="false" [fit-to-page]="true"
-        style="width: 100%; height: 30rem"></pdf-viewer>
+        style="width: 100%; height: 30rem" [zoom]="zoom"></pdf-viewer>
+      </div>
         <button class="downloadBtn" *ngIf="this.fileDownloaded">Offline downloaded</button>
       <button class="downloadBtn" *ngIf="!this.fileDownloaded" (click)="download()">Download</button>
     </div>
