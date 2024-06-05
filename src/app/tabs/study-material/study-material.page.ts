@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, Platform } from '@ionic/angular';
 import { HttpService } from 'src/app/services/http.service';
 
 import { AppService } from 'src/app/services/app.service';
@@ -9,6 +9,7 @@ import { AppService } from 'src/app/services/app.service';
 import { DbService } from 'src/app/services/db.service';
 import { HammerGestureConfig } from '@angular/platform-browser';
 import * as Hammer from 'hammerjs';
+import { Capacitor } from '@capacitor/core';
 
 
 @Component({
@@ -49,10 +50,12 @@ export class StudyMaterialPage implements OnInit {
   minZoom = 0.5;
   maxZoom = 3;
   @ViewChild('pdfContainer') pdfContainer: ElementRef | undefined;
+  @ViewChild('pdfViewerOnDemand') pdfViewerOnDemand: any;
 
   constructor(
     private sanitizer: DomSanitizer,
     private router: Router,
+    private platform: Platform,
     private loader: LoadingController,
     private httpService: HttpService,
     private appService: AppService,
@@ -83,18 +86,14 @@ export class StudyMaterialPage implements OnInit {
     this.currentLesson.instructor_name  = this.courseData.instructor_name;
     this.currentLesson.course_name  = this.courseData.title;
     await this.isFileDownloaded();
-    // if (this.currentLesson.lesson_type == 'quiz') {
-    //   this.quizUrl = "https://learn.rahulshrivastava.in/home/start_quiz/" + this.currentLesson.id + "/" + this.USER_ID;
-    // }
-  }
 
-  ngAfterViewInit() {
-    const hammer = new Hammer(this.pdfContainer!.nativeElement);
-    hammer.get('pinch').set({enable: true});
-    hammer.on('pinch', (ev) => {
-      this.zoom = ev.scale;
-      console.log("ZOOM2: " + this.zoom);
-    });
+    this.checkButtons();
+
+    if (Capacitor.getPlatform() == 'android') {
+      this.platform.backButton.subscribeWithPriority(999, () => {
+        window.history.back();
+      })
+    }
   }
 
   async download() {
@@ -204,11 +203,11 @@ export class StudyMaterialPage implements OnInit {
     console.log('BEFORE: ', this.lessonIndex);
 
     if (this.chapterIndex <= 0) {
-      if (this.lessonIndex <= 0) {
-        // Last chapter, so do nothing.
-        document.getElementById('previous-btn')!.style.backgroundColor = '#8d8f93';
-      } else {
+      if (this.lessonIndex != 0) {
+        document.getElementById('previous-btn')!.style.backgroundColor = '#1A4789';
+        this.isPreviousBtnDisabled = false;
         this.lessonIndex--;
+        this.setData();
       }
     } else {
       if (this.lessonIndex <= 0) {
@@ -217,7 +216,22 @@ export class StudyMaterialPage implements OnInit {
       } else {
         this.lessonIndex--;
       }
+      this.setData();
     }
+
+    await this.isFileDownloaded();
+    this.refreshPdf();
+    this.checkButtons();
+  }
+  refreshPdf() {
+    if (this.currentLesson.lesson_type == 'other') {
+      setTimeout(() => {
+        this.pdfViewerOnDemand.refresh();
+      }, 1000);
+    }
+  }
+
+  setData() {
     this.fileDownloaded = false;
     this.currentLesson = this.data[this.chapterIndex].lessons[this.lessonIndex];
     this.currentLesson.instructor_name  = this.courseData.instructor_name;
@@ -230,8 +244,23 @@ export class StudyMaterialPage implements OnInit {
       chapterIndex: this.chapterIndex,
       lessonIndex: this.lessonIndex
     }
+  }
 
-    await this.isFileDownloaded();
+  checkButtons() {
+    if ((this.chapterIndex == 0) && (this.lessonIndex == 0)) {
+      document.getElementById('previous-btn')!.style.backgroundColor = '#8d8f93';
+      this.isPreviousBtnDisabled = true;
+    } else {
+      document.getElementById('previous-btn')!.style.backgroundColor = '#1A4789';
+      this.isPreviousBtnDisabled = false;
+    }
+    if ((this.chapterIndex == this.data.length - 1) && (this.lessonIndex == (this.data[this.chapterIndex].lessons.length - 1))) {
+      document.getElementById('next-btn')!.style.backgroundColor = '#8d8f93';
+      this.isNextBtnDisabled = true;
+    } else {
+      document.getElementById('next-btn')!.style.backgroundColor = '#1A4789';
+      this.isNextBtnDisabled = false;
+    }
   }
   
   async onNextBtnPressed() {
@@ -239,11 +268,11 @@ export class StudyMaterialPage implements OnInit {
     console.log('BEFORE: ', this.lessonIndex);
 
     if (this.chapterIndex >= (this.data.length - 1)) {
-      if (this.lessonIndex >= (this.data[this.chapterIndex].lessons.length - 1)) {
-        // Last chapter, so do nothing.
-        document.getElementById('next-btn')!.style.backgroundColor = '#8d8f93';
-      } else {
+      if (this.lessonIndex != (this.data[this.chapterIndex].lessons.length - 1)) {
+        document.getElementById('next-btn')!.style.backgroundColor = '#1A4789';
+        this.isNextBtnDisabled = false;
         this.lessonIndex++;
+        this.setData();
       }
     } else {
       if (this.lessonIndex >= (this.data[this.chapterIndex].lessons.length - 1)) {
@@ -252,21 +281,12 @@ export class StudyMaterialPage implements OnInit {
       } else {
         this.lessonIndex++;
       }
-    }
-    this.fileDownloaded = false;
-    this.currentLesson = this.data[this.chapterIndex].lessons[this.lessonIndex];
-    this.currentLesson.instructor_name  = this.courseData.instructor_name;
-    this.currentLesson.course_name  = this.courseData.title;
-    console.log("Current Course Name",this.currentLesson.course_name);
-
-    this.all = {
-      course: this.courseData,
-      data: this.data,
-      chapterIndex: this.chapterIndex,
-      lessonIndex: this.lessonIndex
+      this.setData();
     }
 
     await this.isFileDownloaded();
+    this.refreshPdf();
+    this.checkButtons();
   }
 
   async closeQuizComponent(is_next_btn_pressed: any) {

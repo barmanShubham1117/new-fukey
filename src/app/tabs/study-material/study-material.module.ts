@@ -16,6 +16,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatButtonModule} from '@angular/material/button';
+import { PdfJsViewerModule } from "ng2-pdfjs-viewer";
 @NgModule({
   imports: [
     CommonModule,
@@ -29,6 +30,7 @@ import {MatButtonModule} from '@angular/material/button';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    PdfJsViewerModule
   ],
   declarations: [StudyMaterialPage,QuizComponent],
   providers:[SQLite,File]

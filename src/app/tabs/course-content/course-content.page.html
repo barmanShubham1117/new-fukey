@@ -67,7 +67,7 @@
                 <ion-icon name="stats-chart-outline"></ion-icon>
               </div>
               <div class="lesson-title">{{ lesson.title }}</div>
-              <div class="lesson-duration">{{ lesson.duration }}</div>
+              <div class="lesson-duration" *ngIf="lesson.lesson_type == 'video';">{{ lesson.duration }}</div>
             </div>
           </div>
         </div>
