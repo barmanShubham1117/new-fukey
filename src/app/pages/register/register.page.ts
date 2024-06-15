@@ -117,7 +117,7 @@ export class RegisterPage implements OnInit {
               localStorage.setItem('MOBILE', formData.mobile);
               localStorage.setItem('EMAIL', formData.email);
 
-              if (formData.mobile == "9874123650") {
+              if (formData.mobile == "2468135790") {
                 this.sendOtp();
               } else {
                 this.auth.signInWithPhoneNumber(this.recaptchaVerifier, '+91' + formData.mobile)

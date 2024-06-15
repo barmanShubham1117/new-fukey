@@ -29,7 +29,7 @@ export class LoginVerifyPage implements OnInit {
     if (formData.otp != '' || formData.otp != null || formData.otp != undefined) {
       console.log(formData);
 
-      if (this.MOBILE == "9874123650") {
+      if (this.MOBILE == "2468135790") {
         if (formData.otp == "242526") {
           this.getUser();
         } else {

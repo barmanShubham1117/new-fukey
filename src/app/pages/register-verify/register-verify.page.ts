@@ -39,7 +39,7 @@ export class RegisterVerifyPage implements OnInit {
     console.log(formData);
     this.appService.showLoadingScreen("Verifying...")
 
-    if (this.mobile == "9874123650") {
+    if (this.mobile == "2468135790") {
       this.updateStatus();
     } else {
       this.auth.enterVerificationCode(formData.otp)
