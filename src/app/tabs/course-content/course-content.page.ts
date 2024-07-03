@@ -4,7 +4,7 @@ import { AppService } from 'src/app/services/app.service';
 import { HttpService } from 'src/app/services/http.service';
 import { Browser } from '@capacitor/browser'; 
 import { environment } from 'src/environments/environment';
-
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 @Component({
   selector: 'app-course-content',
   templateUrl: './course-content.page.html',
@@ -30,7 +30,8 @@ export class CourseContentPage implements OnInit {
   constructor(
     private appService: AppService,
     private httpService: HttpService,
-    private router: Router
+    private router: Router,
+    private inAppBrowser: InAppBrowser
   ) { 
     this.appService.showLoadingScreen('Loading course content..');
   }
@@ -108,10 +109,7 @@ export class CourseContentPage implements OnInit {
 
   openStudyMaterial(data: any, chapterIndex: any, lessonIndex: any, course_id: any, lesson_id: any) {
     this.httpService.updateUserCurrentProgress(this.USER_ID, course_id, lesson_id).subscribe((response: any) => {
-      console.log(data);
-      console.log(chapterIndex + ' : ' + lessonIndex);
-      console.log(data[chapterIndex].lessons[lessonIndex]);
-      
+     
       if (
           data != undefined || data != null || 
           chapterIndex != undefined || chapterIndex != null || 
@@ -140,6 +138,7 @@ export class CourseContentPage implements OnInit {
     // }
     // this.router.navigate(['/zoom-non-login'], navigationExtras);
     
-    await Browser.open({ url: environment.BASE_URL+'addons/liveclass/join/'+this.COURSE_ID });
+    //await Browser.open({ url: environment.BASE_URL+'addons/liveclass/join/'+this.COURSE_ID });
+    await this.inAppBrowser.create(environment.BASE_URL+'addons/liveclass/join/'+this.COURSE_ID, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=no,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff');
   }
 }
