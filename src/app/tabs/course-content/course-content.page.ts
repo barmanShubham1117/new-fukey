@@ -26,6 +26,14 @@ export class CourseContentPage implements OnInit {
   public COURSE_DATA: any;
   public CONTENT_DATA: any;
   public COURSE_ID: any;
+
+  public allLiveClasses: any;
+
+  public isClassStarted = (timestampString: any) => {
+    const timestamp = Number(timestampString);
+    const currentTime = Date.now();
+    return currentTime / 1000 >= timestamp;
+  };
   
   constructor(
     private appService: AppService,
@@ -131,7 +139,7 @@ export class CourseContentPage implements OnInit {
       }
     })
   }
-  async joinMeeting(){
+  async joinMeeting(link: string){
     // const navigationExtras: NavigationExtras = {
     //   state: {
     //     course: this.COURSE_DATA
@@ -140,6 +148,6 @@ export class CourseContentPage implements OnInit {
     // }
     // this.router.navigate(['/zoom-non-login'], navigationExtras);
     
-    await Browser.open({ url: environment.BASE_URL+'addons/liveclass/join/'+this.COURSE_ID });
+    await Browser.open({ url: link });
   }
 }

@@ -18,7 +18,7 @@
       <div class="content-tab">{{ COURSE_DATA.level | uppercase }}</div>
     </div>
 
-    <div class="join-meeting" *ngIf="COURSE_DATA.live_class_datetime" (click)="joinMeeting()">Join Live Class<br>{{ COURSE_DATA.live_class_datetime }}</div>
+    <div class="join-meeting" *ngIf="COURSE_DATA.live_class_url" (click)="joinMeeting(COURSE_DATA.live_class_url)">Join Live Class &#64; {{ COURSE_DATA.scheduled_time }}</div>
     <!-- <div class="join-meeting" (click)="joinMeeting()">Join Live Class</div> -->
 
     <div class="course-description">
