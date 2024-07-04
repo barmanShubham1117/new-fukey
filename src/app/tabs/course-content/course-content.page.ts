@@ -145,9 +145,9 @@ export class CourseContentPage implements OnInit {
     //   replaceUrl: false
     // }
     // this.router.navigate(['/zoom-non-login'], navigationExtras);
+
     //await Browser.open({ url: environment.BASE_URL+'addons/liveclass/join/'+this.COURSE_ID });
-    link = "https://meet.dhiyotech.in/45?p=eyJhZ2VudE5hbWUiOiJKYXlhbnQiLCJkYXRldGltZSI6IjIwMjQtMDctMDRUMDY6Mzg6MDAuMDAwWiIsImNvbmZpZyI6ImNvbmZpZyIsImR1cmF0aW9uIjoiMTIwIiwiZGlzYWJsZVZpZGVvIjpmYWxzZSwiZGlzYWJsZUFsbCI6dHJ1ZX0=";
-    await this.inAppBrowser.create(link, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=no,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff')
+    await this.inAppBrowser.create(link, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff')
 
   }
 }
