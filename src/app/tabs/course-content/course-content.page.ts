@@ -26,6 +26,14 @@ export class CourseContentPage implements OnInit {
   public COURSE_DATA: any;
   public CONTENT_DATA: any;
   public COURSE_ID: any;
+
+  public allLiveClasses: any;
+
+  public isClassStarted = (timestampString: any) => {
+    const timestamp = Number(timestampString);
+    const currentTime = Date.now();
+    return currentTime / 1000 >= timestamp;
+  };
   
   constructor(
     private appService: AppService,
@@ -129,7 +137,7 @@ export class CourseContentPage implements OnInit {
       }
     })
   }
-  async joinMeeting(){
+  async joinMeeting(link: string){
     // const navigationExtras: NavigationExtras = {
     //   state: {
     //     course: this.COURSE_DATA
@@ -137,8 +145,9 @@ export class CourseContentPage implements OnInit {
     //   replaceUrl: false
     // }
     // this.router.navigate(['/zoom-non-login'], navigationExtras);
-    
     //await Browser.open({ url: environment.BASE_URL+'addons/liveclass/join/'+this.COURSE_ID });
-    await this.inAppBrowser.create(environment.BASE_URL+'addons/liveclass/join/'+this.COURSE_ID, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=no,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff');
+    link = "https://meet.dhiyotech.in/45?p=eyJhZ2VudE5hbWUiOiJKYXlhbnQiLCJkYXRldGltZSI6IjIwMjQtMDctMDRUMDY6Mzg6MDAuMDAwWiIsImNvbmZpZyI6ImNvbmZpZyIsImR1cmF0aW9uIjoiMTIwIiwiZGlzYWJsZVZpZGVvIjpmYWxzZSwiZGlzYWJsZUFsbCI6dHJ1ZX0=";
+    await this.inAppBrowser.create(link, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=no,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff')
+
   }
 }
