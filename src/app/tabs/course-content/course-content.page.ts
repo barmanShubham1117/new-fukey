@@ -147,7 +147,8 @@ export class CourseContentPage implements OnInit {
     // this.router.navigate(['/zoom-non-login'], navigationExtras);
 
     //await Browser.open({ url: environment.BASE_URL+'addons/liveclass/join/'+this.COURSE_ID });
-    await this.inAppBrowser.create(link, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff')
+    const userName = "Writelogicheretogetusername";
+    await this.inAppBrowser.create(link+"&userName="+userName, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff,hidenavigationbuttons=no,zoom=no,fullscreen=yes,clearcache=yes,clearsessioncache=yes,')
 
   }
 }
