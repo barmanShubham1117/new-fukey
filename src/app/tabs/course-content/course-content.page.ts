@@ -29,6 +29,8 @@ export class CourseContentPage implements OnInit {
 
   public allLiveClasses: any;
 
+  public username: any;
+
   public isClassStarted = (timestampString: any) => {
     const timestamp = Number(timestampString);
     const currentTime = Date.now();
@@ -51,6 +53,7 @@ export class CourseContentPage implements OnInit {
 
     this.COURSE_ID = this.router.getCurrentNavigation()?.extras.state?.['course_id'];
     console.log(this.COURSE_ID);
+    this.getUser()
     this.getCourse();
   }
 
@@ -137,6 +140,12 @@ export class CourseContentPage implements OnInit {
       }
     })
   }
+  async getUser() {
+    this.httpService.getUserViaMobile(this.MOBILE).subscribe((response: any) => {
+      console.log(response);
+      this.username = response.first_name;
+    });
+  }
   async joinMeeting(link: string){
     // const navigationExtras: NavigationExtras = {
     //   state: {
@@ -147,7 +156,11 @@ export class CourseContentPage implements OnInit {
     // this.router.navigate(['/zoom-non-login'], navigationExtras);
 
     //await Browser.open({ url: environment.BASE_URL+'addons/liveclass/join/'+this.COURSE_ID });
-    await this.inAppBrowser.create(link, '_self', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff')
+
+    await this.inAppBrowser.create(link+"&userName="+this.username, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff,hidenavigationbuttons=no,zoom=no,fullscreen=yes,clearcache=yes,clearsessioncache=yes,')
+
+    // Below Code is working properly 
+    // await this.inAppBrowser.create(link, '_self', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff')
 
   }
 }
