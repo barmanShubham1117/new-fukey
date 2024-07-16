@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "490557422703",
-    "project_id": "fukeyeducation-9f070",
-    "storage_bucket": "fukeyeducation-9f070.appspot.com"
+    "project_number": "591743951341",
+    "project_id": "fukey-education",
+    "storage_bucket": "fukey-education.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:490557422703:android:4b031909d8aa97b1fa219a",
+        "mobilesdk_app_id": "1:591743951341:android:19a653ff52672dba0487e4",
         "android_client_info": {
           "package_name": "com.fukey.education"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAFpDmhsSk3q9dWYvZlHWhwOCnK6nE6XoI"
+          "current_key": "AIzaSyBHRtI_41l7ejQkeftt5BLJxDPP6HxRkvI"
         }
       ],
       "services": {
