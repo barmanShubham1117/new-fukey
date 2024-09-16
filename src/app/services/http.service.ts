@@ -96,6 +96,26 @@ export class HttpService {
     return this.http.post(environment.BASE_API_URL + 'get_access_token', body, httpOptions);
   }
 
+  public getSessionViaMobile(mobile: string) {
+    let body = `mobile=%2B91${mobile}`;
+
+    const httpOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    };
+    
+    return this.http.post(environment.BASE_API_URL + 'get_session', body, httpOptions);
+  }
+
+  public validateUser(mobile: string, sessionId: string) {
+    let body = `mobile=%2B91${mobile}&sessionId=${sessionId}`;
+
+    const httpOptions = {
+      headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    };
+    
+    return this.http.post(environment.BASE_API_URL + 'validate_user', body, httpOptions);
+  }
+
   public updateProfilePicture(file: File, userId: any) {
     const formData: FormData = new FormData();
     formData.append('image', file, file.name);
