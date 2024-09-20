@@ -13,6 +13,7 @@ import { MenuController, NavController } from '@ionic/angular';
 export class TabsPage implements OnInit {
 
   private MOBILE: any;
+  private SESSION_ID: any;
   public name: string = "";
   public std: string = "";
 
@@ -23,13 +24,26 @@ export class TabsPage implements OnInit {
     private navCtrl: NavController
   ) {
     this.MOBILE = localStorage.getItem('MOBILE');
+    this.SESSION_ID = localStorage.getItem('SESSION_ID');
     httpService.getUserViaMobile(this.MOBILE).subscribe((response: any) => {
       this.name = response.first_name;
       this.std = response.class;
     })
    }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.verifySession();
+  }
+
+  verifySession() {
+    this.httpService.validateUser(this.MOBILE, this.SESSION_ID)
+      .subscribe((response: any) => {
+        console.log(response);
+        if (!response.status) {
+          this.logout();
+        }
+      });
+  }
 
   closeMenu() {
     this.menuCtrl.close();

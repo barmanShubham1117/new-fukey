@@ -60,15 +60,23 @@ export class LoginVerifyPage implements OnInit {
       this.getAccessToken();
     })
   }
+  
   getAccessToken() {
     this.httpService.getAccessToken(this.MOBILE, this.USER_ID).subscribe((response: any) => {
       this.appService.dismissLoading().then(() => {
         this.TOKEN = response.token;
         localStorage.setItem('TOKEN', this.TOKEN);
-
-        this.router.navigate(['/tabs/home'], { replaceUrl: true });
+        this.getSession();
       });
     }) 
+  }
+
+  getSession() {
+    this.httpService.getSessionViaMobile(this.MOBILE)
+      .subscribe((response: any) => {
+        localStorage.setItem("SESSION_ID", response.session);
+        this.router.navigate(['/tabs/home'], { replaceUrl: true });
+      });
   }
   
   navigateToTargetPage() {

@@ -146,18 +146,20 @@ export class CourseContentPage implements OnInit {
       this.username = response.first_name;
     });
   }
-  async joinMeeting(link: string){
-    // const navigationExtras: NavigationExtras = {
-    //   state: {
-    //     course: this.COURSE_DATA
-    //   },
-    //   replaceUrl: false
-    // }
-    // this.router.navigate(['/zoom-non-login'], navigationExtras);
+  joinMeeting(link: string){
+    const navigationExtras: NavigationExtras = {
+      state: {
+        name: 'John',
+        age: 30
+      },
+    }
+    console.log(link);
+    
+    this.router.navigate(['/tabs/batches/course-content/live-class'], navigationExtras);
 
     //await Browser.open({ url: environment.BASE_URL+'addons/liveclass/join/'+this.COURSE_ID });
 
-    await this.inAppBrowser.create(link+"&userName="+this.username, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff,hidenavigationbuttons=no,zoom=no,fullscreen=yes,clearcache=yes,clearsessioncache=yes,location=no')
+    // await this.inAppBrowser.create(link+"&userName="+this.username, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff,hidenavigationbuttons=no,zoom=no,fullscreen=yes,clearcache=yes,clearsessioncache=yes,location=no,allowautorotate=true')
 
     // Below Code is working properly 
     // await this.inAppBrowser.create(link, '_self', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff')

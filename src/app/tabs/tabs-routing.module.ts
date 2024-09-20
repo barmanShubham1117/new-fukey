@@ -63,6 +63,15 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'batches/course-content/live-class',
+        children: [
+          {
+            path: '',
+            loadChildren: () => import('./live-class/live-class.module').then( m => m.LiveClassPageModule)
+          }
+        ]
+      },
+      {
         path: 'store',
         loadChildren: () => import('./store/store.module').then( m => m.StorePageModule)
       },
@@ -117,6 +126,7 @@ const routes: Routes = [
       }
     ]
   },
+
 ];
 
 @NgModule({

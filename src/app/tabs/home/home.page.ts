@@ -11,6 +11,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { FcmService } from 'src/app/services/fcm.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { environment } from 'src/environments/environment.prod';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +26,7 @@ export class HomePage implements OnInit {
   private TOKEN: any = '';
   private USER_ID: any = '';
   private MOBILE: any = '';
+  private SESSION_ID: any = '';
 
   public username: string = 'user';
   public userpic: string = '/assets/new/img2.jpg';
@@ -175,6 +177,15 @@ export class HomePage implements OnInit {
         }
       })
     }
+
+    ScreenOrientation.lock({ orientation: 'portrait' }).then(
+      () => {
+        console.log('Orientation locked to portrait');
+      },
+      (error) => {
+        console.error('Error locking orientation:', error);
+      }
+    );
   }
 
   onCheckboxChange(event: any) {
@@ -227,6 +238,7 @@ export class HomePage implements OnInit {
       this.allLiveClasses = response;
       console.log('All Live Class Details: ', this.allLiveClasses);
     });
+    
     this.appService.dismissLoading();
   }
 

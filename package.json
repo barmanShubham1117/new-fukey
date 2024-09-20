@@ -42,6 +42,7 @@
     "@capacitor/keyboard": "5.0.7",
     "@capacitor/preferences": "^5.0.6",
     "@capacitor/push-notifications": "^5.1.0",
+    "@capacitor/screen-orientation": "^6.0.2",
     "@capacitor/share": "^5.0.7",
     "@capacitor/status-bar": "5.0.6",
     "@fortawesome/angular-fontawesome": "^0.14.1",

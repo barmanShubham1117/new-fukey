@@ -10,6 +10,9 @@ const config: CapacitorConfig = {
   plugins: {
     "PushNotifications": {
       "presentationOptions": ["badge", "sound", "alert"]
+    },
+    "ScreenOrientation": {
+      "lockOrientation": "portrait"
     }
   }
 };
