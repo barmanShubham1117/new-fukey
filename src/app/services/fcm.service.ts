@@ -88,29 +88,23 @@ export class FcmService {
     PushNotifications.addListener(
       'registration',
       async (token: any) => {
-        console.log("MY FCM TOKEN: ", token);
         const fcmToken = (token?.value);
+        console.log("MY FCM TOKEN0: ", fcmToken);
         let go = 1;
-        const savedToken = JSON.parse((await this.storageService.getStorage(FCM_TOKEN)).value);
+        const savedToken = (await this.storageService.getStorage(FCM_TOKEN)).value;
         if (savedToken) {
+          console.log("MY SAVED FCM TOKEN: ", savedToken);
           if (fcmToken == savedToken) {
             console.log("Same Token Already Exist");
             go = 0;
           } else {
+            console.log("MY FCM TOKEN2: ", fcmToken);
             go = 2;
           }
         }
-        if (go == 1) {
-          this.storageService.setStorage(FCM_TOKEN, JSON.stringify(fcmToken));
-        } else if (go == 2) {
-          const data = {
-            expired_token: savedToken,
-            refreshed_token: fcmToken
-          };
-
+        if (go > 0) {
           this.storageService.setStorage(FCM_TOKEN, fcmToken);
-
-          messaging
+          console.log("MY FCM TOKEN3: ", fcmToken);
         }
       }
     );

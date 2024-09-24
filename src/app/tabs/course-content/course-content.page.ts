@@ -149,9 +149,9 @@ export class CourseContentPage implements OnInit {
   joinMeeting(link: string){
     const navigationExtras: NavigationExtras = {
       state: {
-        name: 'John',
-        age: 30
+        url: link
       },
+      replaceUrl: false,
     }
     console.log(link);
     

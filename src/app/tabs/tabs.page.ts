@@ -4,6 +4,9 @@ import { HttpService } from '../services/http.service';
 import { AppService } from '../services/app.service';
 import { Browser } from '@capacitor/browser'; 
 import { MenuController, NavController } from '@ionic/angular';
+import { StorageService } from '../services/storage.service';
+
+export const FCM_TOKEN = 'push_notification_token';
 
 @Component({
   selector: 'app-tabs',
@@ -14,6 +17,7 @@ export class TabsPage implements OnInit {
 
   private MOBILE: any;
   private SESSION_ID: any;
+  private FCM_TOKEN: any;
   public name: string = "";
   public std: string = "";
 
@@ -21,18 +25,28 @@ export class TabsPage implements OnInit {
     private router: Router,
     private httpService: HttpService,
     private menuCtrl: MenuController,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private storageService: StorageService
   ) {
     this.MOBILE = localStorage.getItem('MOBILE');
     this.SESSION_ID = localStorage.getItem('SESSION_ID');
     httpService.getUserViaMobile(this.MOBILE).subscribe((response: any) => {
       this.name = response.first_name;
       this.std = response.class;
-    })
+    });
    }
 
   ngOnInit() {
     this.verifySession();
+    this.updateFCMToken();
+  }
+  async updateFCMToken() {
+    this.FCM_TOKEN = (await this.storageService.getStorage(FCM_TOKEN)).value;
+    console.log("MY FCM TOKEN: " + this.FCM_TOKEN);
+    this.httpService.checkUser(this.MOBILE, this.FCM_TOKEN)
+      .subscribe((response: any) => {
+        console.log("updateFCMToken: ", response);
+      })
   }
 
   verifySession() {

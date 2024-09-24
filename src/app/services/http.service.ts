@@ -240,8 +240,8 @@ export class HttpService {
     return this.http.get(environment.BASE_API_URL + 'topic_name?table=' + table + '&name=' + name );
   }
   
-  public getAllLiveClasses() {
-    return this.http.get(environment.BASE_API_URL + 'all_live_classes');
+  public getAllLiveClasses(token: string) {
+    return this.http.get(environment.BASE_API_URL + 'all_live_classes?auth_token=' + token);
   }
 
   public getAndroidRatingLink() {

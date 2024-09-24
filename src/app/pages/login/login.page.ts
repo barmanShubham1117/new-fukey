@@ -40,11 +40,11 @@ export class LoginPage implements OnInit {
 
     localStorage.clear();
     
-    this.logFCMToken();
+    // this.logFCMToken();
   }
 
   async logFCMToken() {
-    this.FCM_TOKEN = JSON.parse((await this.storageService.getStorage(FCM_TOKEN)).value);
+    this.FCM_TOKEN = (await this.storageService.getStorage(FCM_TOKEN)).value;
     console.log(FCM_TOKEN, this.FCM_TOKEN);
   }
 
@@ -82,6 +82,9 @@ export class LoginPage implements OnInit {
   async onSubmit(formData: {mobile: string}) {    
     if (formData.mobile != "") {
       if (this.removeWhiteSpaces(formData.mobile.toString()).length == 10) {
+        this.FCM_TOKEN = (await this.storageService.getStorage(FCM_TOKEN)).value;
+        console.log("MY FCM TOKEN: " + this.FCM_TOKEN);
+        
         this.httpService.checkUser(formData.mobile, this.FCM_TOKEN).subscribe((response: any) => {
           console.log(response);
             if (response.status) {

@@ -3,7 +3,7 @@ import { Preferences } from '@capacitor/preferences';
 import { Observable, from } from 'rxjs';
 
 
-export const APPP_TOKEN = 'app_token';
+export const APP_TOKEN = 'app_token';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +29,6 @@ export class StorageService {
   }
 
   getToken(): Observable<any> {
-    return from(this.getStorage(APPP_TOKEN));
+    return from(this.getStorage(APP_TOKEN));
   }
 }

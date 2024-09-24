@@ -50,7 +50,7 @@ export class RegisterPage implements OnInit {
   }
 
   async logFCMToken() {
-    this.FCM_TOKEN = JSON.parse((await this.storageService.getStorage(FCM_TOKEN)).value);
+    this.FCM_TOKEN = (await this.storageService.getStorage(FCM_TOKEN)).value;
     console.log(FCM_TOKEN, this.FCM_TOKEN);
   }
 

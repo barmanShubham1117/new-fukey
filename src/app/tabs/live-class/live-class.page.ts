@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { HttpService } from 'src/app/services/http.service';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-live-class',
@@ -13,14 +13,13 @@ export class LiveClassPage implements OnInit, OnDestroy {
 
   private username: string = "";
   private MOBILE: string = "";
-  private data: any;
+  private link: string = "";
 
   constructor(
     private httpService: HttpService,
-    private route: ActivatedRoute,
+    private router: Router,
     private inAppBrowser: InAppBrowser
   ) {
-    // this.startLiveClass("");
    }
 
   async getUser() {
@@ -30,23 +29,24 @@ export class LiveClassPage implements OnInit, OnDestroy {
     });
   }
   async startLiveClass(link: string) {
-    await this.inAppBrowser.create(link+"&userName="+this.username, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff,hidenavigationbuttons=no,zoom=no,fullscreen=yes,clearcache=yes,clearsessioncache=yes,location=no,allowautorotate=true')
+    const browser = await this.inAppBrowser.create(link+"&userName="+this.username, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff,hidenavigationbuttons=no,zoom=no,fullscreen=yes,clearcache=yes,clearsessioncache=yes,location=no,allowautorotate=true')
+    browser.on('exit').subscribe(() => {
+      console.log("exit detected");
+    });
   }
 
   ngOnInit() {
-    this.route.data.subscribe((data: any) => {
-      this.data = data.state.data;
-      console.log(data);
-    });
-
-    // ScreenOrientation.lock({ orientation: 'landscape' }).then(
-    //   () => {
-    //     console.log('Orientation locked to landscape');
-    //   },
-    //   (error) => {
-    //     console.error('Error locking orientation:', error);
-    //   }
-    // );
+    this.link = this.router.getCurrentNavigation()?.extras.state?.['url'];
+    console.log(this.link);
+    ScreenOrientation.lock({ orientation: 'landscape' }).then(
+      () => {
+        console.log('Orientation locked to landscape');
+        this.startLiveClass(this.link)
+      },
+      (error) => {
+        console.error('Error locking orientation:', error);
+      }
+    );
   }
 
   ngOnDestroy(): void {

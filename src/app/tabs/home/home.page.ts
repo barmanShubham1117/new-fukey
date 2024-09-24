@@ -234,7 +234,7 @@ export class HomePage implements OnInit {
   }
 
   async getAllLiveClasses() {
-    this.httpService.getAllLiveClasses().subscribe((response: any) => {
+    this.httpService.getAllLiveClasses(this.TOKEN).subscribe((response: any) => {
       this.allLiveClasses = response;
       console.log('All Live Class Details: ', this.allLiveClasses);
     });
@@ -431,7 +431,7 @@ export class HomePage implements OnInit {
     //   this.appService.presentToast("Data is there in localStorage", "bottom");
     // }
 
-    this.FCM_TOKEN = this.storageService.getStorage("push_notification_token").value;
+    this.FCM_TOKEN = this.storageService.getStorage("push_notification_token");
     console.log("Home page: ngOnit(): ", this.FCM_TOKEN);
   }
 
@@ -490,7 +490,7 @@ export class HomePage implements OnInit {
 
           this.isTestimonyAvailabe = true;
   
-          console.log(this.idx);
+          // console.log(this.idx);
           this.idx++;
           if (this.idx > (this.testimonials.length-1)) {
             this.idx = 0;
