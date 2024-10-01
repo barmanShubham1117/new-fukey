@@ -104,6 +104,8 @@ export class RegisterPage implements OnInit {
 
       this.httpService.register(formData, this.FCM_TOKEN).subscribe(async (response: any) => {
           console.log(response);
+          const msg = 'Sending OTP to +91 ' + formData.mobile;
+          this.appService.showLoadingScreen(msg);
 
           this.httpService.getTopicName("category", formData.class).subscribe(async (topicName: any) => {
             const topic = topicName.topic;
@@ -118,12 +120,12 @@ export class RegisterPage implements OnInit {
               localStorage.setItem('EMAIL', formData.email);
 
               if (formData.mobile == "2468135790") {
+                this.appService.dismissLoading();
                 this.sendOtp();
               } else {
                 this.auth.signInWithPhoneNumber(this.recaptchaVerifier, '+91' + formData.mobile)
                 .then((success) => {
-                  const msg = 'Sending OTP to +91 ' + formData.mobile;
-                  this.appService.showLoadingScreen(msg);
+                  this.appService.dismissLoading();
                   this.sendOtp();
                 });
               }

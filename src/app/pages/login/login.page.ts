@@ -95,7 +95,7 @@ export class LoginPage implements OnInit {
                 localStorage.setItem('SUBSCRIBE_ALL_TOPIC', 'true');
               }
               
-              if (formData.mobile == "2468135790") {
+              if (formData.mobile == "2468135790" || formData.mobile == "1111111111" || formData.mobile == "2222222222" || formData.mobile == "3333333333" || formData.mobile == "4444444444" || formData.mobile == "5555555555") {
                 this.loginVerify();
               } else {
                 this.appService.showLoadingScreen("Sending OTP to +91 " + formData.mobile);

@@ -2,7 +2,7 @@ import { Token } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { PushNotificationSchema, PushNotifications } from '@capacitor/push-notifications';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, retry } from 'rxjs';
 import { StorageService } from './storage.service';
 
 import * as firebase from 'firebase/app';
@@ -118,6 +118,9 @@ export class FcmService {
 
     PushNotifications.addListener('pushNotificationReceived', notification => {
       console.log('Push notification received: ', notification);
+      if (notification.data.unattended) {
+        this.subscribe(notification.data.unattended, 'UNATTENDED');
+      }
     });
   
     PushNotifications.addListener('pushNotificationActionPerformed', notification => {
@@ -139,4 +142,15 @@ export class FcmService {
 
     return topic;
   }
-}
+
+  unsubscribe(topic: string): string {
+    FCM.unsubscribeFrom({topic})
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+    return topic;
+  }
+} 

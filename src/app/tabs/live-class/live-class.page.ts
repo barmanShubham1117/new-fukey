@@ -3,6 +3,7 @@ import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { HttpService } from 'src/app/services/http.service';
 import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-live-class',
@@ -18,7 +19,8 @@ export class LiveClassPage implements OnInit, OnDestroy {
   constructor(
     private httpService: HttpService,
     private router: Router,
-    private inAppBrowser: InAppBrowser
+    private inAppBrowser: InAppBrowser,
+    private navCtrl: NavController
   ) {
    }
 
@@ -32,10 +34,13 @@ export class LiveClassPage implements OnInit, OnDestroy {
     const browser = await this.inAppBrowser.create(link+"&userName="+this.username, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff,hidenavigationbuttons=no,zoom=no,fullscreen=yes,clearcache=yes,clearsessioncache=yes,location=no,allowautorotate=true')
     browser.on('exit').subscribe(() => {
       console.log("exit detected");
+      this.navCtrl.pop();
     });
   }
 
   ngOnInit() {
+    console.log("ngOnInit()");
+    
     this.link = this.router.getCurrentNavigation()?.extras.state?.['url'];
     console.log(this.link);
     ScreenOrientation.lock({ orientation: 'landscape' }).then(
@@ -50,6 +55,7 @@ export class LiveClassPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    console.log("ionViewWillEnter()");
     ScreenOrientation.lock({ orientation: 'portrait' }).then(
       () => {
         console.log('Orientation locked to portrait');
