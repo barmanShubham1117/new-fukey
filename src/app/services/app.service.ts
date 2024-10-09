@@ -29,8 +29,6 @@ export class AppService {
   }
 
   public async dismissLoading() {
-    while (await this.loading.getTop() !== undefined) {
       await this.loading.dismiss();
-    }
   }
 }
