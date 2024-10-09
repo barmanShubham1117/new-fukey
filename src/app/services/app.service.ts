@@ -6,6 +6,7 @@ import { LoadingController, ToastController } from '@ionic/angular';
 })
 export class AppService {
   private loading: any;
+  currentLoading:any = null;
 
   constructor(
     private toastController: ToastController,
@@ -22,13 +23,23 @@ export class AppService {
   }
 
   public async showLoadingScreen(msg: string) {
-    this.loading = await this.loadingCtrl.create({
+    if (this.currentLoading != null) {
+      this.currentLoading.dismiss();
+  }
+    this.currentLoading = await this.loadingCtrl.create({
       message: msg
-    });
-    await this.loading.present();
+  });
+
+  return await this.currentLoading.present();
+    //await this.loading.present();
   }
 
   public async dismissLoading() {
-      await this.loading.dismiss();
+    if (this.currentLoading != null) {
+      this.currentLoading = null;
+      return await this.loadingCtrl.dismiss();
+      
+  }
+  return;
   }
 }

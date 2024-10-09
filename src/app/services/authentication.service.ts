@@ -19,9 +19,13 @@ export class AuthenticationService {
 				.then((confirmationResult) => {
 					this.confirmationResult = confirmationResult;
 					resolve(confirmationResult);
+					recaptchaVerifier.clear();
 				})
 				.catch((error) => {
 					console.log(error);
+					if(recaptchaVerifier !=null){
+						recaptchaVerifier.clear();
+					}
 					reject('SMS not sent');
 				});
 		});
