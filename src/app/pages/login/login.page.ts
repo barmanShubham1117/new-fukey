@@ -84,7 +84,8 @@ export class LoginPage implements OnInit {
       if (this.removeWhiteSpaces(formData.mobile.toString()).length == 10) {
         this.FCM_TOKEN = (await this.storageService.getStorage(FCM_TOKEN)).value;
         console.log("MY FCM TOKEN: " + this.FCM_TOKEN);
-        
+        this.appService.showLoadingScreen("Verifying..");
+
         this.httpService.checkUser(formData.mobile, this.FCM_TOKEN).subscribe((response: any) => {
           console.log(response);
             if (response.status) {
@@ -98,7 +99,7 @@ export class LoginPage implements OnInit {
               if (formData.mobile == "2468135790" || formData.mobile == "1111111111" || formData.mobile == "2222222222" || formData.mobile == "3333333333" || formData.mobile == "4444444444" || formData.mobile == "5555555555") {
                 this.loginVerify();
               } else {
-                this.appService.showLoadingScreen("Sending OTP to +91 " + formData.mobile);
+                // this.appService.showLoadingScreen("Sending OTP to +91 " + formData.mobile);
     
                 this.authService.signInWithPhoneNumber(this.recaptchaVerifier, '+91' + formData.mobile)
                     .then((success) => {
@@ -115,6 +116,7 @@ export class LoginPage implements OnInit {
               }
               
             } else {
+              this.appService.dismissLoading();
               this.appService.presentToast('Mobile no. not registered.', "bottom");
             }
         })

@@ -61,7 +61,11 @@ export class RegisterVerifyPage implements OnInit {
         if (data.status) {
           this.httpService.getAccessToken(this.mobile, this.userId).subscribe((response: any) => {
             localStorage.setItem('TOKEN', response.token);
-            this.router.navigate(['/tabs/home'], { replaceUrl: true });
+            this.httpService.getSessionViaMobile(this.mobile)
+              .subscribe((response: any) => {
+                localStorage.setItem("SESSION_ID", response.session);
+                this.router.navigate(['/tabs/home'], { replaceUrl: true });
+              });
           });
         } else {
           this.appService.presentToast("Invaild OTP", "bottom");
