@@ -5,6 +5,18 @@
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
+    <!-- ALERT BOX STARTS HERE -->
+
+    <ion-alert
+    [isOpen]="isAlertOpen"
+    header="ALERT!"
+    message="Here will be the alert message."
+    [buttons]="alertButtons"
+    (didDismiss)="setOpen(false)"
+    ></ion-alert>
+
+    <!-- ALERT BOX ENDS HERE -->
+
     <!-- WELCOME NOTE STARTS HERE -->
 
     <div class="welcome">

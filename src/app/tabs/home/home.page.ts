@@ -61,11 +61,18 @@ export class HomePage implements OnInit {
   public testimonialDesc: string = "";
   public testimonialImage: string = "";
 
+  isAlertOpen = false;
+  alertButtons = ['Cancle'];
+
   start: any;
   tap = 0;
   selectedItem: string | null = null;
   @ViewChild('classesList', { static: true }) itemListRef: ElementRef | null = null;
   @ViewChild('videoElement') videoElementRef: ElementRef | null = null;
+
+  setOpen(isOpen: boolean) {
+    this.isAlertOpen = isOpen;
+  }
 
   public isClassStarted = (timestampString: any) => {
     const timestamp = Number(timestampString);
@@ -433,6 +440,7 @@ export class HomePage implements OnInit {
 
     this.FCM_TOKEN = this.storageService.getStorage("push_notification_token");
     console.log("Home page: ngOnit(): ", this.FCM_TOKEN);
+    this.setOpen(true)
   }
 
   ionViewDidEnter() {
@@ -454,6 +462,7 @@ export class HomePage implements OnInit {
     }
 
     clearInterval(this.myInterval);
+    this.setOpen(false)
   }
 
   handleRefresh(event: any) {

@@ -5,6 +5,7 @@ import { AppService } from '../services/app.service';
 import { Browser } from '@capacitor/browser'; 
 import { MenuController, NavController } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
+import { Toast } from '@capacitor/toast';
 
 export const FCM_TOKEN = 'push_notification_token';
 
@@ -51,9 +52,12 @@ export class TabsPage implements OnInit {
 
   verifySession() {
     this.httpService.validateUser(this.MOBILE, this.SESSION_ID)
-      .subscribe((response: any) => {
+      .subscribe(async (response: any) => {
         console.log(response);
         if (!response.status) {
+          await Toast.show({
+            text: "You're logged in an another device."
+          });
           this.logout();
         }
       });
