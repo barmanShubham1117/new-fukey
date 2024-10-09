@@ -29,7 +29,7 @@ export class AppService {
   }
 
   public async dismissLoading() {
-    if (this.loading) {
+    while (await this.loading.getTop() !== undefined) {
       await this.loading.dismiss();
     }
   }

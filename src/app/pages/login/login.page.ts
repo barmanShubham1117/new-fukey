@@ -109,7 +109,7 @@ export class LoginPage implements OnInit {
                     .catch((error) => {
                       this.appService.dismissLoading().then(() => {
                         console.error(error);
-                        throw error;
+                        //throw error;
                       });
                     });
               }
