@@ -1,8 +1,10 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { Toast } from '@capacitor/toast';
+import { AlertController, NavController } from '@ionic/angular';
 import { AppService } from 'src/app/services/app.service';
 import { DbService } from 'src/app/services/db.service';
+import { HttpService } from 'src/app/services/http.service';
 
 @Component({
   selector: 'app-downloads',
@@ -11,6 +13,8 @@ import { DbService } from 'src/app/services/db.service';
 })
 export class DownloadsPage implements AfterViewInit {
 
+  private MOBILE: any = '';
+  private SESSION_ID: any = '';
   type: string = "";
   batchName:string="";
   assets: any[] = [];
@@ -21,9 +25,13 @@ export class DownloadsPage implements AfterViewInit {
   constructor(
     private router: Router,
     private dbService:DbService,
-    private appService: AppService,
-    private alertController: AlertController
-  ) { }
+    private httpService: HttpService,
+    private alertController: AlertController,
+    private navCtrl: NavController
+  ) { 
+    this.MOBILE = localStorage.getItem('MOBILE');
+    this.SESSION_ID = localStorage.getItem('SESSION_ID');
+  }
 
   async ngAfterViewInit() {
     this.type = this.router.getCurrentNavigation()?.extras.state?.['type'];
@@ -44,6 +52,7 @@ export class DownloadsPage implements AfterViewInit {
     });
   }
   openOfflineMaterial(title:string,type: string) {
+    this.verifySession();
     const navigationExtras: NavigationExtras = {
       state: {
         title:title,
@@ -82,6 +91,21 @@ export class DownloadsPage implements AfterViewInit {
     });
 
     await alert.present();
+  }
+
+  verifySession() {
+    this.httpService.validateUser(this.MOBILE, this.SESSION_ID)
+      .subscribe(async (response: any) => {
+        console.log(response);
+        if (!response.status) {
+          await Toast.show({
+            text: "You're logged in an another device."
+          });
+          localStorage.clear();
+          const navigationExtras = { replaceUrl: true };
+          this.navCtrl.navigateForward(['/login'], navigationExtras);
+        }
+      });
   }
 
 }

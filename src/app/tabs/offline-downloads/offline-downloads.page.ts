@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { Toast } from '@capacitor/toast';
+import { AlertController, NavController } from '@ionic/angular';
 import { DbService } from 'src/app/services/db.service';
+import { HttpService } from 'src/app/services/http.service';
 
 @Component({
   selector: 'app-offline-downloads',
@@ -13,6 +15,7 @@ export class OfflineDownloadsPage implements OnInit {
   activeTab = 'documents';
   private USER_ID: any;
   private MOBILE: any;
+  private SESSION_ID: any;
   private TOKEN: any;
   public  pdfs:any[] = [];
   public videos:any[] = [];
@@ -23,10 +26,13 @@ item: any;
   constructor(
     private router: Router,
     private dbService:DbService,
-    private alertController: AlertController
+    private httpService:HttpService,
+    private alertController: AlertController,
+    private navCtrl: NavController
   ) {
     this.USER_ID = localStorage.getItem('USER_ID');
     this.MOBILE = localStorage.getItem('MOBILE');
+    this.SESSION_ID = localStorage.getItem('SESSION_ID');
     this.TOKEN = localStorage.getItem('TOKEN');
    }
   
@@ -111,6 +117,21 @@ item: any;
       this.loadVideoDownloadAssets();
       event.target.complete();
     }, 2);
+  }
+
+  verifySession() {
+    this.httpService.validateUser(this.MOBILE, this.SESSION_ID)
+      .subscribe(async (response: any) => {
+        console.log(response);
+        if (!response.status) {
+          await Toast.show({
+            text: "You're logged in an another device."
+          });
+          localStorage.clear();
+          const navigationExtras = { replaceUrl: true };
+          this.navCtrl.navigateForward(['/login'], navigationExtras);
+        }
+      });
   }
 
 }

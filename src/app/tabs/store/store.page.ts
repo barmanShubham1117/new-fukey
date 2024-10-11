@@ -1,5 +1,7 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { Toast } from '@capacitor/toast';
+import { NavController } from '@ionic/angular';
 import { HttpService } from 'src/app/services/http.service';
 
 @Component({
@@ -9,6 +11,8 @@ import { HttpService } from 'src/app/services/http.service';
 })
 export class StorePage implements OnInit {
 
+  private MOBILE: any = '';
+  private SESSION_ID: any = '';
   private courseList: any;
   private searchedCourseList: any;
   public allCourses: any;
@@ -21,10 +25,13 @@ export class StorePage implements OnInit {
     private httpService: HttpService,
     private el: ElementRef,
     private renderer: Renderer2,
-    private router: Router
+    private router: Router,
+    private navCtrl: NavController
   ) { }
 
   ngOnInit() {
+    this.MOBILE = localStorage.getItem("MOBILE");
+    this.SESSION_ID = localStorage.getItem("SESSION_ID");
     this.getAllCourses();
   }
 
@@ -84,6 +91,8 @@ export class StorePage implements OnInit {
   }
 
   navigateToCourseContentPage(courseId: any) {
+    this.verifySession();
+    
     const navigationExtras = {
       state: {
         course_id: courseId
@@ -143,6 +152,21 @@ export class StorePage implements OnInit {
       this.getAllCourses();
       event.target.complete();
     }, 2000);
+  }
+
+  verifySession() {
+    this.httpService.validateUser(this.MOBILE, this.SESSION_ID)
+      .subscribe(async (response: any) => {
+        console.log(response);
+        if (!response.status) {
+          await Toast.show({
+            text: "You're logged in an another device."
+          });
+          localStorage.clear();
+          const navigationExtras = { replaceUrl: true };
+          this.navCtrl.navigateForward(['/login'], navigationExtras);
+        }
+      });
   }
 }
 

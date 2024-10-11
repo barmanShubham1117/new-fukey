@@ -69,31 +69,37 @@ export class TabsPage implements OnInit {
 
   navigateToOfflineDownloads() {
     this.closeMenu();
+    this.verifySession();
     this.router.navigate(['/tabs/offline-downloads']);
   }
   
   navigateToEbooks() {
     this.closeMenu();
+    this.verifySession();
     this.router.navigate(['/tabs/ebooks']);
   }
 
   navigateToEditProfile() {
-    this.closeMenu()
+    this.closeMenu();
+    this.verifySession();
     this.router.navigate(['/tabs/edit-profile']);
   }
   
   navigateToAbout() {
-    this.closeMenu()
+    this.closeMenu();
+    this.verifySession();
     this.router.navigate(['/tabs/about']);
   }
 
   navigateToTnC() {
-    this.closeMenu()
+    this.closeMenu();
+    this.verifySession();
     this.router.navigate(['/tabs/tnc']);
   }
   
   navigateToPrivacyPolicy() {
-    this.closeMenu()
+    this.closeMenu();
+    this.verifySession();
     this.router.navigate(['/tabs/privacy-policy']);
   }
 

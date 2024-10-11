@@ -5,6 +5,8 @@ import { HttpService } from 'src/app/services/http.service';
 import { Browser } from '@capacitor/browser'; 
 import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { Toast } from '@capacitor/toast';
+import { NavController } from '@ionic/angular';
 @Component({
   selector: 'app-course-content',
   templateUrl: './course-content.page.html',
@@ -15,6 +17,7 @@ export class CourseContentPage implements OnInit {
   private TOKEN: any = '';
   private USER_ID: any = '';
   private MOBILE: any = '';
+  private SESSION_ID: any = '';
   public iframeSrc = "";
   public showIframe = false;
   public isCourseDataAvailable: boolean = false;
@@ -41,7 +44,8 @@ export class CourseContentPage implements OnInit {
     private appService: AppService,
     private httpService: HttpService,
     private router: Router,
-    private inAppBrowser: InAppBrowser
+    private inAppBrowser: InAppBrowser,
+    private navCtrl: NavController
   ) { 
     this.appService.showLoadingScreen('Loading course content..');
   }
@@ -50,6 +54,7 @@ export class CourseContentPage implements OnInit {
     this.USER_ID = localStorage.getItem('USER_ID');
     this.MOBILE = localStorage.getItem('MOBILE');
     this.TOKEN = localStorage.getItem('TOKEN');
+    this.SESSION_ID = localStorage.getItem('SESSION_ID');
 
     this.COURSE_ID = this.router.getCurrentNavigation()?.extras.state?.['course_id'];
     console.log(this.COURSE_ID);
@@ -119,6 +124,7 @@ export class CourseContentPage implements OnInit {
   }
 
   openStudyMaterial(data: any, chapterIndex: any, lessonIndex: any, course_id: any, lesson_id: any) {
+    this.verifySession();
     this.httpService.updateUserCurrentProgress(this.USER_ID, course_id, lesson_id).subscribe((response: any) => {
      
       if (
@@ -140,12 +146,14 @@ export class CourseContentPage implements OnInit {
       }
     })
   }
+
   async getUser() {
     this.httpService.getUserViaMobile(this.MOBILE).subscribe((response: any) => {
       console.log(response);
       this.username = response.first_name;
     });
   }
+
   joinMeeting(link: string){
     const navigationExtras: NavigationExtras = {
       state: {
@@ -164,5 +172,20 @@ export class CourseContentPage implements OnInit {
     // Below Code is working properly 
     // await this.inAppBrowser.create(link, '_self', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff')
 
+  }
+
+  verifySession() {
+    this.httpService.validateUser(this.MOBILE, this.SESSION_ID)
+      .subscribe(async (response: any) => {
+        console.log(response);
+        if (!response.status) {
+          await Toast.show({
+            text: "You're logged in an another device."
+          });
+          localStorage.clear();
+          const navigationExtras = { replaceUrl: true };
+          this.navCtrl.navigateForward(['/login'], navigationExtras);
+        }
+      });
   }
 }

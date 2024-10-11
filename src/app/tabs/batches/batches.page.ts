@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { Toast } from '@capacitor/toast';
 import { NavController } from '@ionic/angular';
 import { AppService } from 'src/app/services/app.service';
 import { HttpService } from 'src/app/services/http.service';
@@ -13,6 +14,7 @@ export class BatchesPage implements OnInit {
   private TOKEN: any = '';
   private USER_ID: any = '';
   private MOBILE: any = '';
+  private SESSION_ID: any = '';
   
   public enrolledCourses: any;
   public isEnrolledCourseAvailable: boolean = false;
@@ -21,6 +23,7 @@ export class BatchesPage implements OnInit {
     private router: Router,
     private httpService: HttpService,
     private appService: AppService,
+    private navCtrl: NavController
   ) {}
 
   async getEnrolledCourses() {
@@ -40,6 +43,8 @@ export class BatchesPage implements OnInit {
     this.USER_ID = localStorage.getItem('USER_ID');
     this.MOBILE = localStorage.getItem('MOBILE');
     this.TOKEN = localStorage.getItem('TOKEN');
+    this.TOKEN = localStorage.getItem('TOKEN');
+    this.SESSION_ID = localStorage.getItem('SESSION_ID');
 
     if (this.TOKEN === undefined) {
       this.httpService.getAccessToken(this.MOBILE, this.USER_ID).subscribe((response: any) => {
@@ -59,8 +64,8 @@ export class BatchesPage implements OnInit {
 
   navigateToCourseContentPage(courseId: any) {
 
-    // Form socket connection here 
-
+    this.verifySession();
+    
     const navigationExtras = {
       state: {
         course_id: courseId
@@ -77,5 +82,20 @@ export class BatchesPage implements OnInit {
       this.getData();
       event.target.complete();
     }, 2000);
+  }
+
+  verifySession() {
+    this.httpService.validateUser(this.MOBILE, this.SESSION_ID)
+      .subscribe(async (response: any) => {
+        console.log(response);
+        if (!response.status) {
+          await Toast.show({
+            text: "You're logged in an another device."
+          });
+          localStorage.clear();
+          const navigationExtras = { replaceUrl: true };
+          this.navCtrl.navigateForward(['/login'], navigationExtras);
+        }
+      });
   }
 }

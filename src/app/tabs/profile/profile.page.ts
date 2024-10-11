@@ -4,7 +4,8 @@ import { HttpService } from 'src/app/services/http.service';
 import { Share } from '@capacitor/share';
 import { Browser } from '@capacitor/browser'; 
 import { environment } from 'src/environments/environment';
-import { Platform } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
+import { Toast } from '@capacitor/toast';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class ProfilePage implements OnInit {
   public USERNAME: any;
   public USER_ID: any;
   public MOBILE: any;
+  public SESSION_ID: any;
 
   private shareLink: string = "https://fukeyeducation.com/";
   private ratingLink: string = "";
@@ -33,11 +35,13 @@ export class ProfilePage implements OnInit {
   constructor(
     private httpService: HttpService,
     private router: Router,
-    private platform: Platform
+    private platform: Platform,
+    private navCtrl: NavController,
   ) { }
 
   ngOnInit() {
     this.MOBILE = localStorage.getItem('MOBILE');
+    this.SESSION_ID = localStorage.getItem('SESSION_ID');
     this.httpService.getUserViaMobile(this.MOBILE).subscribe((response: any) => {
       console.log(response);
       this.USERNAME = response.first_name;
@@ -72,14 +76,17 @@ export class ProfilePage implements OnInit {
   }
 
   navigateToAbout() {
+    this.verifySession();
     this.router.navigate(['/tabs/about']);
   }
 
   navigateToTnC() {
+    this.verifySession();
     this.router.navigate(['/tabs/tnc']);
   }
   
   navigateToPrivacyPolicy() {
+    this.verifySession();
     this.router.navigate(['/tabs/privacy-policy']);
   }
 
@@ -137,6 +144,21 @@ export class ProfilePage implements OnInit {
       url: link,
       dialogTitle: 'Share with Buddies',
     });
+  }
+
+  verifySession() {
+    this.httpService.validateUser(this.MOBILE, this.SESSION_ID)
+      .subscribe(async (response: any) => {
+        console.log(response);
+        if (!response.status) {
+          await Toast.show({
+            text: "You're logged in an another device."
+          });
+          localStorage.clear();
+          const navigationExtras = { replaceUrl: true };
+          this.navCtrl.navigateForward(['/login'], navigationExtras);
+        }
+      });
   }
 
 }

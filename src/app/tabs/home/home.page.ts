@@ -12,6 +12,7 @@ import { FcmService } from 'src/app/services/fcm.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { environment } from 'src/environments/environment.prod';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
+import { Toast } from '@capacitor/toast';
 
 @Component({
   selector: 'app-home',
@@ -233,10 +234,12 @@ export class HomePage implements OnInit {
   }
 
   goToBatchesTab() {
+    this.verifySession();
     this.navCtrl.navigateRoot('/tabs/batches');
   }
 
   goToStoreTab() {
+    this.verifySession();
     this.navCtrl.navigateRoot('/tabs/store');
   }
 
@@ -367,6 +370,7 @@ export class HomePage implements OnInit {
     this.USER_ID = localStorage.getItem('USER_ID');
     this.MOBILE = localStorage.getItem('MOBILE');
     this.TOKEN = localStorage.getItem('TOKEN');
+    this.SESSION_ID = localStorage.getItem('SESSION_ID');
 
     console.log("HOME PAGE : GET DATA : USER_ID : ", this.USER_ID);
     console.log("HOME PAGE : GET DATA : MOBILE : ", this.MOBILE);
@@ -412,6 +416,7 @@ export class HomePage implements OnInit {
   }
 
   navigateToCourseContentPage(courseId: any) {
+    this.verifySession();
     const navigationExtras = {
       state: {
         course_id: courseId
@@ -428,16 +433,6 @@ export class HomePage implements OnInit {
   goNext() { }
 
   ngOnInit() {
-    // if (localStorage.getItem('USER_ID') == undefined || localStorage.getItem('USER_ID') == null ||
-    //   localStorage.getItem('TOKEN') == undefined || localStorage.getItem('TOKEN') == null ||
-    //   localStorage.getItem('MOBILE') == undefined || localStorage.getItem('MOBILE') == null) {
-    //   localStorage.clear();
-    //   this.router.navigate(['/login'], { replaceUrl: true });
-    //   this.appService.presentToast("No Data in localStorage", "bottom");
-    // } else {
-    //   this.appService.presentToast("Data is there in localStorage", "bottom");
-    // }
-
     this.FCM_TOKEN = this.storageService.getStorage("push_notification_token");
     console.log("Home page: ngOnit(): ", this.FCM_TOKEN);
     this.setOpen(true)
@@ -525,4 +520,19 @@ export class HomePage implements OnInit {
   //     }
   //   }
   // }
+
+  verifySession() {
+    this.httpService.validateUser(this.MOBILE, this.SESSION_ID)
+      .subscribe(async (response: any) => {
+        console.log(response);
+        if (!response.status) {
+          await Toast.show({
+            text: "You're logged in an another device."
+          });
+          localStorage.clear();
+          const navigationExtras = { replaceUrl: true };
+          this.navCtrl.navigateForward(['/login'], navigationExtras);
+        }
+      });
+  }
 }
