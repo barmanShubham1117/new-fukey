@@ -62,7 +62,7 @@ export class HomePage implements OnInit {
   public testimonialImage: string = "";
 
   isAlertOpen = false;
-  alertButtons = ['Cancle'];
+  alertButtons = ['Cancel'];
 
   start: any;
   tap = 0;
