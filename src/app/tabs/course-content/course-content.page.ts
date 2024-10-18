@@ -7,6 +7,8 @@ import { environment } from 'src/environments/environment';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { Toast } from '@capacitor/toast';
 import { NavController } from '@ionic/angular';
+import { FcmService } from 'src/app/services/fcm.service';
+import { Capacitor } from '@capacitor/core';
 @Component({
   selector: 'app-course-content',
   templateUrl: './course-content.page.html',
@@ -34,15 +36,18 @@ export class CourseContentPage implements OnInit {
 
   public username: any;
 
-  public isClassStarted = (timestampString: any) => {
-    const timestamp = Number(timestampString);
-    const currentTime = Date.now();
-    return currentTime / 1000 >= timestamp;
+  public isClassStarted = (isStarted: any) => {
+    if (isStarted == 1) {
+      return true;
+    } else {
+      return false;
+    }
   };
   
   constructor(
     private appService: AppService,
     private httpService: HttpService,
+    private fcmService: FcmService,
     private router: Router,
     private inAppBrowser: InAppBrowser,
     private navCtrl: NavController
@@ -155,6 +160,11 @@ export class CourseContentPage implements OnInit {
   }
 
   joinMeeting(link: string){
+    if (Capacitor.getPlatform() != 'web') {
+      this.fcmService.subscribe(this.COURSE_DATA.topic_info.attended_topic, 'ATTENDED');
+      this.fcmService.unsubscribe(this.COURSE_DATA.topic_info.unattended_topic, 'ATTENDED');
+    }
+
     const navigationExtras: NavigationExtras = {
       state: {
         url: link
@@ -166,9 +176,7 @@ export class CourseContentPage implements OnInit {
     this.router.navigate(['/tabs/batches/course-content/live-class'], navigationExtras);
 
     //await Browser.open({ url: environment.BASE_URL+'addons/liveclass/join/'+this.COURSE_ID });
-
     // await this.inAppBrowser.create(link+"&userName="+this.username, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff,hidenavigationbuttons=no,zoom=no,fullscreen=yes,clearcache=yes,clearsessioncache=yes,location=no,allowautorotate=true')
-
     // Below Code is working properly 
     // await this.inAppBrowser.create(link, '_self', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff')
 

@@ -8,6 +8,7 @@ import { HttpService } from 'src/app/services/http.service';
 import { AppService } from 'src/app/services/app.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { FcmService } from 'src/app/services/fcm.service';
+import { Capacitor } from '@capacitor/core';
 
 export const FCM_TOKEN = 'push_notification_token';
 
@@ -107,11 +108,13 @@ export class RegisterPage implements OnInit {
           const msg = 'Sending OTP to +91 ' + formData.mobile;
           this.appService.showLoadingScreen(msg);
 
-          this.httpService.getTopicName("category", formData.class).subscribe(async (topicName: any) => {
-            const topic = topicName.topic;
-            this.fcmService.subscribe(topic, 'SUBSCRIBE_CLASS_TOPIC');
-            localStorage.setItem('SUBSCRIBE_CLASS_TOPIC', 'true');
-          });
+          if (Capacitor.getPlatform() !== 'web') {
+            this.httpService.getTopicName("category", formData.class).subscribe(async (topicName: any) => {
+              const topic = topicName.topic;
+              this.fcmService.subscribe(topic, 'SUBSCRIBE_CLASS_TOPIC');
+              localStorage.setItem('SUBSCRIBE_CLASS_TOPIC', 'true');
+            });
+          }
 
           this.appService.dismissLoading().then(() => {
             if(response.validity) {

@@ -75,10 +75,12 @@ export class HomePage implements OnInit {
     this.isAlertOpen = isOpen;
   }
 
-  public isClassStarted = (timestampString: any) => {
-    const timestamp = Number(timestampString);
-    const currentTime = Date.now();
-    return currentTime / 1000 >= timestamp;
+  public isClassStarted = (isStarted: any) => {
+    if (isStarted == 1) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   public extractTimeFromTimestamp = (timestampString: any) => {
@@ -158,7 +160,7 @@ export class HomePage implements OnInit {
     this.start = 0;
     this.getData();
 
-    if (Capacitor.getPlatform() == 'android') {
+    if (Capacitor.getPlatform() != 'web') {
       this.platform.backButton.subscribeWithPriority(999, () => {
         // if (!this.routerOutlet?.canGoBack()) {
         //   if (window.confirm("Do you want to exit the app?")) {
@@ -184,16 +186,16 @@ export class HomePage implements OnInit {
           window.history.back();
         }
       })
-    }
 
-    ScreenOrientation.lock({ orientation: 'portrait' }).then(
-      () => {
-        console.log('Orientation locked to portrait');
-      },
-      (error) => {
-        console.error('Error locking orientation:', error);
-      }
-    );
+      ScreenOrientation.lock({ orientation: 'portrait' }).then(
+        () => {
+          console.log('Orientation locked to portrait');
+        },
+        (error) => {
+          console.error('Error locking orientation:', error);
+        }
+      );
+    }
   }
 
   onCheckboxChange(event: any) {

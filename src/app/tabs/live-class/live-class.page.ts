@@ -4,6 +4,7 @@ import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { HttpService } from 'src/app/services/http.service';
 import { Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-live-class',
@@ -43,27 +44,32 @@ export class LiveClassPage implements OnInit, OnDestroy {
     
     this.link = this.router.getCurrentNavigation()?.extras.state?.['url'];
     console.log(this.link);
-    ScreenOrientation.lock({ orientation: 'landscape' }).then(
-      () => {
-        console.log('Orientation locked to landscape');
-        this.startLiveClass(this.link)
-      },
-      (error) => {
-        console.error('Error locking orientation:', error);
-      }
-    );
+
+    if (Capacitor.getPlatform() != 'web') {
+      ScreenOrientation.lock({ orientation: 'landscape' }).then(
+        () => {
+          console.log('Orientation locked to landscape');
+          this.startLiveClass(this.link)
+        },
+        (error) => {
+          console.error('Error locking orientation:', error);
+        }
+      );
+    }
   }
 
   ngOnDestroy(): void {
     console.log("ionViewWillEnter()");
-    ScreenOrientation.lock({ orientation: 'portrait' }).then(
-      () => {
-        console.log('Orientation locked to portrait');
-      },
-      (error) => {
-        console.error('Error locking orientation:', error);
-      }
-    );
+    if (Capacitor.getPlatform() != 'web') {
+      ScreenOrientation.lock({ orientation: 'portrait' }).then(
+        () => {
+          console.log('Orientation locked to portrait');
+        },
+        (error) => {
+          console.error('Error locking orientation:', error);
+        }
+      );
+    }
   }
 
 }

@@ -18,7 +18,7 @@
       <div class="content-tab">{{ COURSE_DATA.level | uppercase }}</div>
     </div>
 
-    <div class="join-meeting" *ngIf="COURSE_DATA.live_class_url" (click)="joinMeeting(COURSE_DATA.live_class_url)">Join Live Class &#64; {{ COURSE_DATA.scheduled_time }}</div>
+    <div class="join-meeting" *ngIf="isClassStarted(COURSE_DATA.is_live_class_started)" (click)="joinMeeting(COURSE_DATA.live_class_url)">Join Live Class &#64; {{ COURSE_DATA.scheduled_time }}</div>
 
     <!-- <div class="join-meeting" (click)="joinMeeting()">Join Live Class</div> -->
 
@@ -27,7 +27,7 @@
       <div class="description" [innerHTML]="COURSE_DATA.description"></div>
     </div>
 
-    <div class="course-description" *ngIf="isContentDataAvailable && CONTENT_DATA.length > 0">
+    <div class="course-description" *ngIf="isContentDataAvailable && CONTENT_DATA[0].lessons.length > 0">
       <h3>Curriculum for this course</h3>
     </div>
 

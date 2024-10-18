@@ -49,7 +49,7 @@
         <div class="swiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide upcoming-class-slide" *ngFor="let class of allLiveClasses;">
-              <div class="upcoming-classes-container" *ngIf="!isClassStarted(class.time)" (click)="navigateToCourseContentPage(class.course_id)">
+              <div class="upcoming-classes-container" *ngIf="!isClassStarted(class.is_started)" (click)="navigateToCourseContentPage(class.course_id)">
                 <div class="upcoming-class-status">UPCOMING</div>
                 <div>
                   <!-- <div class="class-name">{{ class.name }}</div> -->
@@ -57,7 +57,7 @@
                 </div>
                 <div class="class-timing">{{ extractTimeFromTimestamp(class.time) }}, {{ extractDateFromTimestamp(class.time) }}</div>
               </div>
-              <div class="live-classes-container" *ngIf="isClassStarted(class.time)" (click)="navigateToCourseContentPage(class.course_id)">
+              <div class="live-classes-container" *ngIf="isClassStarted(class.is_started)" (click)="navigateToCourseContentPage(class.course_id)">
                 <div class="live-class-status">LIVE</div>
                 <div>
                   <!-- <div class="class-name">{{ class.name }}</div> -->

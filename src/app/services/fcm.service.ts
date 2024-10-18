@@ -143,10 +143,11 @@ export class FcmService {
     return topic;
   }
 
-  unsubscribe(topic: string): string {
+  unsubscribe(topic: string, key: string): string {
     FCM.unsubscribeFrom({topic})
       .then((res) => {
         console.log(res);
+        localStorage.setItem(key, 'false');
       })
       .catch((err) => {
         console.error(err);
