@@ -11,7 +11,7 @@ import { Capacitor } from '@capacitor/core';
   templateUrl: './live-class.page.html',
   styleUrls: ['./live-class.page.scss'],
 })
-export class LiveClassPage implements OnInit, OnDestroy {
+export class LiveClassPage implements OnInit {
 
   private username: string = "";
   private MOBILE: string = "";
@@ -33,9 +33,20 @@ export class LiveClassPage implements OnInit, OnDestroy {
   }
   async startLiveClass(link: string) {
     const browser = await this.inAppBrowser.create(link+"&userName="+this.username, '_blank', 'presentationstyle=formsheet,toolbarposition=top,fullscreen=yes,hideurlbar=yes,toolbarcolor=#176bff,closebuttoncolor=#ffffff,navigationbuttoncolor=#ffffff,hidenavigationbuttons=no,zoom=no,fullscreen=yes,clearcache=yes,clearsessioncache=yes,location=no,allowautorotate=true')
+
     browser.on('exit').subscribe(() => {
       console.log("exit detected");
-      this.navCtrl.pop();
+      if (Capacitor.getPlatform() != 'web') {
+        ScreenOrientation.lock({ orientation: 'portrait' }).then(
+          () => {
+            console.log('Orientation locked to portrait');
+            this.navCtrl.back()
+          },
+          (error) => {
+            console.error('Error locking orientation:', error);
+          }
+        );
+      }
     });
   }
 
@@ -58,18 +69,5 @@ export class LiveClassPage implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    console.log("ionViewWillEnter()");
-    if (Capacitor.getPlatform() != 'web') {
-      ScreenOrientation.lock({ orientation: 'portrait' }).then(
-        () => {
-          console.log('Orientation locked to portrait');
-        },
-        (error) => {
-          console.error('Error locking orientation:', error);
-        }
-      );
-    }
-  }
 
 }

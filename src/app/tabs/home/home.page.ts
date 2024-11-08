@@ -68,8 +68,16 @@ export class HomePage implements OnInit {
   start: any;
   tap = 0;
   selectedItem: string | null = null;
+
+  showPlayPauseBtn = false;
+  showPauseBtn = true;
+  showPlayBtn = false;
+  showMuteBtn = false;
+  showUnmuteBtn = true;
+
   @ViewChild('classesList', { static: true }) itemListRef: ElementRef | null = null;
   @ViewChild('videoElement') videoElementRef: ElementRef | null = null;
+  @ViewChild('videoElement', { static: false }) videoPlayer!: ElementRef<HTMLVideoElement>;
 
   setOpen(isOpen: boolean) {
     this.isAlertOpen = isOpen;
@@ -437,7 +445,15 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.FCM_TOKEN = this.storageService.getStorage("push_notification_token");
     console.log("Home page: ngOnit(): ", this.FCM_TOKEN);
-    this.setOpen(true)
+
+    const show_alert = this.router.getCurrentNavigation()?.extras.state?.['show_alert'];
+    console.log(show_alert);
+    
+    if (show_alert) {
+      this.setOpen(true);
+    } else {
+      this.setOpen(false)
+    }
   }
 
   ionViewDidEnter() {
@@ -476,9 +492,37 @@ export class HomePage implements OnInit {
 
       if (this.videoElement.paused) {
         this.videoElement.play();
+        this.showPauseBtn = true;
+        this.showPlayBtn  = false;
       } else {
         this.videoElement.pause();
+        this.showPauseBtn = false;
+        this.showPlayBtn  = true;
       }
+    }
+
+    this.showPlayPauseBtn = true;
+
+    setTimeout(() => {
+      this.showPlayBtn = false;
+      this.showPauseBtn = false;
+      this.showPlayPauseBtn = false;
+    }, 2000);
+  }
+
+  toggleAudio () {
+    if (this.videoPlayer) {
+      const video: HTMLVideoElement = this.videoPlayer.nativeElement;
+
+      if (video.muted) {
+        video.muted = false;
+        this.showMuteBtn = false;
+        this.showUnmuteBtn = true;
+      } else {
+        video.muted = true;
+        this.showMuteBtn = true;
+        this.showUnmuteBtn = false;
+      }      
     }
   }
 

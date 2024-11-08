@@ -77,7 +77,16 @@ export class LoginVerifyPage implements OnInit {
     this.httpService.getSessionViaMobile(this.MOBILE)
       .subscribe((response: any) => {
         localStorage.setItem("SESSION_ID", response.session);
-        this.router.navigate(['/tabs/home'], { replaceUrl: true });
+        const navigationExtras = {
+          state: {
+            show_alert: true
+          },
+          replaceUrl: true,
+        };
+        console.log(navigationExtras);
+    
+        this.router.navigate(['/tabs/home'], navigationExtras);
+        // this.router.navigate(['/tabs/home'], { replaceUrl: true });
       });
   }
   

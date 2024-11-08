@@ -33,7 +33,27 @@
 
     <!-- INTRODUCTION VIDEO STARTS HERE -->
 
-    <video #videoElement class="promo-video" src="assets/video/Introduction to Fukey Education.mp4" autoplay loop (click)="toggleVideo()"></video>
+    <!-- <video #videoElement class="promo-video" src="assets/video/Introduction to Fukey Education.mp4" autoplay loop (click)="toggleVideo()">
+      <div class="custom-play-pause" (click)="toggleVideo()">
+        <i class="fa fa-play" *ngIf="videoElement.paused"></i>
+        <i class="fa fa-pause" *ngIf="!videoElement.paused"></i>
+      </div>
+    
+      <div class="custom-mute-unmute" (click)="toggleMute()">
+        <i class="fa fa-volume-up" *ngIf="!videoElement.muted"></i>
+        <i class="fa fa-volume-off" *ngIf="videoElement.muted"></i>
+      </div>
+    </video> -->
+
+    <div class="video-player">
+      <video #videoElement class="promo-video" (click)="toggleVideo()" src="assets/video/Introduction.mp4" autoplay loop></video>
+      <div class="playback-controls">
+        <button *ngIf="showPlayPauseBtn" (click)="toggleVideo()"><i *ngIf="showPlayBtn" class="fa fa-play"></i><i *ngIf="showPauseBtn" class="fa fa-pause"></i></button>
+      </div>
+      <div class="audio-controls">
+        <button (click)="toggleAudio()"><i *ngIf="showUnmuteBtn" class="fa fa-volume-up"></i><i *ngIf="showMuteBtn" class="fa fa-volume-mute"></i></button>
+      </div>
+    </div>
 
     <!-- INTRODUCTION VIDEO ENDS HERE -->
 
