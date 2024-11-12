@@ -2,15 +2,11 @@ import { Injectable } from '@angular/core';
 import { Capacitor, PluginListenerHandle, Plugins } from '@capacitor/core';
 import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { HttpClient } from '@angular/common/http';
-import { File } from '@ionic-native/file/ngx';
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { HttpService } from './http.service';
 import { AppService } from './app.service';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { FileOpener } from "@capacitor-community/file-opener";
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Platform } from '@ionic/angular';
 import { Directory, Filesystem, DownloadFileResult, DownloadFileOptions, DeleteFileOptions } from "@capacitor/filesystem";
-import { Preferences } from "@capacitor/preferences";
 
 @Injectable({
   providedIn: 'root'
@@ -31,9 +27,8 @@ export class DbService {
     private sqlite: SQLite,
     private httpClient: HttpClient,
     private appService: AppService,
-    private httpService: HttpService,
-    private file: File
-  ) {
+    private httpService: HttpService
+    ) {
     if (Capacitor.getPlatform() !== 'web') {
       this.platform.ready().then(() => {
         this.sqlite

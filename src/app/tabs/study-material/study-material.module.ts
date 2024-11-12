@@ -9,7 +9,6 @@ import { StudyMaterialPage } from './study-material.page';
 import { QuizComponent } from 'src/app/components/quiz/quiz.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
-import { File } from '@ionic-native/file/ngx';
 
 import {FormBuilder, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
