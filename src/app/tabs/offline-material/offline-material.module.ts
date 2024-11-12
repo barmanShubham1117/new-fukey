@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
-import { File } from '@ionic-native/file/ngx';
 import { OfflineMaterialPageRoutingModule } from './offline-material-routing.module';
 import { OfflineMaterialPage } from './offline-material.page';
 
@@ -20,6 +19,6 @@ import { OfflineMaterialPage } from './offline-material.page';
     PdfViewerModule,
   ],
   declarations: [OfflineMaterialPage],
-  providers:[SQLite,File]
+  providers:[SQLite]
 })
 export class OfflineMaterialPageModule {}

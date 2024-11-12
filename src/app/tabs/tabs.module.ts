@@ -8,7 +8,6 @@ import { TabsPageRoutingModule } from './tabs-routing.module';
 
 import { TabsPage } from './tabs.page';
 import { HeaderComponent } from '../components/header/header.component';
-import { Zoom } from '@ionic-native/zoom/ngx';
 @NgModule({
   imports: [
     CommonModule,

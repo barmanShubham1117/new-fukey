@@ -3,10 +3,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { HttpService } from 'src/app/services/http.service';
-
 import { AppService } from 'src/app/services/app.service';
 import { DbService } from 'src/app/services/db.service';
-import { File } from '@ionic-native/file/ngx';
 import { Filesystem, FilesystemDirectory } from '@capacitor/filesystem';
 import { FileOpener } from '@capacitor-community/file-opener';
 
