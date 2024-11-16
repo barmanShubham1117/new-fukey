@@ -75,6 +75,12 @@ export class HomePage implements OnInit {
   showMuteBtn = false;
   showUnmuteBtn = true;
 
+  public scheduleList = [];
+  public liveClassList = [];
+  public isScheduleTabSelected = true;
+  isScheduleAvailable = false;
+  isLiveClassAvailable = false;
+
   @ViewChild('classesList', { static: true }) itemListRef: ElementRef | null = null;
   @ViewChild('videoElement') videoElementRef: ElementRef | null = null;
   @ViewChild('videoElement', { static: false }) videoPlayer!: ElementRef<HTMLVideoElement>;
@@ -253,11 +259,20 @@ export class HomePage implements OnInit {
     this.navCtrl.navigateRoot('/tabs/store');
   }
 
-  async getAllLiveClasses() {
-    this.httpService.getAllLiveClasses(this.TOKEN).subscribe((response: any) => {
-      this.allLiveClasses = response;
-      console.log('All Live Class Details: ', this.allLiveClasses);
-    });
+  async getClasses() {
+    this.httpService.getScheduledClasses(this.TOKEN).subscribe((response: any) => {
+      this.scheduleList = response;
+      console.log('Scheduled Classes: ', this.scheduleList);
+    })
+    this.httpService.getLiveClasses(this.TOKEN).subscribe((response: any) => {
+      this.liveClassList = response;
+      console.log('Scheduled Classes: ', this.liveClassList);
+    })
+
+    // this.httpService.getAllLiveClasses(this.TOKEN).subscribe((response: any) => {
+    //   this.allLiveClasses = response;
+    //   console.log('All Live Class Details: ', this.allLiveClasses);
+    // });
     
     this.appService.dismissLoading();
   }
@@ -293,6 +308,18 @@ export class HomePage implements OnInit {
     });
   }
 
+  getClassInfo(val: any, key: string) {
+    if (key == "organiser_name") {
+      return val.organiser_name;
+    } else if (key == "time") {
+      return this.extractTimeFromTimestamp(val.time);
+    } else if (key == "date") {
+      return this.extractDateFromTimestamp(val.time);
+    } else if (key == "course_id") {
+      return val.course_id;
+    }
+  }
+
   async getClassList() {
     this.httpService.getClassList().subscribe((response: any) => {
       this.classList = response;
@@ -314,7 +341,7 @@ export class HomePage implements OnInit {
         }
       }
 
-      this.getAllLiveClasses();
+      this.getClasses();
 
       this.appService.dismissLoading();
     })
@@ -550,23 +577,6 @@ export class HomePage implements OnInit {
     })
   }
 
-  // updateTestimonials() {  
-  //   let idx = 1
-  //   if (!this.testimonials) {
-  //   } else {
-  //     this.testimonialName = this.testimonials[idx]?.name;
-  //     this.testimonialImage = this.testimonials[idx]?.photo;
-  //     this.testimonialClass = this.testimonials[idx]?.position;
-  //     this.testimonialDesc = this.testimonials[idx]?.text;
-
-  //     console.log(idx);
-  //     idx++;
-  //     if (idx > 4) {
-  //       idx = 0;
-  //     }
-  //   }
-  // }
-
   verifySession() {
     this.httpService.validateUser(this.MOBILE, this.SESSION_ID)
       .subscribe(async (response: any) => {
@@ -580,5 +590,21 @@ export class HomePage implements OnInit {
           this.navCtrl.navigateForward(['/login'], navigationExtras);
         }
       });
+  }
+
+  isScheduleTab(val: boolean) {
+    this.httpService.getLiveClasses(this.TOKEN).subscribe((response: any) => {console.log(response);});
+    this.httpService.getScheduledClasses(this.TOKEN).subscribe((response: any) => {console.log(response);});
+    this.isScheduleTabSelected = val;
+    const schedule_content = this.el.nativeElement.querySelector('#schedule-content');
+    const live_now_content = this.el.nativeElement.querySelector('#live-now-content');
+
+    if (this.isScheduleTabSelected) {
+      schedule_content.style.display = "block";
+      live_now_content.style.display = "none";
+    } else {
+      schedule_content.style.display = "none";
+      live_now_content.style.display = "block";
+    }
   }
 }

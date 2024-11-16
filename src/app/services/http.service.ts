@@ -244,6 +244,14 @@ export class HttpService {
     return this.http.get(environment.BASE_API_URL + 'all_live_classes?auth_token=' + token);
   }
 
+  public getLiveClasses(token: string) {
+    return this.http.get(environment.BASE_API_URL + 'live_classes?auth_token=' + token);
+  }
+
+  public getScheduledClasses(token: string) {
+    return this.http.get(environment.BASE_API_URL + 'scheduled_classes?auth_token=' + token);
+  }
+
   public getAndroidRatingLink() {
     return this.http.get(environment.BASE_API_URL + 'get_android_rating_link');
   }

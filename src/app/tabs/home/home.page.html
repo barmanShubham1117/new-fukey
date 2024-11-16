@@ -60,36 +60,53 @@
 
     <!-- LIVE CLASS STARTS HERE -->
 
-    <div class="live-classes" id="live-classes" *ngIf="allLiveClasses.length > 0">
-      <div class="live-classes-header">
-        <span id="live-classes-title"><b>Live Classes</b></span>
+    <div>
+      <div class="live-class-container">
+        <div class="tabs">
+          <input type="radio" id="radio-1" name="tabs" checked />
+          <label class="tab" for="radio-1" (click)="isScheduleTab(true)">Schedule<span class="notification">{{ scheduleList.length }}</span></label>
+          <input type="radio" id="radio-2" name="tabs" />
+          <label class="tab" for="radio-2" (click)="isScheduleTab(false)">Live Now<span class="notification">{{ liveClassList.length }}</span></label>
+          <span class="glider"></span>
+        </div>
       </div>
-
-      <div id="live-classes-div" class="live-classes-div">
-        <div class="swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide upcoming-class-slide" *ngFor="let class of allLiveClasses;">
-              <div class="upcoming-classes-container" *ngIf="!isClassStarted(class.is_started)" (click)="navigateToCourseContentPage(class.course_id)">
-                <div class="upcoming-class-status">UPCOMING</div>
-                <div>
-                  <!-- <div class="class-name">{{ class.name }}</div> -->
-                  <div class="subject-name">{{ class.organiser_name }}</div>
+      <div class="tab-content">
+        <div class="tab-content-item" id="schedule-content">
+          <div id="live-classes-div" class="live-classes-div">
+            <div class="swiper">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide upcoming-class-slide" *ngFor="let item of scheduleList;">
+                  <div class="upcoming-classes-container" (click)="navigateToCourseContentPage(getClassInfo(item, 'course_id'))">
+                    <div class="upcoming-class-status">UPCOMING</div>
+                    <div>
+                      <div class="subject-name">{{ getClassInfo(item, "organiser_name") }}</div>
+                    </div>
+                    <div class="class-timing">{{ getClassInfo(item, "time") }}, {{ getClassInfo(item, "date") }}</div>
+                  </div>
                 </div>
-                <div class="class-timing">{{ extractTimeFromTimestamp(class.time) }}, {{ extractDateFromTimestamp(class.time) }}</div>
               </div>
-              <div class="live-classes-container" *ngIf="isClassStarted(class.is_started)" (click)="navigateToCourseContentPage(class.course_id)">
-                <div class="live-class-status">LIVE</div>
-                <div>
-                  <!-- <div class="class-name">{{ class.name }}</div> -->
-                  <div class="subject-name">{{ class.organiser_name }}</div>
-                </div>
-                <div class="class-timing">{{ extractTimeFromTimestamp(class.time) }}, {{ extractDateFromTimestamp(class.time) }}</div>
-              </div>
+              <div class="swiper-pagination1"></div>
             </div>
           </div>
-          <div class="swiper-pagination1" style="display: none;"></div>
         </div>
-
+        <div class="tab-content-item" id="live-now-content">
+          <div id="live-classes-div" class="live-classes-div">
+            <div class="swiper">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide upcoming-class-slide"  *ngFor="let item of liveClassList;">
+                  <div class="live-classes-container" (click)="navigateToCourseContentPage(getClassInfo(item, 'course_id'))">
+                    <div class="live-class-status">LIVE</div>
+                    <div>
+                      <div class="subject-name">{{ getClassInfo(item, "organiser_name") }}</div>
+                    </div>
+                    <div class="class-timing">{{ getClassInfo(item, "time") }}, {{ getClassInfo(item, "date") }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="swiper-pagination1"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
